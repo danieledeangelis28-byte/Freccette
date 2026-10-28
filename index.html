@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Freccette 🎯</title>
+  <style>
+    :root {
+      --primary: #007aff;
+      --bg: #1c1c1e;
+      --card-bg: #2c2c2e;
+      --card-alt: #3a3a3c;
+      --text: #ffffff;
+      --danger: #ff3b30;
+      --warning: #ff9500;
+      --success: #34c759;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    
+    .screen {
+      width: 100%;
+      max-width: 480px;
+      padding: 16px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #game-screen, #victory-screen { display: none; }
+    
+    h1 { text-align: center; margin: 10px 0 20px 0; }
+    
+    /* LOBBY */
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-size: 14px; margin-bottom: 8px; color: #aaa; font-weight: 600; }
+    input[type="text"] {
+      width: 100%; padding: 13px; font-size: 17px;
+      background: var(--card-bg); color: white;
+      border: 1px solid #444; border-radius: 10px;
+      box-sizing: border-box;
+    }
+    .toggle-group { display: flex; gap: 10px; }
+    .toggle-btn {
+      flex: 1; background-color: var(--card-bg); color: #aaa; margin: 0;
+      padding: 12px; font-size: 15px; border-radius: 10px;
+    }
+    .toggle-btn.active { background-color: var(--primary); color: white; }
+    
+    /* PULSANTI GENERALI */
+    button {
+      width: 100%; padding: 14px; font-size: 16px; font-weight: bold;
+      color: white; background-color: var(--primary);
+      border: none; border-radius: 12px; cursor: pointer;
+      transition: transform 0.08s, opacity 0.08s;
+    }
+    button:active { transform: scale(0.97); opacity: 0.8; }
+    
+    /* HEADER PARTITA */
+    .game-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .btn-header {
+      width: auto; padding: 7px 12px; font-size: 13px;
+      background-color: var(--card-alt); border-radius: 8px;
+    }
+
+    /* SCOREBOARD */
+    .scoreboard {
+      display: flex; justify-content: space-between;
+      background: var(--card-bg); border-radius: 12px; padding: 10px 14px;
+      margin-bottom: 12px;
+    }
+    .player-score { text-align: center; flex: 1; opacity: 0.45; transition: 0.25s; }
+    .player-score.active { opacity: 1; transform: scale(1.05); }
+    .player-score h2 { margin: 0; font-size: 15px; color: #aaa; }
+    .player-score .points { font-size: 34px; font-weight: 800; margin-top: 2px; }
+    
+    /* CONTENITORE INGRESSI (BERSAGLIO O TABELLA) */
+    .input-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 12px;
+      min-height: 350px;
+    }
+
+    /* BERSAGLIO SVG */
+    #dartboard-container {
+      width: 100%; aspect-ratio: 1; max-width: 360px;
+    }
+    svg { width: 100%; height: 100%; touch-action: manipulation; }
+    .segment { cursor: pointer; }
+    .segment:active { opacity: 0.6; }
+    
+    /* TABELLA INPUT */
+    #table-container {
+      width: 100%;
+      max-height: 360px;
+      overflow-y: auto;
+      border-radius: 10px;
+      background: var(--card-bg);
+      border: 1px solid #3a3a3c;
+    }
+    .darts-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    .darts-table th {
+      position: sticky;
+      top: 0;
+      background: #252528;
+      padding: 10px 4px;
+      font-size: 13px;
+      color: #aaa;
+      border-bottom: 1px solid #444;
+      z-index: 2;
+    }
+    .darts-table td {
+      padding: 4px;
+      border-bottom: 1px solid #353538;
+    }
+    .tbl-btn {
+      width: 100%;
+      padding: 10px 2px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 6px;
+    }
+    .btn-single { background-color: #48484a; color: #fff; }
+    .btn-double { background-color: #1b5e20; color: #4ade80; }
+    .btn-triple { background-color: #b71c1c; color: #fca5a5; }
+    .btn-bull { background-color: #0077b6; color: #90e0ef; }
+
+    /* CONTROLLI TURNO */
+    .turn-controls {
+      display: flex; flex-direction: column; gap: 8px;
+      background: var(--card-bg); padding: 12px; border-radius: 12px;
+    }
+    .darts-info { 
+      display: flex; justify-content: space-between; font-size: 15px; 
+      align-items: center; padding: 0 4px;
+    }
+    .dart-slot { font-weight: bold; color: #ffeb3b; min-width: 34px; text-align: center; }
+    
+    .action-row { display: flex; gap: 8px; }
+    .btn-miss { background-color: #48484a; flex: 1; padding: 11px; }
+    .btn-undo { background-color: var(--warning); flex: 1; padding: 11px; }
+    .btn-confirm { background-color: var(--success); }
+    
+    /* POPUP GENERALI */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); z-index: 1000;
+      justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
+    }
+    .modal-box {
+      background: var(--card-bg); padding: 24px; border-radius: 16px;
+      text-align: center; width: 100%; max-width: 320px;
+    }
+    .modal-box h3 { margin-top: 0; font-size: 20px; }
+    .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
+    .btn-modal-cancel { background-color: #555; }
+    .btn-modal-danger { background-color: var(--danger); }
+    .btn-modal-ok { background-color: var(--success); }
+
+    /* VITTORIA */
+    #victory-screen {
+      justify-content: center; align-items: center; text-align: center;
+      cursor: pointer;
+    }
+    .trophy { font-size: 70px; margin-bottom: 10px; }
+    .winner-name { font-size: 34px; font-weight: 800; color: #ffeb3b; margin: 10px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- SCHERMATA 1: LOBBY -->
+  <div id="lobby-screen" class="screen">
+    <h1>Freccette 🎯</h1>
+    
+    <div class="form-group">
+      <label>Giocatore 1</label>
+      <input type="text" id="player1" value="Giocatore 1">
+    </div>
+    
+    <div class="form-group">
+      <label>Giocatore 2</label>
+      <input type="text" id="player2" value="Giocatore 2">
+    </div>
+    
+    <div class="form-group">
+      <label>Tipo di Gioco</label>
+      <div class="toggle-group">
+        <button type="button" class="toggle-btn" id="btn-301" onclick="selezionaPunteggio(301)">301</button>
+        <button type="button" class="toggle-btn active" id="btn-501" onclick="selezionaPunteggio(501)">501</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Interfaccia di Tiro</label>
+      <div class="toggle-group">
+        <button type="button" class="toggle-btn active" id="btn-mode-board" onclick="selezionaInterfaccia('board')">🎯 Bersaglio</button>
+        <button type="button" class="toggle-btn" id="btn-mode-table" onclick="selezionaInterfaccia('table')">🔢 Tabella</button>
+      </div>
+    </div>
+
+    <button onclick="iniziaPartita()" style="margin-top: 14px;">Inizia Partita</button>
+  </div>
+
+  <!-- SCHERMATA 2: GIOCO -->
+  <div id="game-screen" class="screen">
+    <div class="game-header">
+      <button class="btn-header" onclick="chiediConfermaUscita()">✕ Lobby</button>
+      <span id="active-mode-label" style="font-size: 13px; color: #8e8e93; font-weight: 600;">Partita</span>
+      <span style="width: 45px;"></span>
+    </div>
+
+    <div class="scoreboard">
+      <div id="p1-panel" class="player-score active">
+        <h2 id="p1-name">G1</h2>
+        <div id="p1-score" class="points">501</div>
+      </div>
+      <div id="p2-panel" class="player-score">
+        <h2 id="p2-name">G2</h2>
+        <div id="p2-score" class="points">501</div>
+      </div>
+    </div>
+
+    <!-- AREA DI INPUT: BERSAGLIO O TABELLA -->
+    <div class="input-wrapper">
+      <div id="dartboard-container"></div>
+      <div id="table-container" style="display: none;"></div>
+    </div>
+
+    <div class="turn-controls">
+      <div class="darts-info">
+        <span>Tiri:</span>
+        <span id="dart-1" class="dart-slot">-</span>
+        <span id="dart-2" class="dart-slot">-</span>
+        <span id="dart-3" class="dart-slot">-</span>
+        <span>Tot: <strong id="turn-total" style="color:var(--success); font-size: 18px;">0</strong></span>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-miss" onclick="aggiungiTiro(0, 'Fuori')">Fuori</button>
+        <button class="btn-undo" onclick="annullaUltimoTiro()">↩ Annulla</button>
+      </div>
+
+      <button class="btn-confirm" onclick="chiediConfermaTurno()">Conferma Turno</button>
+    </div>
+  </div>
+
+  <!-- SCHERMATA 3: VITTORIA -->
+  <div id="victory-screen" class="screen" onclick="tornaAllaLobby()">
+    <div class="trophy">🏆</div>
+    <h1 style="margin: 0; font-size: 26px;">VITTORIA!</h1>
+    <div class="winner-name" id="winner-display">Giocatore 1</div>
+    <p style="font-size: 17px; color: #ccc;">Ha chiuso la partita!</p>
+    <div style="color: #8e8e93; font-size: 14px; margin-top: 30px;">Tocca ovunque per tornare alla lobby</div>
+  </div>
+
+  <!-- POPUP 1: CONFERMA TURNO -->
+  <div id="popup-turn" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Conferma Turno</h3>
+      <p id="popup-turn-text">Punti: 0</p>
+      <div class="modal-buttons">
+        <button class="btn-modal-cancel" onclick="chiudiPopups()">Modifica</button>
+        <button class="btn-modal-ok" onclick="confermaEPassa()">Passa Turno</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP 2: CONFERMA USCITA LOBBY -->
+  <div id="popup-exit" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Abbandonare la partita?</h3>
+      <p style="color: #bbb; font-size: 15px;">I punteggi correnti andranno persi.</p>
+      <div class="modal-buttons">
+        <button class="btn-modal-cancel" onclick="chiudiPopups()">Resta</button>
+        <button class="btn-modal-danger" onclick="confermaUscita()">Esci</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let punteggioScelto = 501;
+    let interfacciaScelta = 'board'; // 'board' o 'table'
+    let scores = [501, 501];
+    let names = ["", ""];
+    let activePlayer = 0;
+    let turnDarts = [];
+
+    // --- SELEZIONI LOBBY ---
+    function selezionaPunteggio(pts) {
+      punteggioScelto = pts;
+      document.getElementById('btn-301').classList.toggle('active', pts === 301);
+      document.getElementById('btn-501').classList.toggle('active', pts === 501);
+    }
+
+    function selezionaInterfaccia(mode) {
+      interfacciaScelta = mode;
+      document.getElementById('btn-mode-board').classList.toggle('active', mode === 'board');
+      document.getElementById('btn-mode-table').classList.toggle('active', mode === 'table');
+    }
+
+    function iniziaPartita() {
+      names[0] = document.getElementById('player1').value || "Giocatore 1";
+      names[1] = document.getElementById('player2').value || "Giocatore 2";
+      scores = [punteggioScelto, punteggioScelto];
+      activePlayer = 0;
+      
+      document.getElementById('p1-name').innerText = names[0];
+      document.getElementById('p2-name').innerText = names[1];
+      document.getElementById('active-mode-label').innerText = `${punteggioScelto} • ${interfacciaScelta === 'board' ? 'Bersaglio' : 'Tabella'}`;
+      
+      // Impostazione dell'interfaccia scelta
+      const boardContainer = document.getElementById('dartboard-container');
+      const tableContainer = document.getElementById('table-container');
+      
+      if (interfacciaScelta === 'board') {
+        boardContainer.style.display = 'block';
+        tableContainer.style.display = 'none';
+        disegnaBersaglio();
+      } else {
+        boardContainer.style.display = 'none';
+        tableContainer.style.display = 'block';
+        costruisciTabella();
+      }
+      
+      aggiornaUI();
+      resetTurno();
+      
+      document.getElementById('lobby-screen').style.display = 'none';
+      document.getElementById('victory-screen').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'flex';
+    }
+
+    // --- LOGICA GIOCO ---
+    function aggiungiTiro(punti, etichetta) {
+      if (turnDarts.length >= 3) return;
+      turnDarts.push({ points: punti, label: etichetta });
+      aggiornaSlotTiri();
+    }
+
+    function annullaUltimoTiro() {
+      if (turnDarts.length === 0) return;
+      turnDarts.pop();
+      aggiornaSlotTiri();
+    }
+
+    function aggiornaSlotTiri() {
+      const tot = turnDarts.reduce((acc, d) => acc + d.points, 0);
+      document.getElementById('dart-1').innerText = turnDarts[0] ? turnDarts[0].label : "-";
+      document.getElementById('dart-2').innerText = turnDarts[1] ? turnDarts[1].label : "-";
+      document.getElementById('dart-3').innerText = turnDarts[2] ? turnDarts[2].label : "-";
+      document.getElementById('turn-total').innerText = tot;
+    }
+
+    // POPUPS
+    function chiediConfermaTurno() {
+      const tot = turnDarts.reduce((acc, d) => acc + d.points, 0);
+      document.getElementById('popup-turn-text').innerHTML = `Hai totalizzato <strong>${tot}</strong> punti.<br>Confermi di passare il turno?`;
+      document.getElementById('popup-turn').style.display = 'flex';
+    }
+
+    function chiediConfermaUscita() {
+      document.getElementById('popup-exit').style.display = 'flex';
+    }
+
+    function chiudiPopups() {
+      document.getElementById('popup-turn').style.display = 'none';
+      document.getElementById('popup-exit').style.display = 'none';
+    }
+
+    function confermaUscita() {
+      chiudiPopups();
+      tornaAllaLobby();
+    }
+
+    function confermaEPassa() {
+      chiudiPopups();
+      const tot = turnDarts.reduce((acc, d) => acc + d.points, 0);
+      let nuovoPunteggio = scores[activePlayer] - tot;
+      
+      if (nuovoPunteggio === 0) {
+        mostraVittoria(names[activePlayer]);
+        return;
+      }
+      
+      if (nuovoPunteggio > 0) {
+        scores[activePlayer] = nuovoPunteggio;
+      } // Se < 0 è busto (sballo): i punti restano inalterati
+      
+      activePlayer = activePlayer === 0 ? 1 : 0;
+      resetTurno();
+      aggiornaUI();
+    }
+
+    function resetTurno() {
+      turnDarts = [];
+      aggiornaSlotTiri();
+    }
+
+    function aggiornaUI() {
+      document.getElementById('p1-score').innerText = scores[0];
+      document.getElementById('p2-score').innerText = scores[1];
+      
+      document.getElementById('p1-panel').classList.toggle('active', activePlayer === 0);
+      document.getElementById('p2-panel').classList.toggle('active', activePlayer === 1);
+    }
+
+    function mostraVittoria(vincitore) {
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('winner-display').innerText = vincitore;
+      document.getElementById('victory-screen').style.display = 'flex';
+    }
+
+    function tornaAllaLobby() {
+      document.getElementById('victory-screen').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('lobby-screen').style.display = 'flex';
+    }
+
+    // --- COSTRUZIONE TABELLA INPUT (1-20 + 25) ---
+    function costruisciTabella() {
+      const container = document.getElementById('table-container');
+      if (container.innerHTML !== "") return; // Già costruita
+
+      let html = `
+        <table class="darts-table">
+          <thead>
+            <tr>
+              <th>Singolo</th>
+              <th>Doppio</th>
+              <th>Triplo</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      // Righe da 1 a 20
+      for (let i = 1; i <= 20; i++) {
+        html += `
+          <tr>
+            <td><button type="button" class="tbl-btn btn-single" onclick="aggiungiTiro(${i}, '${i}')">${i}</button></td>
+            <td><button type="button" class="tbl-btn btn-double" onclick="aggiungiTiro(${i * 2}, 'D${i}')">D${i} (${i * 2})</button></td>
+            <td><button type="button" class="tbl-btn btn-triple" onclick="aggiungiTiro(${i * 3}, 'T${i}')">T${i} (${i * 3})</button></td>
+          </tr>
+        `;
+      }
+
+      // Riga speciale per il 25 (Bull) e Doppio 25 (Bullseye / 50)
+      html += `
+          <tr>
+            <td><button type="button" class="tbl-btn btn-bull" onclick="aggiungiTiro(25, '25')">25</button></td>
+            <td><button type="button" class="tbl-btn btn-bull" onclick="aggiungiTiro(50, 'D25')">D25 (50)</button></td>
+            <td style="color:#666; font-size:12px;">—</td>
+          </tr>
+        </tbody>
+      </table>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    // --- COSTRUZIONE BERSAGLIO SVG ---
+    function disegnaBersaglio() {
+      const container = document.getElementById('dartboard-container');
+      if (container.innerHTML !== "") return;
+      
+      const order = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
+      const cx = 200, cy = 200;
+      const angleStep = 360 / 20;
+
+      function descriviArco(rIn, rOut, startA, endA) {
+        const rad = (a) => (a - 90) * Math.PI / 180;
+        const pInS = { x: cx + rIn * Math.cos(rad(endA)), y: cy + rIn * Math.sin(rad(endA)) };
+        const pInE = { x: cx + rIn * Math.cos(rad(startA)), y: cy + rIn * Math.sin(rad(startA)) };
+        const pOutS = { x: cx + rOut * Math.cos(rad(endA)), y: cy + rOut * Math.sin(rad(endA)) };
+        const pOutE = { x: cx + rOut * Math.cos(rad(startA)), y: cy + rOut * Math.sin(rad(startA)) };
+        return `M ${pOutE.x} ${pOutE.y} A ${rOut} ${rOut} 0 0 1 ${pOutS.x} ${pOutS.y} L ${pInS.x} ${pInS.y} A ${rIn} ${rIn} 0 0 0 ${pInE.x} ${pInE.y} Z`;
+      }
+
+      let svgHTML = `<svg viewBox="0 0 400 400">`;
+      svgHTML += `<circle cx="200" cy="200" r="198" fill="#111" />`;
+
+      for (let i = 0; i < 20; i++) {
+        let n = order[i];
+        let startAngle = (i * angleStep) - (angleStep / 2);
+        let endAngle = (i * angleStep) + (angleStep / 2);
+        
+        let cSingle = (i % 2 === 0) ? '#000000' : '#f0ece1';
+        let cDouble = (i % 2 === 0) ? '#e3292e' : '#309f6a';
+        
+        svgHTML += `<path class="segment" fill="${cSingle}" d="${descriviArco(16, 100, startAngle, endAngle)}" onclick="aggiungiTiro(${n}, '${n}')" />`;
+        svgHTML += `<path class="segment" fill="${cDouble}" d="${descriviArco(100, 110, startAngle, endAngle)}" onclick="aggiungiTiro(${n * 3}, 'T${n}')" />`;
+        svgHTML += `<path class="segment" fill="${cSingle}" d="${descriviArco(110, 160, startAngle, endAngle)}" onclick="aggiungiTiro(${n}, '${n}')" />`;
+        svgHTML += `<path class="segment" fill="${cDouble}" d="${descriviArco(160, 170, startAngle, endAngle)}" onclick="aggiungiTiro(${n * 2}, 'D${n}')" />`;
+        
+        const radNum = (startAngle + angleStep / 2 - 90) * Math.PI / 180;
+        const nx = cx + 184 * Math.cos(radNum);
+        const ny = cy + 184 * Math.sin(radNum);
+        svgHTML += `<text x="${nx}" y="${ny}" fill="white" font-size="15" font-weight="bold" text-anchor="middle" dominant-baseline="middle">${n}</text>`;
+      }
+      
+      svgHTML += `<circle class="segment" cx="200" cy="200" r="16" fill="#309f6a" onclick="aggiungiTiro(25, '25')" />`;
+      svgHTML += `<circle class="segment" cx="200" cy="200" r="8" fill="#e3292e" onclick="aggiungiTiro(50, 'D25')" />`;
+      
+      svgHTML += `</svg>`;
+      container.innerHTML = svgHTML;
+    }
+  </script>
+</body>
+</html>
