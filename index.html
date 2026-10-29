@@ -7,6 +7,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
   
   <style>
+    *, *::before, *::after {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      outline: none;
+    }
+    button:focus, button:active, .sector-wedge:focus, .sector-wedge:active, svg:focus, svg:active {
+      outline: none; -webkit-tap-highlight-color: transparent;
+    }
+
     :root {
       --bg: #064e3b;          
       --card-bg: rgba(20, 83, 45, 0.85); 
@@ -22,15 +31,9 @@
     
     body {
       font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-      margin: 0;
-      padding: 0;
-      color: var(--text);
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-      user-select: none;
-      -webkit-user-select: none;
-      
+      margin: 0; padding: 0; color: var(--text);
+      display: flex; justify-content: center; min-height: 100vh;
+      user-select: none; -webkit-user-select: none;
       background-color: var(--bg);
       background-image: 
         radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.12) 0%, transparent 60%),
@@ -38,73 +41,41 @@
     }
 
     #app-container {
-      position: relative;
-      width: 100%;
-      max-width: 480px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      box-sizing: border-box;
+      position: relative; width: 100%; max-width: 480px; min-height: 100vh;
+      display: flex; flex-direction: column; box-sizing: border-box;
     }
     
     .screen {
-      width: 100%;
-      padding: 10px 12px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
+      width: 100%; padding: 10px 12px; box-sizing: border-box;
+      display: flex; flex-direction: column;
     }
-    
     #game-screen, #victory-screen { display: none; }
     
     h1 { 
-      text-align: center; 
-      margin: 14px 0 18px 0; 
-      padding: 0 45px;
-      font-size: 30px;
-      font-weight: 900;
-      letter-spacing: 1px;
+      text-align: center; margin: 14px 0 18px 0; padding: 0 45px;
+      font-size: 30px; font-weight: 900; letter-spacing: 1px;
       text-shadow: 0 4px 6px rgba(0,0,0,0.4);
     }
 
     #btn-fullscreen {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 40px;
-      height: 40px;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute; top: 12px; right: 12px; width: 40px; height: 40px;
+      padding: 0; display: flex; align-items: center; justify-content: center;
       background: linear-gradient(145deg, rgba(20,83,45,0.9), rgba(10,50,25,0.9));
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      z-index: 900;
-      cursor: pointer;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%;
+      z-index: 900; cursor: pointer;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255,255,255,0.1);
     }
     #btn-fullscreen svg {
-      width: 18px;
-      height: 18px;
-      fill: none;
-      stroke: var(--primary);
-      stroke-width: 2.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      pointer-events: none;
+      width: 18px; height: 18px; fill: none; stroke: var(--primary);
+      stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none;
       filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
     }
     
     .glass-panel {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 14px;
+      background: var(--card-bg); border-radius: 20px; padding: 14px;
       border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: var(--shadow), inset 0 1px 2px rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow), inset 0 1px 2px rgba(255,255,255,0.1); backdrop-filter: blur(10px);
     }
 
     .form-group { margin-bottom: 14px; }
@@ -112,8 +83,7 @@
     input[type="text"] {
       width: 100%; padding: 12px 14px; font-size: 17px; font-family: 'Outfit', sans-serif; font-weight: 600;
       background: rgba(0,0,0,0.3); color: var(--text);
-      border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
-      box-sizing: border-box; outline: none; transition: all 0.2s;
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; box-sizing: border-box; outline: none; transition: all 0.2s;
       box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
     }
     input[type="text"]:focus { border-color: var(--primary); box-shadow: inset 0 2px 6px rgba(0,0,0,0.4), 0 0 12px rgba(251,191,36,0.3); }
@@ -124,95 +94,70 @@
       padding: 11px 8px; font-size: 14px; border-radius: 12px; font-weight: 800; border: 1px solid rgba(255,255,255,0.05);
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
     }
-    
     .toggle-btn.active, button.btn-gold { 
       background: linear-gradient(180deg, #fde047 0%, #fbbf24 40%, #d97706 100%);
-      color: var(--primary-text); 
-      border: none;
-      border-top: 1px solid #fef08a;
-      border-bottom: 2px solid #92400e;
+      color: var(--primary-text); border: none; border-top: 1px solid #fef08a; border-bottom: 2px solid #92400e;
       box-shadow: 0 6px 16px rgba(217, 119, 6, 0.4), inset 0 2px 4px rgba(255,255,255,0.4);
       text-shadow: 0 1px 1px rgba(255,255,255,0.5);
     }
     
     button {
       width: 100%; padding: 15px; font-size: 17px; font-weight: 800; font-family: 'Outfit', sans-serif;
-      border-radius: 50px; cursor: pointer;
-      transition: transform 0.08s, box-shadow 0.08s;
+      border-radius: 50px; cursor: pointer; transition: transform 0.08s, box-shadow 0.08s;
     }
     button:active { transform: scale(0.96); }
     
-    .game-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 8px;
-    }
+    .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .btn-header {
       width: auto; padding: 6px 14px; font-size: 13px; font-weight: 800;
       background-color: rgba(0,0,0,0.3); color: var(--text); border-radius: 50px;
       border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
     }
 
-    /* SCOREBOARD */
     .scoreboard {
       display: flex; justify-content: space-between;
       background: linear-gradient(145deg, rgba(20,83,45,0.9), rgba(10,50,25,0.95)); 
-      border-radius: 20px; padding: 8px 12px;
-      margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: var(--shadow), inset 0 1px 2px rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
+      border-radius: 20px; padding: 8px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: var(--shadow), inset 0 1px 2px rgba(255,255,255,0.1); backdrop-filter: blur(10px);
     }
     .player-score { text-align: center; flex: 1; opacity: 0.4; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 6px; border-radius: 16px; border: 1px solid transparent; }
-    
     .player-score.active { 
-      opacity: 1; transform: scale(1.04); 
-      background: rgba(0,0,0,0.2); 
-      border: 1px solid rgba(251, 191, 36, 0.5);
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.4), 0 0 20px rgba(251, 191, 36, 0.15);
+      opacity: 1; transform: scale(1.04); background: rgba(0,0,0,0.2); 
+      border: 1px solid rgba(251, 191, 36, 0.5); box-shadow: inset 0 2px 10px rgba(0,0,0,0.4), 0 0 20px rgba(251, 191, 36, 0.15);
     }
-    
-    .player-title-row {
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-    }
+    .player-title-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
     .player-score h2 { margin: 0; font-size: 13px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
     
-    .leg-badge {
-      font-size: 11px; font-weight: 900; padding: 2px 7px; border-radius: 12px;
-      background: rgba(0,0,0,0.4); color: var(--primary); border: 1px solid rgba(251, 191, 36, 0.3);
-      letter-spacing: 0.5px;
-    }
-
+    .leg-badge { font-size: 11px; font-weight: 900; padding: 2px 7px; border-radius: 12px; background: rgba(0,0,0,0.4); color: var(--primary); border: 1px solid rgba(251, 191, 36, 0.3); letter-spacing: 0.5px; }
     .score-wrapper { margin-top: 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .prev-score {
-      font-size: 13px; color: var(--text-muted); text-decoration: line-through;
-      height: 14px; opacity: 0; transition: opacity 0.2s; font-weight: 600;
-    }
+    .prev-score { font-size: 13px; color: var(--text-muted); text-decoration: line-through; height: 14px; opacity: 0; transition: opacity 0.2s; font-weight: 600; }
     .prev-score.visible { opacity: 0.7; }
+    .player-score .points { font-size: 38px; font-weight: 900; line-height: 1; margin-top: 1px; transition: color 0.2s, font-size 0.2s; font-variant-numeric: tabular-nums; text-shadow: 0 2px 6px rgba(0,0,0,0.5); }
     
-    .player-score .points {
-      font-size: 38px; font-weight: 900; line-height: 1; margin-top: 1px;
-      transition: color 0.2s, font-size 0.2s; font-variant-numeric: tabular-nums;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    }
     .bust-text { color: var(--danger) !important; font-size: 22px !important; line-height: 38px; letter-spacing: 1px; }
     .win-text { color: var(--success) !important; }
     
-    /* AREA INGRESSI E BERSAGLIO */
-    .input-wrapper { 
-      flex: 1; display: flex; justify-content: center; align-items: center; 
-      margin-bottom: 8px; min-height: 0; 
-    }
-    #dartboard-container { 
-      width: 100%; aspect-ratio: 1; 
-      max-width: 440px; 
-    }
-    svg { 
-      width: 100%; height: 100%; touch-action: manipulation; 
-      filter: drop-shadow(0 15px 25px rgba(0,0,0,0.7)); 
-    }
+    .input-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; margin-bottom: 8px; min-height: 0; position: relative; }
+    #dartboard-container { width: 100%; aspect-ratio: 1; max-width: 440px; position: relative; }
+    svg { width: 100%; height: 100%; touch-action: manipulation; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.7)); }
     .sector-wedge { cursor: pointer; }
-    .sector-wedge:active path { opacity: 0.7; }
+    .sector-wedge:active path, .sector-wedge:active circle { filter: brightness(1.2); }
     
-    /* TABELLA INPUT */
+    /* FRECCE TUNGSTENO PRO & ANIMAZIONI */
+    .dart-anchor {
+      pointer-events: none;
+    }
+    .dart-obj {
+      transform-origin: 0 0;
+      filter: drop-shadow(4px 6px 3.5px rgba(0,0,0,0.78));
+      animation: dartThud 0.16s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes dartThud {
+      0% { transform: scale(1.6) translate(-6px, -12px); opacity: 0.2; }
+      70% { transform: scale(0.96) translate(1px, 1px); opacity: 1; }
+      100% { transform: scale(1) translate(0, 0); opacity: 1; }
+    }
+
     #table-container { width: 100%; max-height: 360px; overflow-y: auto; border-radius: 16px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
     .darts-table { width: 100%; border-collapse: collapse; text-align: center; }
     .darts-table th { position: sticky; top: 0; background: #082613; padding: 10px 4px; font-size: 12px; color: var(--text-muted); text-transform: uppercase; z-index: 2; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.1); }
@@ -222,19 +167,25 @@
     .btn-double { background-color: #065f46; color: var(--success); }
     .btn-triple { background-color: #7f1d1d; color: var(--danger); }
 
-    /* CONTROLLI TURNO */
-    .turn-controls { display: flex; flex-direction: column; gap: 8px; background: rgba(20,83,45,0.85); padding: 10px; border-radius: 18px; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
-    .darts-info { display: flex; justify-content: space-between; align-items: center; padding: 0 4px; }
-    
-    .dart-badges { display: flex; gap: 8px; }
+    .turn-controls { display: flex; flex-direction: column; gap: 8px; background: rgba(20,83,45,0.85); padding: 10px; border-radius: 18px; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); z-index: 10; }
+    .darts-info { display: flex; justify-content: space-between; align-items: center; padding: 0 4px; gap: 6px; }
+    .dart-badges { display: flex; gap: 6px; }
     .dart-slot { 
-      width: 38px; height: 38px; border-radius: 50%;
-      background: inset 0 2px 6px rgba(0,0,0,0.6);
-      background-color: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
-      display: flex; justify-content: center; align-items: center;
-      font-weight: 900; font-size: 15px; color: var(--primary);
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      width: 38px; height: 38px; border-radius: 50%; background: inset 0 2px 6px rgba(0,0,0,0.6);
+      background-color: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center;
+      font-weight: 900; font-size: 14px; color: var(--primary); text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
+
+    #checkout-assistant-btn {
+      display: none;
+      background: linear-gradient(180deg, rgba(251, 191, 36, 0.22) 0%, rgba(217, 119, 6, 0.22) 100%);
+      border: 1px solid var(--primary); color: var(--primary); padding: 0 12px; height: 36px;
+      border-radius: 50px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      transition: transform 0.08s, background 0.15s; white-space: nowrap; align-items: center; justify-content: center; width: auto;
+    }
+    #checkout-assistant-btn:active { transform: scale(0.95); background: var(--primary); color: var(--primary-text); }
+
+    .turn-total-box { font-size: 13px; font-weight: 800; color: var(--text-muted); text-align: right; min-width: 65px; }
     
     .action-row { display: flex; gap: 8px; }
     .btn-miss, .btn-undo { 
@@ -244,7 +195,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.1);
     }
     
-    /* POPUP */
     .modal-overlay { 
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
       background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; 
@@ -258,21 +208,20 @@
     }
     .modal-box h3 { margin-top: 0; font-size: 22px; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
     .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
-    
     .btn-modal-cancel { background: rgba(0,0,0,0.4); color: var(--text); border: 1px solid rgba(255,255,255,0.1); }
     .btn-modal-danger { background: linear-gradient(180deg, #f87171, #dc2626); color: #fff; border-bottom: 2px solid #7f1d1d;}
+
+    .checkout-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; max-height: 270px; overflow-y: auto; padding-right: 4px; text-align: left; }
+    .checkout-route { background: rgba(0,0,0,0.35); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; }
+    .checkout-route .darts { font-weight: 900; color: #fff; font-size: 16px; letter-spacing: 0.5px; }
+    .checkout-route.optimal { border-color: var(--primary); background: rgba(251, 191, 36, 0.15); box-shadow: 0 0 12px rgba(251, 191, 36, 0.12); }
     
     #zoom-svg-container { 
-      width: 100%; aspect-ratio: 1; margin: 10px 0 14px 0; 
-      border-radius: 20px; overflow: hidden; 
-      background: radial-gradient(circle at 50% 50%, #0f3a22, #000000); 
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+      width: 100%; aspect-ratio: 1; margin: 10px 0 14px 0; border-radius: 20px; overflow: hidden; 
+      background: radial-gradient(circle at 50% 50%, #2b221a, #0c0a08); 
+      border: 1px solid rgba(255,255,255,0.15); box-shadow: inset 0 0 30px rgba(0,0,0,0.8); position: relative;
     }
-    .zoom-segment { cursor: pointer; transition: filter 0.08s; }
-    .zoom-segment:active { filter: brightness(1.4); }
-
-    /* VITTORIA */
+    
     #victory-screen { justify-content: center; align-items: center; text-align: center; cursor: pointer; }
     .trophy { font-size: 84px; margin-bottom: 8px; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.6)); }
     .winner-name { font-size: 38px; font-weight: 900; color: var(--primary); margin: 8px 0; text-transform: uppercase; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
@@ -283,33 +232,21 @@
   <div id="app-container">
 
     <button id="btn-fullscreen" type="button" onclick="toggleFullscreen()" title="Schermo intero">
-      <svg id="icon-fs-enter" viewBox="0 0 24 24">
-        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-      </svg>
-      <svg id="icon-fs-exit" viewBox="0 0 24 24" style="display: none;">
-        <path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M14 4v6m0 0h6m-6 0L21 3M10 4v6m0 0H4m6 0L3 3"></path>
-      </svg>
+      <svg id="icon-fs-enter" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+      <svg id="icon-fs-exit" viewBox="0 0 24 24" style="display: none;"><path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M14 4v6m0 0h6m-6 0L21 3M10 4v6m0 0H4m6 0L3 3"></path></svg>
     </button>
 
-    <!-- SCHERMATA LOBBY -->
     <div id="lobby-screen" class="screen">
       <h1>Freccette 🎯</h1>
-      
       <div class="glass-panel">
         <div class="form-group">
           <label>Giocatore 1</label>
-          <input type="text" id="player1" value="Giocatore 1" 
-                 onfocus="if(this.value==='Giocatore 1') this.value='';" 
-                 onblur="if(this.value.trim()==='') this.value='Giocatore 1';">
+          <input type="text" id="player1" value="Giocatore 1" onfocus="if(this.value==='Giocatore 1') this.value='';" onblur="if(this.value.trim()==='') this.value='Giocatore 1';">
         </div>
-        
         <div class="form-group">
           <label>Giocatore 2</label>
-          <input type="text" id="player2" value="Giocatore 2" 
-                 onfocus="if(this.value==='Giocatore 2') this.value='';" 
-                 onblur="if(this.value.trim()==='') this.value='Giocatore 2';">
+          <input type="text" id="player2" value="Giocatore 2" onfocus="if(this.value==='Giocatore 2') this.value='';" onblur="if(this.value.trim()==='') this.value='Giocatore 2';">
         </div>
-        
         <div class="form-group">
           <label>Punti Iniziali</label>
           <div class="toggle-group">
@@ -317,7 +254,6 @@
             <button type="button" class="toggle-btn active" id="btn-501" onclick="selezionaPunteggio(501)">501</button>
           </div>
         </div>
-
         <div class="form-group">
           <label>Regola di Chiusura</label>
           <div class="toggle-group">
@@ -325,7 +261,6 @@
             <button type="button" class="toggle-btn active" id="btn-out-double" onclick="selezionaDoubleOut(true)">Doppia (Double-Out)</button>
           </div>
         </div>
-
         <div class="form-group">
           <label>Modalità Partita</label>
           <div class="toggle-group">
@@ -334,7 +269,6 @@
             <button type="button" class="toggle-btn" id="btn-leg-3" onclick="selezionaLegs(3)">Primo a 3</button>
           </div>
         </div>
-
         <div class="form-group" style="margin-bottom: 0;">
           <label>Interfaccia di Tiro</label>
           <div class="toggle-group">
@@ -343,11 +277,9 @@
           </div>
         </div>
       </div>
-
       <button class="btn-gold" onclick="iniziaPartita()" style="margin-top: 16px;">INIZIA PARTITA</button>
     </div>
 
-    <!-- SCHERMATA GIOCO -->
     <div id="game-screen" class="screen">
       <div class="game-header">
         <button class="btn-header" onclick="chiediConfermaUscita()">✕ LOBBY</button>
@@ -390,21 +322,19 @@
             <span id="dart-2" class="dart-slot"></span>
             <span id="dart-3" class="dart-slot"></span>
           </div>
-          <div style="font-size: 14px; font-weight: 800; color: var(--text-muted);">
-            Tot: <strong id="turn-total" style="color:var(--primary); font-size: 24px; vertical-align: middle; margin-left: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">0</strong>
+          <button id="checkout-assistant-btn" type="button" onclick="mostraCheckoutModal()">💡 Chiusure</button>
+          <div class="turn-total-box">
+            Tot: <strong id="turn-total" style="color:var(--primary); font-size: 24px; vertical-align: middle; margin-left: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">0</strong>
           </div>
         </div>
-
         <div class="action-row">
-          <button class="btn-miss" onclick="aggiungiTiro(0, 'Miss', false)">Fuori</button>
+          <button class="btn-miss" onclick="aggiungiTiro(0, 'Miss', false, null)">Fuori</button>
           <button class="btn-undo" onclick="annullaUltimoTiro()">↩ Annulla</button>
         </div>
-
         <button class="btn-gold" onclick="chiediConfermaTurno()">CONFERMA TURNO</button>
       </div>
     </div>
 
-    <!-- SCHERMATA VITTORIA MATCH -->
     <div id="victory-screen" class="screen" onclick="tornaAllaLobby()">
       <div class="trophy">🏆</div>
       <h1 style="margin: 0; font-size: 26px;">VITTORIA!</h1>
@@ -415,7 +345,16 @@
 
   </div> <!-- FINE APP-CONTAINER -->
 
-  <!-- POPUP ZOOM SETTORE -->
+  <!-- MODAL ASSISTENTE CHIUSURE -->
+  <div id="popup-checkout" class="modal-overlay" onclick="chiudiPopups()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3 style="color: var(--primary); margin-bottom: 4px;">Vie di Chiusura</h3>
+      <p style="color: var(--text-muted); font-size: 13px; margin: 0 0 4px 0;">Da <strong id="checkout-score-title" style="color:white;">0</strong> punti con <strong id="checkout-darts-title" style="color:white;">3</strong> freccette (<span id="checkout-count-title">0 vie</span>)</p>
+      <div id="checkout-list" class="checkout-list"></div>
+      <button class="btn-modal-cancel" style="border-radius: 50px; font-family: 'Outfit'; margin-top: 18px; padding: 12px;" onclick="chiudiPopups()">Chiudi</button>
+    </div>
+  </div>
+
   <div id="zoom-modal" class="modal-overlay" onclick="chiudiSelettore()">
     <div class="modal-box" onclick="event.stopPropagation()">
       <h3 id="zoom-title" style="margin-bottom: 2px;">Settore</h3>
@@ -425,7 +364,6 @@
     </div>
   </div>
 
-  <!-- POPUP CONFERMA TURNO -->
   <div id="popup-turn" class="modal-overlay">
     <div class="modal-box">
       <h3>Conferma Turno</h3>
@@ -437,7 +375,6 @@
     </div>
   </div>
 
-  <!-- POPUP VITTORIA LEG INTERMEDIO -->
   <div id="popup-leg-win" class="modal-overlay">
     <div class="modal-box">
       <h3 style="color: var(--primary); margin-bottom: 8px;">🎯 LEG VINTO!</h3>
@@ -446,7 +383,6 @@
     </div>
   </div>
 
-  <!-- POPUP CONFERMA USCITA LOBBY -->
   <div id="popup-exit" class="modal-overlay">
     <div class="modal-box">
       <h3>Abbandonare?</h3>
@@ -458,7 +394,6 @@
     </div>
   </div>
 
-  <!-- INIZIO LOGICA JAVASCRIPT -->
   <script>
     let punteggioScelto = 501;
     let interfacciaScelta = 'board';
@@ -473,159 +408,189 @@
     let turnDarts = [];
     
     const boardOrder = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
+    const cx = 200, cy = 200, angleStep = 360 / 20;
 
-    // --- SCHERMO INTERO ---
+    function descriviArco(rIn, rOut, cx, cy, startA, endA) {
+      const rad = (a) => (a - 90) * Math.PI / 180;
+      const pInS = { x: cx + rIn * Math.cos(rad(endA)), y: cy + rIn * Math.sin(rad(endA)) };
+      const pInE = { x: cx + rIn * Math.cos(rad(startA)), y: cy + rIn * Math.sin(rad(startA)) };
+      const pOutS = { x: cx + rOut * Math.cos(rad(endA)), y: cy + rOut * Math.sin(rad(endA)) };
+      const pOutE = { x: cx + rOut * Math.cos(rad(startA)), y: cy + rOut * Math.sin(rad(startA)) };
+      return `M ${pOutE.x} ${pOutE.y} A ${rOut} ${rOut} 0 0 1 ${pOutS.x} ${pOutS.y} L ${pInS.x} ${pInS.y} A ${rIn} ${rIn} 0 0 0 ${pInE.x} ${pInE.y} Z`;
+    }
+
+    const CHECKOUT_PRO = {
+      170: ["T20", "T20", "Bull"], 167: ["T20", "T19", "Bull"], 164: ["T20", "T18", "Bull"], 161: ["T20", "T17", "Bull"], 160: ["T20", "T20", "D20"],
+      158: ["T20", "T20", "D19"], 157: ["T20", "T19", "D20"], 156: ["T20", "T20", "D18"], 155: ["T20", "T19", "D19"], 154: ["T20", "T18", "D20"],
+      153: ["T20", "T19", "D18"], 152: ["T20", "T20", "D16"], 151: ["T20", "T17", "D20"], 150: ["T20", "T18", "D18"], 149: ["T20", "T19", "D16"],
+      148: ["T20", "T16", "D20"], 147: ["T20", "T17", "D18"], 146: ["T20", "T18", "D16"], 145: ["T20", "T15", "D20"], 144: ["T20", "T20", "D12"],
+      143: ["T20", "T17", "D16"], 142: ["T20", "T14", "D20"], 141: ["T20", "T19", "D12"], 140: ["T20", "T20", "D10"], 139: ["T19", "T14", "D20"],
+      138: ["T20", "T18", "D12"], 137: ["T17", "T18", "D16"], 136: ["T20", "T20", "D8"], 135: ["T20", "T17", "D12"], 134: ["T20", "T14", "D16"],
+      133: ["T20", "T19", "D8"], 132: ["T20", "T16", "D12"], 131: ["T20", "T13", "D16"], 130: ["T20", "T20", "D5"], 129: ["T19", "T16", "D12"],
+      128: ["T18", "T14", "D16"], 127: ["T20", "T17", "D8"], 126: ["T19", "T19", "D6"], 125: ["Bull", "T20", "D7"], 124: ["T20", "T16", "D8"],
+      123: ["T19", "T16", "D9"], 122: ["T18", "T20", "D4"], 121: ["T20", "T15", "D8"], 120: ["T20", "20", "D20"], 119: ["T19", "T10", "D16"],
+      118: ["T20", "18", "D20"], 117: ["T20", "17", "D20"], 116: ["T20", "16", "D20"], 115: ["T20", "15", "D20"], 114: ["T20", "14", "D20"],
+      113: ["T20", "13", "D20"], 112: ["T20", "12", "D20"], 111: ["T20", "11", "D20"], 110: ["T20", "10", "D20"], 109: ["T19", "20", "D16"],
+      108: ["T20", "16", "D16"], 107: ["T19", "18", "D16"], 106: ["T20", "10", "D18"], 105: ["T19", "16", "D16"], 104: ["T18", "18", "D16"],
+      103: ["T19", "10", "D18"], 102: ["T20", "10", "D16"], 101: ["T17", "18", "D16"], 100: ["T20", "D20"], 99: ["T19", "10", "D16"],
+      98: ["T20", "D19"], 97: ["T19", "D20"], 96: ["T20", "D18"], 95: ["T19", "D19"], 94: ["T18", "D20"], 93: ["T19", "D18"], 92: ["T20", "D16"],
+      91: ["T17", "D20"], 90: ["T20", "D15"], 89: ["T19", "D16"], 88: ["T20", "D14"], 87: ["T17", "D18"], 86: ["T18", "D16"], 85: ["T15", "D20"],
+      84: ["T20", "D12"], 83: ["T17", "D16"], 82: ["Bull", "D16"], 81: ["T19", "D12"], 80: ["T20", "D10"], 79: ["T13", "D20"], 78: ["T18", "D12"],
+      77: ["T15", "D16"], 76: ["T20", "D8"], 75: ["T17", "D12"], 74: ["T14", "D16"], 73: ["T19", "D8"], 72: ["T16", "D12"], 71: ["T13", "D16"],
+      70: ["T18", "D8"], 69: ["T15", "D12"], 68: ["T20", "D4"], 67: ["T17", "D8"], 66: ["T10", "D18"], 65: ["T19", "D4"], 64: ["T16", "D8"],
+      63: ["T13", "D12"], 62: ["T10", "D16"], 61: ["T15", "D8"], 60: ["20", "D20"], 59: ["19", "D20"], 58: ["18", "D20"], 57: ["17", "D20"],
+      56: ["16", "D20"], 55: ["15", "D20"], 54: ["14", "D20"], 53: ["13", "D20"], 52: ["12", "D20"], 51: ["11", "D20"], 50: ["Bull"],
+      40: ["D20"], 38: ["D19"], 36: ["D18"], 34: ["D17"], 32: ["D16"], 30: ["D15"], 28: ["D14"], 26: ["D13"], 24: ["D12"], 22: ["D11"],
+      20: ["D10"], 18: ["D9"], 16: ["D8"], 14: ["D7"], 12: ["D6"], 10: ["D5"], 8: ["D4"], 6: ["D3"], 4: ["D2"], 2: ["D1"]
+    };
+
     function toggleFullscreen() {
       const doc = document.documentElement;
       const isFs = document.fullscreenElement || document.webkitFullscreenElement;
-      
-      if (!isFs) {
-        if (doc.requestFullscreen) doc.requestFullscreen();
-        else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
-      } else {
-        if (document.exitFullscreen) document.exitFullscreen();
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-      }
+      if (!isFs) { if (doc.requestFullscreen) doc.requestFullscreen(); else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen(); } 
+      else { if (document.exitFullscreen) document.exitFullscreen(); else if (document.webkitExitFullscreen) document.webkitExitFullscreen(); }
     }
 
     function aggiornaIconaFullscreen() {
       const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
       const iconEnter = document.getElementById('icon-fs-enter');
       const iconExit = document.getElementById('icon-fs-exit');
-      if (iconEnter && iconExit) {
-        iconEnter.style.display = isFs ? 'none' : 'block';
-        iconExit.style.display = isFs ? 'block' : 'none';
-      }
+      if (iconEnter && iconExit) { iconEnter.style.display = isFs ? 'none' : 'block'; iconExit.style.display = isFs ? 'block' : 'none'; }
     }
 
     document.addEventListener('fullscreenchange', aggiornaIconaFullscreen);
     document.addEventListener('webkitfullscreenchange', aggiornaIconaFullscreen);
 
-    // --- SELEZIONI LOBBY ---
-    function selezionaPunteggio(pts) {
-      punteggioScelto = pts;
-      document.getElementById('btn-301').classList.toggle('active', pts === 301);
-      document.getElementById('btn-501').classList.toggle('active', pts === 501);
-    }
-
-    function selezionaDoubleOut(isDouble) {
-      regolaDoubleOut = isDouble;
-      document.getElementById('btn-out-straight').classList.toggle('active', !isDouble);
-      document.getElementById('btn-out-double').classList.toggle('active', isDouble);
-    }
-
-    function selezionaLegs(num) {
-      legsToWin = num;
-      document.getElementById('btn-leg-1').classList.toggle('active', num === 1);
-      document.getElementById('btn-leg-2').classList.toggle('active', num === 2);
-      document.getElementById('btn-leg-3').classList.toggle('active', num === 3);
-    }
-
-    function selezionaInterfaccia(mode) {
-      interfacciaScelta = mode;
-      document.getElementById('btn-mode-board').classList.toggle('active', mode === 'board');
-      document.getElementById('btn-mode-table').classList.toggle('active', mode === 'table');
-    }
+    function selezionaPunteggio(pts) { punteggioScelto = pts; document.getElementById('btn-301').classList.toggle('active', pts === 301); document.getElementById('btn-501').classList.toggle('active', pts === 501); }
+    function selezionaDoubleOut(isDouble) { regolaDoubleOut = isDouble; document.getElementById('btn-out-straight').classList.toggle('active', !isDouble); document.getElementById('btn-out-double').classList.toggle('active', isDouble); }
+    function selezionaLegs(num) { legsToWin = num; document.getElementById('btn-leg-1').classList.toggle('active', num === 1); document.getElementById('btn-leg-2').classList.toggle('active', num === 2); document.getElementById('btn-leg-3').classList.toggle('active', num === 3); }
+    function selezionaInterfaccia(mode) { interfacciaScelta = mode; document.getElementById('btn-mode-board').classList.toggle('active', mode === 'board'); document.getElementById('btn-mode-table').classList.toggle('active', mode === 'table'); }
 
     function iniziaPartita() {
-      names[0] = document.getElementById('player1').value.trim() || "Giocatore 1";
+      names[0] = document.getElementById('player1').value.trim() || "Giocatore 1"; 
       names[1] = document.getElementById('player2').value.trim() || "Giocatore 2";
-      scores = [punteggioScelto, punteggioScelto];
-      legs = [0, 0];
-      starterPlayerForLeg = 0;
-      activePlayer = 0;
-      
-      document.getElementById('p1-name').innerText = names[0];
-      document.getElementById('p2-name').innerText = names[1];
-      
-      const legLabel = legsToWin === 1 ? '1 Leg' : `Primo a ${legsToWin}`;
-      const outLabel = regolaDoubleOut ? 'Double-Out' : 'Chiusura Aperta';
+      scores = [punteggioScelto, punteggioScelto]; legs = [0, 0]; starterPlayerForLeg = 0; activePlayer = 0;
+      document.getElementById('p1-name').innerText = names[0]; document.getElementById('p2-name').innerText = names[1];
+      const legLabel = legsToWin === 1 ? '1 Leg' : `Primo a ${legsToWin}`; const outLabel = regolaDoubleOut ? 'Double-Out' : 'Chiusura Aperta';
       document.getElementById('active-mode-label').innerText = `${punteggioScelto} • ${outLabel} • ${legLabel}`;
       
-      const boardContainer = document.getElementById('dartboard-container');
+      const boardContainer = document.getElementById('dartboard-container'); 
       const tableContainer = document.getElementById('table-container');
-      
-      if (interfacciaScelta === 'board') {
-        boardContainer.style.display = 'block';
-        tableContainer.style.display = 'none';
-        disegnaBersaglio();
-      } else {
-        boardContainer.style.display = 'none';
-        tableContainer.style.display = 'block';
-        costruisciTabella();
+      if (interfacciaScelta === 'board') { 
+        boardContainer.style.display = 'block'; 
+        tableContainer.style.display = 'none'; 
+        disegnaBersaglio(); 
+      } else { 
+        boardContainer.style.display = 'none'; 
+        tableContainer.style.display = 'block'; 
+        costruisciTabella(); 
       }
       
-      aggiornaUI();
-      resetTurno();
-      
-      document.getElementById('lobby-screen').style.display = 'none';
-      document.getElementById('victory-screen').style.display = 'none';
+      aggiornaUI(); resetTurno();
+      document.getElementById('lobby-screen').style.display = 'none'; 
+      document.getElementById('victory-screen').style.display = 'none'; 
       document.getElementById('game-screen').style.display = 'flex';
     }
 
-    // --- LOGICA DI CALCOLO PUNTI E VERIFICA CHIUSURA ---
     function valutaTiriTurno(scoreIniziale, tiri, doubleOutAttivo) {
-      let scoreCorrente = scoreIniziale;
-      let sballato = false;
-      let vinto = false;
-
+      let scoreCorrente = scoreIniziale; let sballato = false; let vinto = false;
       for (let i = 0; i < tiri.length; i++) {
-        const t = tiri[i];
-        const rimanente = scoreCorrente - t.points;
-        
+        const t = tiri[i]; const rimanente = scoreCorrente - t.points;
         if (doubleOutAttivo) {
-          if (rimanente < 0 || rimanente === 1) {
-            sballato = true;
-            break;
-          } else if (rimanente === 0) {
-            if (t.isDouble) {
-              vinto = true;
-              scoreCorrente = 0;
-              break;
-            } else {
-              sballato = true;
-              break;
-            }
-          } else {
-            scoreCorrente = rimanente;
-          }
+          if (rimanente < 0 || rimanente === 1) { sballato = true; break; } 
+          else if (rimanente === 0) { if (t.isDouble) { vinto = true; scoreCorrente = 0; break; } else { sballato = true; break; } } 
+          else { scoreCorrente = rimanente; }
         } else {
-          if (rimanente < 0) {
-            sballato = true;
-            break;
-          } else if (rimanente === 0) {
-            vinto = true;
-            scoreCorrente = 0;
-            break;
-          } else {
-            scoreCorrente = rimanente;
-          }
+          if (rimanente < 0) { sballato = true; break; } else if (rimanente === 0) { vinto = true; scoreCorrente = 0; break; } else { scoreCorrente = rimanente; }
         }
       }
-
-      return {
-        scoreFinale: sballato ? scoreIniziale : scoreCorrente,
-        sballato: sballato,
-        vinto: vinto,
-        scoreVisualizzato: sballato ? "SBALLO" : scoreCorrente
-      };
+      return { scoreFinale: sballato ? scoreIniziale : scoreCorrente, sballato: sballato, vinto: vinto, scoreVisualizzato: sballato ? "SBALLO" : scoreCorrente };
     }
 
-    function aggiungiTiro(punti, etichetta, isDouble = false) {
-      if (turnDarts.length >= 3) return;
+    // --- AGGIUNTA FRECCIA CON CLUSTERING CORRETTO ---
+    function aggiungiFrecciaSVG(targetId, targetCx, targetCy, clusterIndex) {
+      const layer = document.getElementById('darts-layer');
+      if (!layer) return null;
 
-      // Se il turno corrente è già finito in vittoria o sballo, blocca ulteriori tiri
+      // Logica corretta di Offset: ogni freccia ha coordinate uniche e salde
+      let offsetX = 0, offsetY = 0, rotationDeg = 15;
+      if (clusterIndex === 0) { 
+        offsetX = 0; offsetY = 0; rotationDeg = 18; 
+      } else if (clusterIndex === 1) { 
+        offsetX = -7; offsetY = 5; rotationDeg = 28; 
+      } else if (clusterIndex >= 2) { 
+        offsetX = 7; offsetY = 6; rotationDeg = 5; 
+      }
+
+      const fillColor = activePlayer === 0 ? '#38bdf8' : '#ef4444'; // Azzurro elettrico G1, Rosso rubino G2
+      const px = targetCx + offsetX;
+      const py = targetCy + offsetY;
+
+      const elementId = `dart-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+      const wrapper = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      wrapper.setAttribute("id", elementId);
+      wrapper.setAttribute("class", "dart-anchor");
+      wrapper.setAttribute("transform", `translate(${px}, ${py}) rotate(${rotationDeg})`);
+
+      wrapper.innerHTML = `
+        <g class="dart-obj" style="color: ${fillColor};">
+          <use href="#model-tungsten"/>
+        </g>
+      `;
+
+      layer.appendChild(wrapper);
+      return elementId;
+    }
+
+    function svuotaFrecceSVG() {
+      const layer = document.getElementById('darts-layer');
+      if (layer) layer.innerHTML = '';
+    }
+
+    function aggiungiTiro(punti, etichetta, isDouble, coordData) {
+      if (turnDarts.length >= 3) return;
       const statoAttuale = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
       if (statoAttuale.sballato || statoAttuale.vinto) return;
+      
+      const sectorId = coordData ? coordData.id : 'miss';
+      
+      // Calcola e fissa la posizione (clusterIndex) della freccia in questo settore
+      const clusterIndex = turnDarts.filter(d => d.sectorId === sectorId).length;
+      let elementId = null;
 
-      turnDarts.push({ points: punti, label: etichetta, isDouble: isDouble });
+      if (coordData && interfacciaScelta === 'board') {
+        elementId = aggiungiFrecciaSVG(sectorId, coordData.x, coordData.y, clusterIndex);
+      }
+
+      turnDarts.push({ 
+        points: punti, 
+        label: etichetta, 
+        isDouble: isDouble, 
+        sectorId: sectorId, 
+        elementId: elementId,
+        coordData: coordData,
+        clusterIndex: clusterIndex
+      });
+      
       aggiornaSlotTiri();
     }
 
-    function annullaUltimoTiro() {
-      if (turnDarts.length === 0) return;
-      turnDarts.pop();
-      aggiornaSlotTiri();
+    // --- ANNULLA CORRETTO ---
+    function annullaUltimoTiro() { 
+      if (turnDarts.length === 0) return; 
+      
+      // Rimuove l'ultima freccia dallo storico
+      const removedDart = turnDarts.pop(); 
+      
+      // La rimuove fisicamente e chirurgicamente dal bersaglio SVG
+      if (removedDart.elementId) {
+        const el = document.getElementById(removedDart.elementId);
+        if (el) el.remove();
+      }
+      
+      // Non tocchiamo le altre frecce già piazzate!
+      aggiornaSlotTiri(); 
     }
 
     function aggiornaSlotTiri() {
@@ -637,6 +602,157 @@
       aggiornaProiezionePunteggio();
     }
 
+    function calcolaTutteLeChiusure(score, dartsLeft, doubleOut) {
+      if (score < 2 || (doubleOut && score > 170)) return [];
+      if (doubleOut && [159, 162, 163, 165, 166, 168, 169].includes(score)) return [];
+
+      const singles = [];
+      for (let i = 1; i <= 20; i++) singles.push({ val: i, label: `${i}`, type: 'S', base: i });
+      singles.push({ val: 25, label: '25', type: 'S', base: 25 });
+
+      const doubles = [];
+      for (let i = 1; i <= 20; i++) doubles.push({ val: i * 2, label: `D${i}`, type: 'D', base: i });
+      doubles.push({ val: 50, label: 'Bull', type: 'D', base: 25 });
+
+      const triples = [];
+      for (let i = 1; i <= 20; i++) triples.push({ val: i * 3, label: `T${i}`, type: 'T', base: i });
+
+      const allDarts = [...triples, ...singles, ...doubles];
+
+      function getFinisher(val) {
+        if (doubleOut) {
+          if (val === 50) return { label: 'Bull', val: 50, type: 'D', base: 25 };
+          if (val >= 2 && val <= 40 && val % 2 === 0) return { label: `D${val / 2}`, val: val, type: 'D', base: val / 2 };
+          return null;
+        } else {
+          let matches = [];
+          if (val === 50) matches.push({ label: 'Bull', val: 50, type: 'D', base: 25 });
+          if (val === 25) matches.push({ label: '25', val: 25, type: 'S', base: 25 });
+          if (val >= 1 && val <= 20) matches.push({ label: `${val}`, val: val, type: 'S', base: val });
+          if (val >= 2 && val <= 40 && val % 2 === 0) matches.push({ label: `D${val / 2}`, val: val, type: 'D', base: val / 2 });
+          if (val >= 3 && val <= 60 && val % 3 === 0) matches.push({ label: `T${val / 3}`, val: val, type: 'T', base: val / 3 });
+          return matches.length > 0 ? matches : null;
+        }
+      }
+
+      function valutaComodita(dartList, targetScore) {
+        let rating = 0;
+        const labels = dartList.map(d => d.label);
+        if (CHECKOUT_PRO[targetScore]) {
+          const pro = CHECKOUT_PRO[targetScore];
+          if (pro.length === labels.length && pro.every((v, i) => v === labels[i])) {
+            rating += 150000;
+          }
+        }
+        if (dartList.length === 1) rating += 50000;
+        else if (dartList.length === 2) rating += 20000;
+        const finisher = dartList[dartList.length - 1];
+        if (finisher.type === 'D') {
+          if (finisher.base === 20 || finisher.base === 16) rating += 5000;
+          else if ([8, 10, 12, 4].includes(finisher.base)) rating += 3500;
+          else if ([18, 14, 6, 2].includes(finisher.base)) rating += 2000;
+          else if (finisher.base === 25) rating += 1600;
+          else rating += 200;
+        }
+        for (let i = 0; i < dartList.length - 1; i++) {
+          const d = dartList[i];
+          if (d.type === 'T') {
+            if ([20, 19, 18, 17].includes(d.base)) rating += 1200;
+            else if ([16, 15, 14].includes(d.base)) rating += 800;
+            else rating += 400;
+          } else if (d.type === 'S') {
+            if ([20, 19, 18, 17, 16].includes(d.base)) rating += 600;
+            else if (d.base === 25) rating += 500;
+            else rating += 100;
+          }
+        }
+        if (dartList.length >= 2 && dartList[0].type === 'T' && dartList[1].type === 'S') rating += 700;
+        return rating;
+      }
+
+      let routes = [];
+      if (dartsLeft >= 1) {
+        const fin = getFinisher(score);
+        if (fin) {
+          if (Array.isArray(fin)) fin.forEach(f => routes.push({ darts: [f.label], rating: valutaComodita([f], score) }));
+          else routes.push({ darts: [fin.label], rating: valutaComodita([fin], score) });
+        }
+      }
+      if (dartsLeft >= 2) {
+        for (let d1 of allDarts) {
+          let rem = score - d1.val;
+          if (rem <= 0 || (doubleOut && rem === 1)) continue;
+          const fin = getFinisher(rem);
+          if (fin) {
+            if (Array.isArray(fin)) fin.forEach(f => routes.push({ darts: [d1.label, f.label], rating: valutaComodita([d1, f], score) }));
+            else routes.push({ darts: [d1.label, fin.label], rating: valutaComodita([d1, fin], score) });
+          }
+        }
+      }
+      if (dartsLeft >= 3) {
+        for (let d1 of allDarts) {
+          let rem1 = score - d1.val;
+          if (rem1 <= 0 || (doubleOut && rem1 === 1)) continue;
+          for (let d2 of allDarts) {
+            let rem2 = rem1 - d2.val;
+            if (rem2 <= 0 || (doubleOut && rem2 === 1)) continue;
+            const fin = getFinisher(rem2);
+            if (fin) {
+              if (Array.isArray(fin)) fin.forEach(f => routes.push({ darts: [d1.label, d2.label, f.label], rating: valutaComodita([d1, d2, f], score) }));
+              else routes.push({ darts: [d1.label, d2.label, fin.label], rating: valutaComodita([d1, d2, fin], score) });
+            }
+          }
+        }
+      }
+
+      const seen = new Set();
+      const unique = [];
+      for (let r of routes) {
+        const key = r.darts.join('-');
+        if (!seen.has(key)) { seen.add(key); unique.push(r); }
+      }
+      unique.sort((a, b) => b.rating - a.rating);
+      return unique;
+    }
+
+    function aggiornaAssistenteChiusura(esito) {
+      const btnAssistant = document.getElementById('checkout-assistant-btn');
+      const dartsLeft = 3 - turnDarts.length;
+      if (esito.scoreFinale > 0 && esito.scoreFinale <= 170 && !esito.sballato && dartsLeft > 0) {
+        const vie = calcolaTutteLeChiusure(esito.scoreFinale, dartsLeft, regolaDoubleOut);
+        if (vie.length > 0) {
+          btnAssistant.style.display = 'inline-flex';
+          btnAssistant.innerHTML = `💡 Chiusure (${vie.length})`;
+          return;
+        }
+      }
+      btnAssistant.style.display = 'none';
+    }
+
+    function mostraCheckoutModal() {
+      const esito = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
+      const dartsLeft = 3 - turnDarts.length;
+      const vie = calcolaTutteLeChiusure(esito.scoreFinale, dartsLeft, regolaDoubleOut);
+      
+      document.getElementById('checkout-score-title').innerText = esito.scoreFinale;
+      document.getElementById('checkout-darts-title').innerText = dartsLeft;
+      document.getElementById('checkout-count-title').innerText = `${vie.length} opzion${vie.length === 1 ? 'e' : 'i'}`;
+      
+      const listHtml = vie.map((r, idx) => {
+        const isOptimal = idx === 0 ? "optimal" : "";
+        const viaText = r.darts.join(" • ");
+        const tagText = idx === 0 ? '★ Consigliata' : `${r.darts.length} ${r.darts.length === 1 ? 'freccia' : 'frecce'}`;
+        const tagColor = idx === 0 ? 'var(--primary)' : 'var(--text-muted)';
+        return `<div class="checkout-route ${isOptimal}">
+                  <span class="darts">${viaText}</span>
+                  <span style="font-size:11px; font-weight:800; color:${tagColor}; text-transform:uppercase;">${tagText}</span>
+                </div>`;
+      }).join('');
+      
+      document.getElementById('checkout-list').innerHTML = listHtml;
+      document.getElementById('popup-checkout').style.display = 'flex';
+    }
+
     function aggiornaProiezionePunteggio() {
       [1, 2].forEach(p => {
         document.getElementById(`p${p}-prev`).classList.remove('visible');
@@ -645,24 +761,28 @@
         scoreEl.classList.remove('bust-text', 'win-text');
       });
 
+      const esito = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
+      aggiornaAssistenteChiusura(esito);
+
       if (turnDarts.length > 0) {
-        const esito = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
         const prevEl = document.getElementById(`p${activePlayer + 1}-prev`);
         const scoreEl = document.getElementById(`p${activePlayer + 1}-score`);
-        
         prevEl.innerText = scores[activePlayer];
         prevEl.classList.add('visible');
-        
-        if (esito.sballato) {
-          scoreEl.innerText = "SBALLO";
-          scoreEl.classList.add('bust-text');
-        } else if (esito.vinto) {
-          scoreEl.innerText = "0";
-          scoreEl.classList.add('win-text');
-        } else {
-          scoreEl.innerText = esito.scoreVisualizzato;
-        }
+        if (esito.sballato) { scoreEl.innerText = "SBALLO"; scoreEl.classList.add('bust-text'); } 
+        else if (esito.vinto) { scoreEl.innerText = "0"; scoreEl.classList.add('win-text'); } 
+        else { scoreEl.innerText = esito.scoreVisualizzato; }
       }
+    }
+
+    function pointOnCircle(cx, cy, r, aRad) {
+      return { x: cx + r * Math.cos(aRad), y: cy + r * Math.sin(aRad) };
+    }
+
+    function getSectorCenter(cx, cy, rIn, rOut, aStartRad, aEndRad) {
+      const midRad = aStartRad + (aEndRad - aStartRad) / 2;
+      const midR = rIn + (rOut - rIn) / 2;
+      return pointOnCircle(cx, cy, midR, midRad);
     }
 
     function apriZoomSettore(n, index) {
@@ -670,51 +790,56 @@
       const statoAttuale = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
       if (statoAttuale.sballato || statoAttuale.vinto) return;
 
-      const cx = 200, cy = 200, angleStep = 360 / 20;
       let startAngle = (index * angleStep) - (angleStep / 2);
       let endAngle = (index * angleStep) + (angleStep / 2);
-      const midAngleRad = (startAngle + angleStep / 2 - 90) * Math.PI / 180;
+      const startRad = (startAngle - 90) * Math.PI / 180;
+      const endRad = (endAngle - 90) * Math.PI / 180;
       
-      const viewCx = cx + 90 * Math.cos(midAngleRad);
-      const viewCy = cy + 90 * Math.sin(midAngleRad);
+      const midAngleRad = startRad + (endRad - startRad) / 2;
+      
+      const viewCx = cx + 90 * Math.cos(midAngleRad); 
+      const viewCy = cy + 90 * Math.sin(midAngleRad); 
       const viewSize = 180; 
 
       let svgHTML = `<svg viewBox="${viewCx - viewSize/2} ${viewCy - viewSize/2} ${viewSize} ${viewSize}">
         <defs>
-          <filter id="sisalZoom">
-            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" result="noise" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" in="noise" result="coloredNoise" />
+          <filter id="corkZoom" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.22" numOctaves="3" result="noise" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0" in="noise" result="coloredNoise" />
             <feBlend in="SourceGraphic" in2="coloredNoise" mode="darken" />
           </filter>
         </defs>
-        <circle cx="${cx}" cy="${cy}" r="220" fill="#0a2e18" />
-        <g filter="url(#sisalZoom)">
-      `;
+        <circle cx="${cx}" cy="${cy}" r="220" fill="#201a15" />
+        <g filter="url(#corkZoom)">`;
 
       for (let i = 0; i < 20; i++) {
-        let sA = (i * angleStep) - (angleStep / 2);
+        let sA = (i * angleStep) - (angleStep / 2); 
         let eA = (i * angleStep) + (angleStep / 2);
-        let cS = (i % 2 === 0) ? '#000000' : '#f0ece1';
-        let cD = (i % 2 === 0) ? '#e3292e' : '#309f6a';
-        svgHTML += `<path fill="${cS}" opacity="0.15" d="${descriviArco(16, 100, cx, cy, sA, eA)}" />`;
-        svgHTML += `<path fill="${cD}" opacity="0.15" d="${descriviArco(100, 110, cx, cy, sA, eA)}" />`;
-        svgHTML += `<path fill="${cS}" opacity="0.15" d="${descriviArco(110, 160, cx, cy, sA, eA)}" />`;
-        svgHTML += `<path fill="${cD}" opacity="0.15" d="${descriviArco(160, 170, cx, cy, sA, eA)}" />`;
+        let cS = (i % 2 === 0) ? '#1f1e1d' : '#d2b48c'; 
+        let cD = (i % 2 === 0) ? '#b91c1c' : '#047857';
+        svgHTML += `<path fill="${cS}" opacity="0.22" d="${descriviArco(16, 100, cx, cy, sA, eA)}" />`;
+        svgHTML += `<path fill="${cD}" opacity="0.22" d="${descriviArco(100, 110, cx, cy, sA, eA)}" />`;
+        svgHTML += `<path fill="${cS}" opacity="0.22" d="${descriviArco(110, 160, cx, cy, sA, eA)}" />`;
+        svgHTML += `<path fill="${cD}" opacity="0.22" d="${descriviArco(160, 170, cx, cy, sA, eA)}" />`;
       }
 
-      let actSingle = (index % 2 === 0) ? '#1c1c1e' : '#fcfaf5';
-      let actDouble = (index % 2 === 0) ? '#ff3b30' : '#34c759';
-      let wire = `stroke="#71717a" stroke-width="1.2" stroke-linejoin="round" style="filter: drop-shadow(1px 1px 1.5px rgba(0,0,0,0.8));"`;
+      let actSingle = (index % 2 === 0) ? '#1f1e1d' : '#d2b48c'; 
+      let actDouble = (index % 2 === 0) ? '#b91c1c' : '#047857';
+      let wire = `stroke="#d4d4d8" stroke-width="1.6" stroke-linejoin="round" style="filter: drop-shadow(1.2px 2px 2px rgba(0,0,0,0.9));"`;
 
-      svgHTML += `<path class="zoom-segment" fill="${actSingle}" ${wire} d="${descriviArco(16, 96, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n}, '${n}', false)" />`;
-      svgHTML += `<path class="zoom-segment" fill="${actDouble}" ${wire} d="${descriviArco(96, 114, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n * 3}, 'T${n}', false)" />`;
-      svgHTML += `<path class="zoom-segment" fill="${actSingle}" ${wire} d="${descriviArco(114, 156, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n}, '${n}', false)" />`;
-      svgHTML += `<path class="zoom-segment" fill="${actDouble}" ${wire} d="${descriviArco(156, 174, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n * 2}, 'D${n}', true)" />`;
+      const pS1 = getSectorCenter(cx, cy, 16, 96, startRad, endRad);
+      const pT  = getSectorCenter(cx, cy, 96, 114, startRad, endRad);
+      const pS2 = getSectorCenter(cx, cy, 114, 156, startRad, endRad);
+      const pD  = getSectorCenter(cx, cy, 156, 174, startRad, endRad);
+
+      svgHTML += `<path class="zoom-segment" fill="${actSingle}" ${wire} d="${descriviArco(16, 96, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n}, '${n}', false, {id: 's1_${n}', x:${pS1.x}, y:${pS1.y}})" />`;
+      svgHTML += `<path class="zoom-segment" fill="${actDouble}" ${wire} d="${descriviArco(96, 114, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n * 3}, 'T${n}', false, {id: 't_${n}', x:${pT.x}, y:${pT.y}})" />`;
+      svgHTML += `<path class="zoom-segment" fill="${actSingle}" ${wire} d="${descriviArco(114, 156, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n}, '${n}', false, {id: 's2_${n}', x:${pS2.x}, y:${pS2.y}})" />`;
+      svgHTML += `<path class="zoom-segment" fill="${actDouble}" ${wire} d="${descriviArco(156, 174, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n * 2}, 'D${n}', true, {id: 'd_${n}', x:${pD.x}, y:${pD.y}})" />`;
 
       svgHTML += `</g></svg>`;
-
-      document.getElementById('zoom-title').innerText = `Settore ${n}`;
-      document.getElementById('zoom-svg-container').innerHTML = svgHTML;
+      document.getElementById('zoom-title').innerText = `Settore ${n}`; 
+      document.getElementById('zoom-svg-container').innerHTML = svgHTML; 
       document.getElementById('zoom-modal').style.display = 'flex';
     }
 
@@ -722,225 +847,180 @@
       if (turnDarts.length >= 3) return;
       const statoAttuale = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
       if (statoAttuale.sballato || statoAttuale.vinto) return;
-
-      const cx = 200, cy = 200;
       const viewSize = 54;
       
       let svgHTML = `<svg viewBox="${cx - viewSize/2} ${cy - viewSize/2} ${viewSize} ${viewSize}">
         <defs>
-          <filter id="sisalBull">
-            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" result="noise" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" in="noise" result="coloredNoise" />
+          <filter id="corkBull" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.22" numOctaves="3" result="noise" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0" in="noise" result="coloredNoise" />
             <feBlend in="SourceGraphic" in2="coloredNoise" mode="darken" />
           </filter>
         </defs>
-        <circle cx="${cx}" cy="${cy}" r="100" fill="#0a2e18" />
-        <g filter="url(#sisalBull)">
-      `;
-
-      let wire = `stroke="#71717a" stroke-width="0.8" style="filter: drop-shadow(0.5px 1px 1px rgba(0,0,0,0.8));"`;
-      svgHTML += `<circle class="zoom-segment" cx="${cx}" cy="${cy}" r="17" fill="#34c759" ${wire} onclick="selezionaEChiudi(25, '25', false)" />`;
-      svgHTML += `<circle class="zoom-segment" cx="${cx}" cy="${cy}" r="8.5" fill="#ff3b30" ${wire} onclick="selezionaEChiudi(50, 'D25', true)" />`;
+        <circle cx="${cx}" cy="${cy}" r="100" fill="#201a15" />
+        <g filter="url(#corkBull)">`;
+      let wire = `stroke="#d4d4d8" stroke-width="1.3" style="filter: drop-shadow(1px 1.5px 1.5px rgba(0,0,0,0.9));"`;
+      
+      const pGreen = getSectorCenter(cx, cy, 8.5, 17, 0, Math.PI);
+      
+      svgHTML += `<circle class="zoom-segment" cx="${cx}" cy="${cy}" r="17" fill="#047857" ${wire} onclick="selezionaEChiudi(25, '25', false, {id: '25', x:${pGreen.x}, y:${pGreen.y}})" />`;
+      svgHTML += `<circle class="zoom-segment" cx="${cx}" cy="${cy}" r="8.5" fill="#b91c1c" ${wire} onclick="selezionaEChiudi(50, 'Bull', true, {id: '50', x:${cx}, y:${cy}})" />`;
       svgHTML += `</g></svg>`;
-
-      document.getElementById('zoom-title').innerText = `Centro`;
-      document.getElementById('zoom-svg-container').innerHTML = svgHTML;
+      document.getElementById('zoom-title').innerText = `Centro`; 
+      document.getElementById('zoom-svg-container').innerHTML = svgHTML; 
       document.getElementById('zoom-modal').style.display = 'flex';
     }
 
-    function selezionaEChiudi(punti, etichetta, isDouble) {
-      chiudiSelettore();
-      aggiungiTiro(punti, etichetta, isDouble);
+    function selezionaEChiudi(punti, etichetta, isDouble, coordData) { 
+      chiudiSelettore(); 
+      aggiungiTiro(punti, etichetta, isDouble, coordData); 
     }
-
     function chiudiSelettore() { document.getElementById('zoom-modal').style.display = 'none'; }
 
-    // --- CONFERME E GESTIONE TURNI / LEG ---
     function chiediConfermaTurno() {
       const tot = turnDarts.reduce((acc, d) => acc + d.points, 0);
       const esito = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
       
-      if (esito.vinto) {
-        document.getElementById('popup-turn-text').innerHTML = 
-          `<span style="color:var(--success); font-size:22px; font-weight:900;">CHIUSURA! 🎯</span><br>Hai totalizzato <strong>${tot}</strong> punti e chiuso il leg!`;
-      } else if (esito.sballato) {
-        document.getElementById('popup-turn-text').innerHTML = 
-          `<span style="color:var(--danger); font-size:22px; font-weight:900;">SBALLO! ✕</span><br>Chiusura non valida o punteggio eccedente. I punti del turno non saranno contati.`;
-      } else {
-        document.getElementById('popup-turn-text').innerHTML = 
-          `Hai totalizzato <strong style="color:var(--primary); font-size:24px;">${tot}</strong> punti.<br>Confermi di passare il turno?`;
-      }
-      
+      if (esito.vinto) { document.getElementById('popup-turn-text').innerHTML = `<span style="color:var(--success); font-size:22px; font-weight:900;">CHIUSURA! 🎯</span><br>Hai totalizzato <strong>${tot}</strong> punti e chiuso il leg!`; } 
+      else if (esito.sballato) { document.getElementById('popup-turn-text').innerHTML = `<span style="color:var(--danger); font-size:22px; font-weight:900;">SBALLO! ✕</span><br>Chiusura non valida o punteggio eccedente. I punti del turno non saranno contati.`; } 
+      else { document.getElementById('popup-turn-text').innerHTML = `Hai totalizzato <strong style="color:var(--primary); font-size:24px;">${tot}</strong> punti.<br>Confermi di passare il turno?`; }
       document.getElementById('popup-turn').style.display = 'flex';
     }
 
     function chiediConfermaUscita() { document.getElementById('popup-exit').style.display = 'flex'; }
-
-    function chiudiPopups() {
-      document.getElementById('popup-turn').style.display = 'none';
-      document.getElementById('popup-exit').style.display = 'none';
-      document.getElementById('popup-leg-win').style.display = 'none';
+    function chiudiPopups() { 
+      document.getElementById('popup-turn').style.display = 'none'; 
+      document.getElementById('popup-exit').style.display = 'none'; 
+      document.getElementById('popup-leg-win').style.display = 'none'; 
+      document.getElementById('popup-checkout').style.display = 'none'; 
     }
-
     function confermaUscita() { chiudiPopups(); tornaAllaLobby(); }
 
     function confermaEPassa() {
       chiudiPopups();
       const esito = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
-      
       if (esito.vinto) {
-        legs[activePlayer]++;
-        aggiornaUI();
-        
-        if (legs[activePlayer] >= legsToWin) {
-          mostraVittoriaMatch(names[activePlayer]);
-          return;
-        } else {
-          mostraPopupLegVinto(activePlayer);
-          return;
-        }
+        legs[activePlayer]++; aggiornaUI(); svuotaFrecceSVG();
+        if (legs[activePlayer] >= legsToWin) { mostraVittoriaMatch(names[activePlayer]); return; } 
+        else { mostraPopupLegVinto(activePlayer); return; }
       }
-      
-      if (!esito.sballato) {
-        scores[activePlayer] = esito.scoreFinale;
-      }
-      
-      activePlayer = activePlayer === 0 ? 1 : 0;
-      resetTurno();
-      aggiornaUI();
+      if (!esito.sballato) { scores[activePlayer] = esito.scoreFinale; }
+      activePlayer = activePlayer === 0 ? 1 : 0; resetTurno(); aggiornaUI();
+      svuotaFrecceSVG();
     }
 
     function mostraPopupLegVinto(winnerIdx) {
-      document.getElementById('popup-leg-win-text').innerHTML = 
-        `<strong>${names[winnerIdx]}</strong> ha vinto il Leg!<br><br>` +
-        `Situazione Match:<br>` +
-        `<span style="font-size:22px; font-weight:900; color:var(--primary);">${names[0]} [${legs[0]}] — [${legs[1]}] ${names[1]}</span>`;
+      document.getElementById('popup-leg-win-text').innerHTML = `<strong>${names[winnerIdx]}</strong> ha vinto il Leg!<br><br>Situazione Match:<br><span style="font-size:22px; font-weight:900; color:var(--primary);">${names[0]} [${legs[0]}] — [${legs[1]}] ${names[1]}</span>`;
       document.getElementById('popup-leg-win').style.display = 'flex';
     }
 
     function avviaProssimoLeg() {
-      chiudiPopups();
-      // Alternanza ufficiale di chi tira per primo nel nuovo leg
-      starterPlayerForLeg = starterPlayerForLeg === 0 ? 1 : 0;
-      activePlayer = starterPlayerForLeg;
-      
-      scores = [punteggioScelto, punteggioScelto];
-      resetTurno();
-      aggiornaUI();
+      chiudiPopups(); starterPlayerForLeg = starterPlayerForLeg === 0 ? 1 : 0; activePlayer = starterPlayerForLeg;
+      scores = [punteggioScelto, punteggioScelto]; resetTurno(); aggiornaUI(); svuotaFrecceSVG();
     }
 
-    function resetTurno() {
-      turnDarts = [];
-      aggiornaSlotTiri();
-    }
+    function resetTurno() { turnDarts = []; aggiornaSlotTiri(); }
 
     function aggiornaUI() {
-      document.getElementById('p1-panel').classList.toggle('active', activePlayer === 0);
-      document.getElementById('p2-panel').classList.toggle('active', activePlayer === 1);
-      
+      document.getElementById('p1-panel').classList.toggle('active', activePlayer === 0); document.getElementById('p2-panel').classList.toggle('active', activePlayer === 1);
       document.getElementById('p1-legs').innerText = legsToWin > 1 ? `${legs[0]}/${legsToWin}` : `${legs[0]} L`;
       document.getElementById('p2-legs').innerText = legsToWin > 1 ? `${legs[1]}/${legsToWin}` : `${legs[1]} L`;
-
       aggiornaProiezionePunteggio();
     }
 
     function mostraVittoriaMatch(vincitore) {
-      document.getElementById('game-screen').style.display = 'none';
-      document.getElementById('winner-display').innerText = vincitore;
+      document.getElementById('game-screen').style.display = 'none'; document.getElementById('winner-display').innerText = vincitore;
       document.getElementById('winner-match-score').innerText = `Ha vinto il match con ${legs[activePlayer]} Leg a ${legs[activePlayer === 0 ? 1 : 0]}!`;
       document.getElementById('victory-screen').style.display = 'flex';
     }
+    function tornaAllaLobby() { document.getElementById('victory-screen').style.display = 'none'; document.getElementById('game-screen').style.display = 'none'; document.getElementById('lobby-screen').style.display = 'flex'; }
 
-    function tornaAllaLobby() {
-      document.getElementById('victory-screen').style.display = 'none';
-      document.getElementById('game-screen').style.display = 'none';
-      document.getElementById('lobby-screen').style.display = 'flex';
-    }
-
-    // --- TABELLA INPUT ---
     function costruisciTabella() {
       const container = document.getElementById('table-container');
       if (container.innerHTML !== "") return;
-      
       let html = `<table class="darts-table"><thead><tr><th>Singolo</th><th>Doppio</th><th>Triplo</th></tr></thead><tbody>`;
-      
       for (let i = 1; i <= 20; i++) {
-        html += `<tr>
-            <td><button type="button" class="tbl-btn btn-single" onclick="aggiungiTiro(${i}, '${i}', false)">${i}</button></td>
-            <td><button type="button" class="tbl-btn btn-double" onclick="aggiungiTiro(${i * 2}, 'D${i}', true)">D${i}</button></td>
-            <td><button type="button" class="tbl-btn btn-triple" onclick="aggiungiTiro(${i * 3}, 'T${i}', false)">T${i}</button></td>
-          </tr>`;
+        html += `<tr><td><button type="button" class="tbl-btn btn-single" onclick="aggiungiTiro(${i}, '${i}', false, null)">${i}</button></td><td><button type="button" class="tbl-btn btn-double" onclick="aggiungiTiro(${i * 2}, 'D${i}', true, null)">D${i}</button></td><td><button type="button" class="tbl-btn btn-triple" onclick="aggiungiTiro(${i * 3}, 'T${i}', false, null)">T${i}</button></td></tr>`;
       }
-      
-      html += `<tr>
-            <td colspan="3" style="padding: 4px;">
-              <div style="display: flex; gap: 8px; width: 100%;">
-                <button type="button" class="tbl-btn btn-double" style="flex: 1;" onclick="aggiungiTiro(25, '25', false)">Bull (25)</button>
-                <button type="button" class="tbl-btn btn-triple" style="flex: 1;" onclick="aggiungiTiro(50, 'D25', true)">Bullseye (50)</button>
-              </div>
-            </td>
-          </tr></tbody></table>`;
-          
+      html += `<tr><td colspan="3" style="padding: 4px;"><div style="display: flex; gap: 8px; width: 100%;"><button type="button" class="tbl-btn btn-double" style="flex: 1;" onclick="aggiungiTiro(25, '25', false, null)">Bull (25)</button><button type="button" class="tbl-btn btn-triple" style="flex: 1;" onclick="aggiungiTiro(50, 'Bull', true, null)">Bullseye (50)</button></div></td></tr></tbody></table>`;
       container.innerHTML = html;
-    }
-
-    // --- BERSAGLIO SVG ---
-    function descriviArco(rIn, rOut, cx, cy, startA, endA) {
-      const rad = (a) => (a - 90) * Math.PI / 180;
-      const pInS = { x: cx + rIn * Math.cos(rad(endA)), y: cy + rIn * Math.sin(rad(endA)) };
-      const pInE = { x: cx + rIn * Math.cos(rad(startA)), y: cy + rIn * Math.sin(rad(startA)) };
-      const pOutS = { x: cx + rOut * Math.cos(rad(endA)), y: cy + rOut * Math.sin(rad(endA)) };
-      const pOutE = { x: cx + rOut * Math.cos(rad(startA)), y: cy + rOut * Math.sin(rad(startA)) };
-      return `M ${pOutE.x} ${pOutE.y} A ${rOut} ${rOut} 0 0 1 ${pOutS.x} ${pOutS.y} L ${pInS.x} ${pInS.y} A ${rIn} ${rIn} 0 0 0 ${pInE.x} ${pInE.y} Z`;
     }
 
     function disegnaBersaglio() {
       const container = document.getElementById('dartboard-container');
       if (container.innerHTML !== "") return;
-      const cx = 200, cy = 200, angleStep = 360 / 20;
-      
-      let svgHTML = `<svg viewBox="0 0 400 400">
-        <defs>
-          <filter id="sisalBoard" x="0" y="0" width="100%" height="100%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" result="noise" />
-            <feColorMatrix type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" in="noise" result="coloredNoise" />
-            <feBlend in="SourceGraphic" in2="coloredNoise" mode="darken" />
-          </filter>
-        </defs>
-        
-        <circle cx="${cx}" cy="${cy}" r="198" fill="#111" />
-        
-        <g filter="url(#sisalBoard)">
+
+      let svgHTML = `
+        <svg viewBox="0 0 400 400">
+          <defs>
+            <filter id="corkBoard" x="0" y="0" width="100%" height="100%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.22" numOctaves="3" result="noise" />
+              <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.35 0" in="noise" result="coloredNoise" />
+              <feBlend in="SourceGraphic" in2="coloredNoise" mode="darken" />
+            </filter>
+            
+            <linearGradient id="grad-silver" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#94a3b8" />
+              <stop offset="50%" stop-color="#f8fafc" />
+              <stop offset="100%" stop-color="#64748b" />
+            </linearGradient>
+
+            <g id="model-tungsten">
+              <polygon points="-0.8,-11 0.8,-11 0,0" fill="#e2e8f0" />
+              <rect x="-2.2" y="-32" width="4.4" height="21" fill="url(#grad-silver)" rx="1.2" />
+              <line x1="-2.2" y1="-15" x2="2.2" y2="-15" stroke="#1e293b" stroke-width="1" />
+              <line x1="-2.2" y1="-18" x2="2.2" y2="-18" stroke="#1e293b" stroke-width="1" />
+              <line x1="-2.2" y1="-21" x2="2.2" y2="-21" stroke="#1e293b" stroke-width="1" />
+              <line x1="-2.2" y1="-24" x2="2.2" y2="-24" stroke="#1e293b" stroke-width="1" />
+              <line x1="-2.2" y1="-27" x2="2.2" y2="-27" stroke="#1e293b" stroke-width="1" />
+              <rect x="-1" y="-47" width="2" height="15" fill="#18181b" />
+              <path d="M0,-41 C-8,-46 -8,-57 0,-57 C8,-57 8,-46 0,-41 Z" fill="currentColor" opacity="0.95" />
+              <line x1="0" y1="-41" x2="0" y2="-56" stroke="rgba(255,255,255,0.4)" stroke-width="0.8" />
+            </g>
+          </defs>
+          <circle cx="${cx}" cy="${cy}" r="198" fill="#2b2622" />
+          <g filter="url(#corkBoard)">
       `;
 
+      const strokeStyle = `stroke="#d4d4d8" stroke-width="1.1" stroke-linejoin="round" style="filter: drop-shadow(0.8px 1.4px 1.2px rgba(0,0,0,0.85));"`;
+
       for (let i = 0; i < 20; i++) {
-        let n = boardOrder[i];
-        let startAngle = (i * angleStep) - (angleStep / 2);
+        let n = boardOrder[i]; 
+        let startAngle = (i * angleStep) - (angleStep / 2); 
         let endAngle = (i * angleStep) + (angleStep / 2);
-        let cSingle = (i % 2 === 0) ? '#000000' : '#f0ece1';
-        let cDouble = (i % 2 === 0) ? '#e3292e' : '#309f6a';
-        const radNum = (startAngle + angleStep / 2 - 90) * Math.PI / 180;
-        const nx = cx + 184 * Math.cos(radNum);
-        const ny = cy + 184 * Math.sin(radNum);
+        
+        let cSingle = (i % 2 === 0) ? '#1f1e1d' : '#d2b48c'; 
+        let cDouble = (i % 2 === 0) ? '#b91c1c' : '#047857';
+
+        const startRad = (startAngle - 90) * Math.PI / 180;
+        const endRad = (endAngle - 90) * Math.PI / 180;
+        
+        const nx = cx + 184 * Math.cos(startRad + (endRad - startRad)/2); 
+        const ny = cy + 184 * Math.sin(startRad + (endRad - startRad)/2);
 
         svgHTML += `
           <g class="sector-wedge" onclick="apriZoomSettore(${n}, ${i})">
             <path fill="transparent" d="${descriviArco(160, 200, cx, cy, startAngle, endAngle)}" />
-            <path fill="${cSingle}" d="${descriviArco(16, 100, cx, cy, startAngle, endAngle)}" />
-            <path fill="${cDouble}" d="${descriviArco(100, 110, cx, cy, startAngle, endAngle)}" />
-            <path fill="${cSingle}" d="${descriviArco(110, 160, cx, cy, startAngle, endAngle)}" />
-            <path fill="${cDouble}" d="${descriviArco(160, 170, cx, cy, startAngle, endAngle)}" />
-            <text x="${nx}" y="${ny}" fill="white" font-size="15" font-weight="bold" pointer-events="none" text-anchor="middle" dominant-baseline="middle">${n}</text>
+            <path fill="${cSingle}" ${strokeStyle} d="${descriviArco(16, 100, cx, cy, startAngle, endAngle)}" />
+            <path fill="${cDouble}" ${strokeStyle} d="${descriviArco(100, 110, cx, cy, startAngle, endAngle)}" />
+            <path fill="${cSingle}" ${strokeStyle} d="${descriviArco(110, 160, cx, cy, startAngle, endAngle)}" />
+            <path fill="${cDouble}" ${strokeStyle} d="${descriviArco(160, 170, cx, cy, startAngle, endAngle)}" />
+            <text x="${nx}" y="${ny}" fill="#d4d4d8" font-size="16" font-weight="900" pointer-events="none" text-anchor="middle" dominant-baseline="middle">${n}</text>
           </g>
         `;
       }
+
       svgHTML += `
-        <g class="sector-wedge" onclick="apriZoomBull()">
-          <circle cx="${cx}" cy="${cy}" r="16" fill="#309f6a" />
-          <circle cx="${cx}" cy="${cy}" r="8" fill="#e3292e" />
+          <g class="sector-wedge" onclick="apriZoomBull()">
+            <circle cx="${cx}" cy="${cy}" r="16" fill="#047857" ${strokeStyle} />
+            <circle cx="${cx}" cy="${cy}" r="8" fill="#b91c1c" ${strokeStyle} />
+          </g>
         </g>
-        </g>
-        </svg>`;
+        
+        <!-- LAYER DEDICATO ALLA VISUALIZZAZIONE DELLE FRECCETTE -->
+        <g id="darts-layer"></g>
+      </svg>`;
+
       container.innerHTML = svgHTML;
     }
   </script>
