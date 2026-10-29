@@ -4,35 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Freccette 🎯</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --primary: #007aff;
-      --bg: #1c1c1e;
-      --card-bg: #2c2c2e;
-      --card-alt: #3a3a3c;
-      --text: #ffffff;
-      --danger: #ff3b30;
-      --warning: #ff9500;
-      --success: #34c759;
+      --bg: #064e3b;          
+      --card-bg: rgba(20, 83, 45, 0.85); 
+      --text: #fef3c7;        
+      --text-muted: #a7bca9;
+      --primary: #fbbf24;     
+      --primary-text: #451a03;
+      --danger: #f87171;
+      --warning: #fbbf24;
+      --success: #34d399;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: var(--bg);
       color: var(--text);
       display: flex;
       justify-content: center;
       min-height: 100vh;
       user-select: none;
       -webkit-user-select: none;
+      
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.12) 0%, transparent 60%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.12'/%3E%3C/svg%3E");
+    }
+
+    #app-container {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
     }
     
     .screen {
       width: 100%;
-      max-width: 480px;
-      padding: 16px;
+      padding: 10px 12px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
@@ -40,220 +57,371 @@
     
     #game-screen, #victory-screen { display: none; }
     
-    h1 { text-align: center; margin: 10px 0 20px 0; }
+    h1 { 
+      text-align: center; 
+      margin: 14px 0 18px 0; 
+      padding: 0 45px;
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-shadow: 0 4px 6px rgba(0,0,0,0.4);
+    }
+
+    #btn-fullscreen {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, rgba(20,83,45,0.9), rgba(10,50,25,0.9));
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      z-index: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255,255,255,0.1);
+    }
+    #btn-fullscreen svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+    }
     
-    /* LOBBY */
-    .form-group { margin-bottom: 18px; }
-    label { display: block; font-size: 14px; margin-bottom: 8px; color: #aaa; font-weight: 600; }
+    .glass-panel {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: var(--shadow), inset 0 1px 2px rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 12px; margin-bottom: 6px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
     input[type="text"] {
-      width: 100%; padding: 13px; font-size: 17px;
-      background: var(--card-bg); color: white;
-      border: 1px solid #444; border-radius: 10px;
-      box-sizing: border-box;
+      width: 100%; padding: 12px 14px; font-size: 17px; font-family: 'Outfit', sans-serif; font-weight: 600;
+      background: rgba(0,0,0,0.3); color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+      box-sizing: border-box; outline: none; transition: all 0.2s;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
     }
-    .toggle-group { display: flex; gap: 10px; }
+    input[type="text"]:focus { border-color: var(--primary); box-shadow: inset 0 2px 6px rgba(0,0,0,0.4), 0 0 12px rgba(251,191,36,0.3); }
+    
+    .toggle-group { display: flex; gap: 8px; }
     .toggle-btn {
-      flex: 1; background-color: var(--card-bg); color: #aaa; margin: 0;
-      padding: 12px; font-size: 15px; border-radius: 10px;
+      flex: 1; background-color: rgba(0,0,0,0.3); color: var(--text-muted); margin: 0;
+      padding: 11px 8px; font-size: 14px; border-radius: 12px; font-weight: 800; border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
     }
-    .toggle-btn.active { background-color: var(--primary); color: white; }
     
-    /* PULSANTI GENERALI */
+    .toggle-btn.active, button.btn-gold { 
+      background: linear-gradient(180deg, #fde047 0%, #fbbf24 40%, #d97706 100%);
+      color: var(--primary-text); 
+      border: none;
+      border-top: 1px solid #fef08a;
+      border-bottom: 2px solid #92400e;
+      box-shadow: 0 6px 16px rgba(217, 119, 6, 0.4), inset 0 2px 4px rgba(255,255,255,0.4);
+      text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+    }
+    
     button {
-      width: 100%; padding: 14px; font-size: 16px; font-weight: bold;
-      color: white; background-color: var(--primary);
-      border: none; border-radius: 12px; cursor: pointer;
-      transition: transform 0.08s, opacity 0.08s;
+      width: 100%; padding: 15px; font-size: 17px; font-weight: 800; font-family: 'Outfit', sans-serif;
+      border-radius: 50px; cursor: pointer;
+      transition: transform 0.08s, box-shadow 0.08s;
     }
-    button:active { transform: scale(0.97); opacity: 0.8; }
+    button:active { transform: scale(0.96); }
     
-    /* HEADER PARTITA */
     .game-header {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .btn-header {
-      width: auto; padding: 7px 12px; font-size: 13px;
-      background-color: var(--card-alt); border-radius: 8px;
+      width: auto; padding: 6px 14px; font-size: 13px; font-weight: 800;
+      background-color: rgba(0,0,0,0.3); color: var(--text); border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
     }
 
-    /* SCOREBOARD DINAMICA */
+    /* SCOREBOARD */
     .scoreboard {
       display: flex; justify-content: space-between;
-      background: var(--card-bg); border-radius: 12px; padding: 12px 14px;
-      margin-bottom: 12px;
+      background: linear-gradient(145deg, rgba(20,83,45,0.9), rgba(10,50,25,0.95)); 
+      border-radius: 20px; padding: 8px 12px;
+      margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: var(--shadow), inset 0 1px 2px rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
     }
-    .player-score { text-align: center; flex: 1; opacity: 0.45; transition: 0.25s; }
-    .player-score.active { opacity: 1; transform: scale(1.05); }
-    .player-score h2 { margin: 0; font-size: 15px; color: #aaa; }
+    .player-score { text-align: center; flex: 1; opacity: 0.4; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 6px; border-radius: 16px; border: 1px solid transparent; }
     
-    .score-wrapper { margin-top: 4px; }
+    .player-score.active { 
+      opacity: 1; transform: scale(1.04); 
+      background: rgba(0,0,0,0.2); 
+      border: 1px solid rgba(251, 191, 36, 0.5);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.4), 0 0 20px rgba(251, 191, 36, 0.15);
+    }
     
-    /* Il punteggio pre-tiro, invisibile di default ma occupa spazio */
+    .player-title-row {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .player-score h2 { margin: 0; font-size: 13px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    .leg-badge {
+      font-size: 11px; font-weight: 900; padding: 2px 7px; border-radius: 12px;
+      background: rgba(0,0,0,0.4); color: var(--primary); border: 1px solid rgba(251, 191, 36, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .score-wrapper { margin-top: 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .prev-score {
-      font-size: 14px; color: #8e8e93; text-decoration: line-through;
-      height: 16px; opacity: 0; transition: opacity 0.2s;
+      font-size: 13px; color: var(--text-muted); text-decoration: line-through;
+      height: 14px; opacity: 0; transition: opacity 0.2s; font-weight: 600;
     }
-    .prev-score.visible { opacity: 0.6; }
+    .prev-score.visible { opacity: 0.7; }
     
     .player-score .points {
-      font-size: 36px; font-weight: 800; line-height: 1;
-      transition: color 0.2s, font-size 0.2s;
+      font-size: 38px; font-weight: 900; line-height: 1; margin-top: 1px;
+      transition: color 0.2s, font-size 0.2s; font-variant-numeric: tabular-nums;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
-    
-    /* Stati speciali del punteggio (Sballo / Vittoria) */
-    .bust-text { color: var(--danger) !important; font-size: 26px !important; line-height: 36px; }
+    .bust-text { color: var(--danger) !important; font-size: 22px !important; line-height: 38px; letter-spacing: 1px; }
     .win-text { color: var(--success) !important; }
     
-    /* AREA INGRESSI */
-    .input-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; min-height: 350px; }
-    #dartboard-container { width: 100%; aspect-ratio: 1; max-width: 360px; }
-    svg { width: 100%; height: 100%; touch-action: manipulation; }
+    /* AREA INGRESSI E BERSAGLIO */
+    .input-wrapper { 
+      flex: 1; display: flex; justify-content: center; align-items: center; 
+      margin-bottom: 8px; min-height: 0; 
+    }
+    #dartboard-container { 
+      width: 100%; aspect-ratio: 1; 
+      max-width: 440px; 
+    }
+    svg { 
+      width: 100%; height: 100%; touch-action: manipulation; 
+      filter: drop-shadow(0 15px 25px rgba(0,0,0,0.7)); 
+    }
     .sector-wedge { cursor: pointer; }
-    .sector-wedge:active path { opacity: 0.65; }
+    .sector-wedge:active path { opacity: 0.7; }
     
     /* TABELLA INPUT */
-    #table-container { width: 100%; max-height: 360px; overflow-y: auto; border-radius: 10px; background: var(--card-bg); border: 1px solid #3a3a3c; }
+    #table-container { width: 100%; max-height: 360px; overflow-y: auto; border-radius: 16px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
     .darts-table { width: 100%; border-collapse: collapse; text-align: center; }
-    .darts-table th { position: sticky; top: 0; background: #252528; padding: 10px 4px; font-size: 13px; color: #aaa; border-bottom: 1px solid #444; z-index: 2; }
-    .darts-table td { padding: 4px; border-bottom: 1px solid #353538; }
-    .tbl-btn { width: 100%; padding: 10px 2px; font-size: 15px; font-weight: 700; border-radius: 6px; }
-    .btn-single { background-color: #48484a; color: #fff; }
-    .btn-double { background-color: #1b5e20; color: #4ade80; }
-    .btn-triple { background-color: #b71c1c; color: #fca5a5; }
-    .btn-bull { background-color: #0077b6; color: #90e0ef; }
+    .darts-table th { position: sticky; top: 0; background: #082613; padding: 10px 4px; font-size: 12px; color: var(--text-muted); text-transform: uppercase; z-index: 2; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .darts-table td { padding: 4px; border-bottom: 1px solid rgba(0,0,0,0.3); }
+    .tbl-btn { width: 100%; padding: 11px 2px; font-size: 15px; font-weight: 800; border-radius: 8px; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); border: 1px solid rgba(0,0,0,0.5); }
+    .btn-single { background-color: #2c2c2e; color: var(--text); }
+    .btn-double { background-color: #065f46; color: var(--success); }
+    .btn-triple { background-color: #7f1d1d; color: var(--danger); }
 
     /* CONTROLLI TURNO */
-    .turn-controls { display: flex; flex-direction: column; gap: 8px; background: var(--card-bg); padding: 12px; border-radius: 12px; }
-    .darts-info { display: flex; justify-content: space-between; font-size: 15px; align-items: center; padding: 0 4px; }
-    .dart-slot { font-weight: bold; color: #ffeb3b; min-width: 34px; text-align: center; }
+    .turn-controls { display: flex; flex-direction: column; gap: 8px; background: rgba(20,83,45,0.85); padding: 10px; border-radius: 18px; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
+    .darts-info { display: flex; justify-content: space-between; align-items: center; padding: 0 4px; }
+    
+    .dart-badges { display: flex; gap: 8px; }
+    .dart-slot { 
+      width: 38px; height: 38px; border-radius: 50%;
+      background: inset 0 2px 6px rgba(0,0,0,0.6);
+      background-color: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: center; align-items: center;
+      font-weight: 900; font-size: 15px; color: var(--primary);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    
     .action-row { display: flex; gap: 8px; }
-    .btn-miss { background-color: #48484a; flex: 1; padding: 11px; }
-    .btn-undo { background-color: var(--warning); flex: 1; padding: 11px; }
-    .btn-confirm { background-color: var(--success); }
+    .btn-miss, .btn-undo { 
+      background: linear-gradient(180deg, #3a3a3c 0%, #1c1c1e 100%);
+      color: var(--text); flex: 1; padding: 13px; 
+      border: 1px solid rgba(255,255,255,0.1); border-bottom: 2px solid #000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.1);
+    }
     
-    /* POPUP GENERALI & ZOOM */
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-    .modal-box { background: var(--card-bg); padding: 24px; border-radius: 16px; text-align: center; width: 100%; max-width: 340px; }
-    .modal-box h3 { margin-top: 0; font-size: 20px; }
+    /* POPUP */
+    .modal-overlay { 
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; 
+      padding: 16px; box-sizing: border-box; backdrop-filter: blur(6px);
+    }
+    .modal-box { 
+      background: linear-gradient(145deg, #14532d, #064e3b); padding: 22px; border-radius: 22px; 
+      text-align: center; width: 100%; max-width: 360px; 
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .modal-box h3 { margin-top: 0; font-size: 22px; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.5);}
     .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
-    .btn-modal-cancel { background-color: #555; }
-    .btn-modal-danger { background-color: var(--danger); }
-    .btn-modal-ok { background-color: var(--success); }
     
-    #zoom-svg-container { width: 100%; aspect-ratio: 1; margin: 15px 0; border-radius: 12px; overflow: hidden; background: #111; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
-    .zoom-segment { cursor: pointer; transition: filter 0.1s; }
-    .zoom-segment:active { filter: brightness(1.5); }
+    .btn-modal-cancel { background: rgba(0,0,0,0.4); color: var(--text); border: 1px solid rgba(255,255,255,0.1); }
+    .btn-modal-danger { background: linear-gradient(180deg, #f87171, #dc2626); color: #fff; border-bottom: 2px solid #7f1d1d;}
+    
+    #zoom-svg-container { 
+      width: 100%; aspect-ratio: 1; margin: 10px 0 14px 0; 
+      border-radius: 20px; overflow: hidden; 
+      background: radial-gradient(circle at 50% 50%, #0f3a22, #000000); 
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+    }
+    .zoom-segment { cursor: pointer; transition: filter 0.08s; }
+    .zoom-segment:active { filter: brightness(1.4); }
 
+    /* VITTORIA */
     #victory-screen { justify-content: center; align-items: center; text-align: center; cursor: pointer; }
-    .trophy { font-size: 70px; margin-bottom: 10px; }
-    .winner-name { font-size: 34px; font-weight: 800; color: #ffeb3b; margin: 10px 0; }
+    .trophy { font-size: 84px; margin-bottom: 8px; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.6)); }
+    .winner-name { font-size: 38px; font-weight: 900; color: var(--primary); margin: 8px 0; text-transform: uppercase; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
   </style>
 </head>
 <body>
 
-  <!-- SCHERMATA 1: LOBBY -->
-  <div id="lobby-screen" class="screen">
-    <h1>Freccette 🎯</h1>
-    
-    <!-- onfocus pulisce il campo solo se è quello di default -->
-    <div class="form-group">
-      <label>Giocatore 1</label>
-      <input type="text" id="player1" value="Giocatore 1" 
-             onfocus="if(this.value==='Giocatore 1') this.value='';" 
-             onblur="if(this.value.trim()==='') this.value='Giocatore 1';">
-    </div>
-    
-    <div class="form-group">
-      <label>Giocatore 2</label>
-      <input type="text" id="player2" value="Giocatore 2"
-             onfocus="if(this.value==='Giocatore 2') this.value='';" 
-             onblur="if(this.value.trim()==='') this.value='Giocatore 2';">
-    </div>
-    
-    <div class="form-group">
-      <label>Tipo di Gioco</label>
-      <div class="toggle-group">
-        <button type="button" class="toggle-btn" id="btn-301" onclick="selezionaPunteggio(301)">301</button>
-        <button type="button" class="toggle-btn active" id="btn-501" onclick="selezionaPunteggio(501)">501</button>
-      </div>
-    </div>
+  <div id="app-container">
 
-    <div class="form-group">
-      <label>Interfaccia di Tiro</label>
-      <div class="toggle-group">
-        <button type="button" class="toggle-btn active" id="btn-mode-board" onclick="selezionaInterfaccia('board')">🎯 Bersaglio</button>
-        <button type="button" class="toggle-btn" id="btn-mode-table" onclick="selezionaInterfaccia('table')">🔢 Tabella</button>
-      </div>
-    </div>
+    <button id="btn-fullscreen" type="button" onclick="toggleFullscreen()" title="Schermo intero">
+      <svg id="icon-fs-enter" viewBox="0 0 24 24">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+      </svg>
+      <svg id="icon-fs-exit" viewBox="0 0 24 24" style="display: none;">
+        <path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M14 4v6m0 0h6m-6 0L21 3M10 4v6m0 0H4m6 0L3 3"></path>
+      </svg>
+    </button>
 
-    <button onclick="iniziaPartita()" style="margin-top: 14px;">Inizia Partita</button>
-  </div>
+    <!-- SCHERMATA LOBBY -->
+    <div id="lobby-screen" class="screen">
+      <h1>Freccette 🎯</h1>
+      
+      <div class="glass-panel">
+        <div class="form-group">
+          <label>Giocatore 1</label>
+          <input type="text" id="player1" value="Giocatore 1" 
+                 onfocus="if(this.value==='Giocatore 1') this.value='';" 
+                 onblur="if(this.value.trim()==='') this.value='Giocatore 1';">
+        </div>
+        
+        <div class="form-group">
+          <label>Giocatore 2</label>
+          <input type="text" id="player2" value="Giocatore 2" 
+                 onfocus="if(this.value==='Giocatore 2') this.value='';" 
+                 onblur="if(this.value.trim()==='') this.value='Giocatore 2';">
+        </div>
+        
+        <div class="form-group">
+          <label>Punti Iniziali</label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn" id="btn-301" onclick="selezionaPunteggio(301)">301</button>
+            <button type="button" class="toggle-btn active" id="btn-501" onclick="selezionaPunteggio(501)">501</button>
+          </div>
+        </div>
 
-  <!-- SCHERMATA 2: GIOCO -->
-  <div id="game-screen" class="screen">
-    <div class="game-header">
-      <button class="btn-header" onclick="chiediConfermaUscita()">✕ Lobby</button>
-      <span id="active-mode-label" style="font-size: 13px; color: #8e8e93; font-weight: 600;">Partita</span>
-      <span style="width: 45px;"></span>
-    </div>
+        <div class="form-group">
+          <label>Regola di Chiusura</label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn" id="btn-out-straight" onclick="selezionaDoubleOut(false)">Aperta</button>
+            <button type="button" class="toggle-btn active" id="btn-out-double" onclick="selezionaDoubleOut(true)">Doppia (Double-Out)</button>
+          </div>
+        </div>
 
-    <div class="scoreboard">
-      <div id="p1-panel" class="player-score active">
-        <h2 id="p1-name">G1</h2>
-        <div class="score-wrapper">
-          <div id="p1-prev" class="prev-score">501</div>
-          <div id="p1-score" class="points">501</div>
+        <div class="form-group">
+          <label>Modalità Partita</label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn active" id="btn-leg-1" onclick="selezionaLegs(1)">1 Leg</button>
+            <button type="button" class="toggle-btn" id="btn-leg-2" onclick="selezionaLegs(2)">Primo a 2</button>
+            <button type="button" class="toggle-btn" id="btn-leg-3" onclick="selezionaLegs(3)">Primo a 3</button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label>Interfaccia di Tiro</label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn active" id="btn-mode-board" onclick="selezionaInterfaccia('board')">🎯 Bersaglio</button>
+            <button type="button" class="toggle-btn" id="btn-mode-table" onclick="selezionaInterfaccia('table')">🔢 Tabella</button>
+          </div>
         </div>
       </div>
-      <div id="p2-panel" class="player-score">
-        <h2 id="p2-name">G2</h2>
-        <div class="score-wrapper">
-          <div id="p2-prev" class="prev-score">501</div>
-          <div id="p2-score" class="points">501</div>
+
+      <button class="btn-gold" onclick="iniziaPartita()" style="margin-top: 16px;">INIZIA PARTITA</button>
+    </div>
+
+    <!-- SCHERMATA GIOCO -->
+    <div id="game-screen" class="screen">
+      <div class="game-header">
+        <button class="btn-header" onclick="chiediConfermaUscita()">✕ LOBBY</button>
+        <span id="active-mode-label" style="font-size: 13px; color: var(--text-muted); font-weight: 800; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Partita</span>
+        <span style="width: 40px;"></span>
+      </div>
+
+      <div class="scoreboard">
+        <div id="p1-panel" class="player-score active">
+          <div class="player-title-row">
+            <h2 id="p1-name">G1</h2>
+            <span class="leg-badge" id="p1-legs">0</span>
+          </div>
+          <div class="score-wrapper">
+            <div id="p1-prev" class="prev-score">501</div>
+            <div id="p1-score" class="points">501</div>
+          </div>
+        </div>
+        <div id="p2-panel" class="player-score">
+          <div class="player-title-row">
+            <h2 id="p2-name">G2</h2>
+            <span class="leg-badge" id="p2-legs">0</span>
+          </div>
+          <div class="score-wrapper">
+            <div id="p2-prev" class="prev-score">501</div>
+            <div id="p2-score" class="points">501</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="input-wrapper">
-      <div id="dartboard-container"></div>
-      <div id="table-container" style="display: none;"></div>
-    </div>
-
-    <div class="turn-controls">
-      <div class="darts-info">
-        <span>Tiri:</span>
-        <span id="dart-1" class="dart-slot">-</span>
-        <span id="dart-2" class="dart-slot">-</span>
-        <span id="dart-3" class="dart-slot">-</span>
-        <span>Tot: <strong id="turn-total" style="color:var(--success); font-size: 18px;">0</strong></span>
+      <div class="input-wrapper">
+        <div id="dartboard-container"></div>
+        <div id="table-container" style="display: none;"></div>
       </div>
 
-      <div class="action-row">
-        <button class="btn-miss" onclick="aggiungiTiro(0, 'Fuori')">Fuori</button>
-        <button class="btn-undo" onclick="annullaUltimoTiro()">↩ Annulla</button>
+      <div class="turn-controls">
+        <div class="darts-info">
+          <div class="dart-badges">
+            <span id="dart-1" class="dart-slot"></span>
+            <span id="dart-2" class="dart-slot"></span>
+            <span id="dart-3" class="dart-slot"></span>
+          </div>
+          <div style="font-size: 14px; font-weight: 800; color: var(--text-muted);">
+            Tot: <strong id="turn-total" style="color:var(--primary); font-size: 24px; vertical-align: middle; margin-left: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">0</strong>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-miss" onclick="aggiungiTiro(0, 'Miss', false)">Fuori</button>
+          <button class="btn-undo" onclick="annullaUltimoTiro()">↩ Annulla</button>
+        </div>
+
+        <button class="btn-gold" onclick="chiediConfermaTurno()">CONFERMA TURNO</button>
       </div>
-
-      <button class="btn-confirm" onclick="chiediConfermaTurno()">Conferma Turno</button>
     </div>
-  </div>
 
-  <!-- SCHERMATA 3: VITTORIA -->
-  <div id="victory-screen" class="screen" onclick="tornaAllaLobby()">
-    <div class="trophy">🏆</div>
-    <h1 style="margin: 0; font-size: 26px;">VITTORIA!</h1>
-    <div class="winner-name" id="winner-display">Giocatore 1</div>
-    <p style="font-size: 17px; color: #ccc;">Ha chiuso la partita!</p>
-    <div style="color: #8e8e93; font-size: 14px; margin-top: 30px;">Tocca ovunque per tornare alla lobby</div>
-  </div>
+    <!-- SCHERMATA VITTORIA MATCH -->
+    <div id="victory-screen" class="screen" onclick="tornaAllaLobby()">
+      <div class="trophy">🏆</div>
+      <h1 style="margin: 0; font-size: 26px;">VITTORIA!</h1>
+      <div class="winner-name" id="winner-display">Giocatore 1</div>
+      <p id="winner-match-score" style="font-size: 18px; color: var(--text-muted); font-weight: 700; margin: 4px 0 0 0;">Ha chiuso il match!</p>
+      <div style="color: var(--text-muted); font-size: 14px; margin-top: 36px; font-weight: 600;">Tocca ovunque per tornare alla lobby</div>
+    </div>
+
+  </div> <!-- FINE APP-CONTAINER -->
 
   <!-- POPUP ZOOM SETTORE -->
   <div id="zoom-modal" class="modal-overlay" onclick="chiudiSelettore()">
     <div class="modal-box" onclick="event.stopPropagation()">
-      <h3 id="zoom-title" style="margin-bottom: 4px; font-size: 22px;">Mirino</h3>
-      <p style="color: #8e8e93; font-size: 14px; margin: 0 0 5px 0;">Tocca l'esatto punto d'impatto</p>
+      <h3 id="zoom-title" style="margin-bottom: 2px;">Settore</h3>
+      <p style="color: var(--text-muted); font-size: 13px; margin: 0 0 4px 0; font-weight: 600;">Tocca il punteggio esatto</p>
       <div id="zoom-svg-container"></div>
-      <button class="btn-modal-cancel" style="width: 100%; padding: 14px;" onclick="chiudiSelettore()">Annulla</button>
+      <button class="btn-modal-cancel" style="width: 100%; padding: 14px; border-radius: 50px; font-weight: 800; font-family: 'Outfit', sans-serif;" onclick="chiudiSelettore()">ANNULLA</button>
     </div>
   </div>
 
@@ -261,48 +429,96 @@
   <div id="popup-turn" class="modal-overlay">
     <div class="modal-box">
       <h3>Conferma Turno</h3>
-      <p id="popup-turn-text">Punti: 0</p>
+      <p id="popup-turn-text" style="font-size: 16px; color: var(--text-muted); font-weight: 600; line-height: 1.5;">Punti: 0</p>
       <div class="modal-buttons">
-        <button class="btn-modal-cancel" onclick="chiudiPopups()">Modifica</button>
-        <button class="btn-modal-ok" onclick="confermaEPassa()">Passa Turno</button>
+        <button class="btn-modal-cancel" style="border-radius: 50px; font-family: 'Outfit';" onclick="chiudiPopups()">Modifica</button>
+        <button class="btn-gold" onclick="confermaEPassa()">PASSA TURNO</button>
       </div>
+    </div>
+  </div>
+
+  <!-- POPUP VITTORIA LEG INTERMEDIO -->
+  <div id="popup-leg-win" class="modal-overlay">
+    <div class="modal-box">
+      <h3 style="color: var(--primary); margin-bottom: 8px;">🎯 LEG VINTO!</h3>
+      <p id="popup-leg-win-text" style="font-size: 16px; color: var(--text); font-weight: 600; line-height: 1.6;"></p>
+      <button class="btn-gold" style="margin-top: 14px;" onclick="avviaProssimoLeg()">INIZIA PROSSIMO LEG</button>
     </div>
   </div>
 
   <!-- POPUP CONFERMA USCITA LOBBY -->
   <div id="popup-exit" class="modal-overlay">
     <div class="modal-box">
-      <h3>Abbandonare la partita?</h3>
-      <p style="color: #bbb; font-size: 15px;">I punteggi correnti andranno persi.</p>
+      <h3>Abbandonare?</h3>
+      <p style="color: var(--text-muted); font-size: 15px; font-weight: 600; line-height: 1.5;">I punteggi correnti andranno persi per sempre.</p>
       <div class="modal-buttons">
-        <button class="btn-modal-cancel" onclick="chiudiPopups()">Resta</button>
-        <button class="btn-modal-danger" onclick="confermaUscita()">Esci</button>
+        <button class="btn-modal-cancel" style="border-radius: 50px; font-family: 'Outfit';" onclick="chiudiPopups()">Resta</button>
+        <button class="btn-modal-danger" style="border-radius: 50px; font-family: 'Outfit';" onclick="confermaUscita()">Esci</button>
       </div>
     </div>
   </div>
 
+  <!-- INIZIO LOGICA JAVASCRIPT -->
   <script>
     let punteggioScelto = 501;
     let interfacciaScelta = 'board';
+    let regolaDoubleOut = true;
+    let legsToWin = 1;
+    
     let scores = [501, 501];
+    let legs = [0, 0];
     let names = ["", ""];
     let activePlayer = 0;
+    let starterPlayerForLeg = 0;
     let turnDarts = [];
+    
     const boardOrder = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
 
-    function descriviArco(rIn, rOut, cx, cy, startA, endA) {
-      const rad = (a) => (a - 90) * Math.PI / 180;
-      const pInS = { x: cx + rIn * Math.cos(rad(endA)), y: cy + rIn * Math.sin(rad(endA)) };
-      const pInE = { x: cx + rIn * Math.cos(rad(startA)), y: cy + rIn * Math.sin(rad(startA)) };
-      const pOutS = { x: cx + rOut * Math.cos(rad(endA)), y: cy + rOut * Math.sin(rad(endA)) };
-      const pOutE = { x: cx + rOut * Math.cos(rad(startA)), y: cy + rOut * Math.sin(rad(startA)) };
-      return `M ${pOutE.x} ${pOutE.y} A ${rOut} ${rOut} 0 0 1 ${pOutS.x} ${pOutS.y} L ${pInS.x} ${pInS.y} A ${rIn} ${rIn} 0 0 0 ${pInE.x} ${pInE.y} Z`;
+    // --- SCHERMO INTERO ---
+    function toggleFullscreen() {
+      const doc = document.documentElement;
+      const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+      
+      if (!isFs) {
+        if (doc.requestFullscreen) doc.requestFullscreen();
+        else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      }
     }
 
+    function aggiornaIconaFullscreen() {
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const iconEnter = document.getElementById('icon-fs-enter');
+      const iconExit = document.getElementById('icon-fs-exit');
+      if (iconEnter && iconExit) {
+        iconEnter.style.display = isFs ? 'none' : 'block';
+        iconExit.style.display = isFs ? 'block' : 'none';
+      }
+    }
+
+    document.addEventListener('fullscreenchange', aggiornaIconaFullscreen);
+    document.addEventListener('webkitfullscreenchange', aggiornaIconaFullscreen);
+
+    // --- SELEZIONI LOBBY ---
     function selezionaPunteggio(pts) {
       punteggioScelto = pts;
       document.getElementById('btn-301').classList.toggle('active', pts === 301);
       document.getElementById('btn-501').classList.toggle('active', pts === 501);
+    }
+
+    function selezionaDoubleOut(isDouble) {
+      regolaDoubleOut = isDouble;
+      document.getElementById('btn-out-straight').classList.toggle('active', !isDouble);
+      document.getElementById('btn-out-double').classList.toggle('active', isDouble);
+    }
+
+    function selezionaLegs(num) {
+      legsToWin = num;
+      document.getElementById('btn-leg-1').classList.toggle('active', num === 1);
+      document.getElementById('btn-leg-2').classList.toggle('active', num === 2);
+      document.getElementById('btn-leg-3').classList.toggle('active', num === 3);
     }
 
     function selezionaInterfaccia(mode) {
@@ -315,11 +531,16 @@
       names[0] = document.getElementById('player1').value.trim() || "Giocatore 1";
       names[1] = document.getElementById('player2').value.trim() || "Giocatore 2";
       scores = [punteggioScelto, punteggioScelto];
+      legs = [0, 0];
+      starterPlayerForLeg = 0;
       activePlayer = 0;
       
       document.getElementById('p1-name').innerText = names[0];
       document.getElementById('p2-name').innerText = names[1];
-      document.getElementById('active-mode-label').innerText = `${punteggioScelto} • ${interfacciaScelta === 'board' ? 'Bersaglio' : 'Tabella'}`;
+      
+      const legLabel = legsToWin === 1 ? '1 Leg' : `Primo a ${legsToWin}`;
+      const outLabel = regolaDoubleOut ? 'Double-Out' : 'Chiusura Aperta';
+      document.getElementById('active-mode-label').innerText = `${punteggioScelto} • ${outLabel} • ${legLabel}`;
       
       const boardContainer = document.getElementById('dartboard-container');
       const tableContainer = document.getElementById('table-container');
@@ -342,9 +563,62 @@
       document.getElementById('game-screen').style.display = 'flex';
     }
 
-    function aggiungiTiro(punti, etichetta) {
+    // --- LOGICA DI CALCOLO PUNTI E VERIFICA CHIUSURA ---
+    function valutaTiriTurno(scoreIniziale, tiri, doubleOutAttivo) {
+      let scoreCorrente = scoreIniziale;
+      let sballato = false;
+      let vinto = false;
+
+      for (let i = 0; i < tiri.length; i++) {
+        const t = tiri[i];
+        const rimanente = scoreCorrente - t.points;
+        
+        if (doubleOutAttivo) {
+          if (rimanente < 0 || rimanente === 1) {
+            sballato = true;
+            break;
+          } else if (rimanente === 0) {
+            if (t.isDouble) {
+              vinto = true;
+              scoreCorrente = 0;
+              break;
+            } else {
+              sballato = true;
+              break;
+            }
+          } else {
+            scoreCorrente = rimanente;
+          }
+        } else {
+          if (rimanente < 0) {
+            sballato = true;
+            break;
+          } else if (rimanente === 0) {
+            vinto = true;
+            scoreCorrente = 0;
+            break;
+          } else {
+            scoreCorrente = rimanente;
+          }
+        }
+      }
+
+      return {
+        scoreFinale: sballato ? scoreIniziale : scoreCorrente,
+        sballato: sballato,
+        vinto: vinto,
+        scoreVisualizzato: sballato ? "SBALLO" : scoreCorrente
+      };
+    }
+
+    function aggiungiTiro(punti, etichetta, isDouble = false) {
       if (turnDarts.length >= 3) return;
-      turnDarts.push({ points: punti, label: etichetta });
+
+      // Se il turno corrente è già finito in vittoria o sballo, blocca ulteriori tiri
+      const statoAttuale = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
+      if (statoAttuale.sballato || statoAttuale.vinto) return;
+
+      turnDarts.push({ points: punti, label: etichetta, isDouble: isDouble });
       aggiornaSlotTiri();
     }
 
@@ -356,17 +630,14 @@
 
     function aggiornaSlotTiri() {
       const tot = turnDarts.reduce((acc, d) => acc + d.points, 0);
-      document.getElementById('dart-1').innerText = turnDarts[0] ? turnDarts[0].label : "-";
-      document.getElementById('dart-2').innerText = turnDarts[1] ? turnDarts[1].label : "-";
-      document.getElementById('dart-3').innerText = turnDarts[2] ? turnDarts[2].label : "-";
+      document.getElementById('dart-1').innerText = turnDarts[0] ? turnDarts[0].label : "";
+      document.getElementById('dart-2').innerText = turnDarts[1] ? turnDarts[1].label : "";
+      document.getElementById('dart-3').innerText = turnDarts[2] ? turnDarts[2].label : "";
       document.getElementById('turn-total').innerText = tot;
-      
-      // Aggiorna l'anteprima in tempo reale
-      aggiornaProiezionePunteggio(tot);
+      aggiornaProiezionePunteggio();
     }
 
-    function aggiornaProiezionePunteggio(totTurno) {
-      // Ripristina l'UI per entrambi i giocatori
+    function aggiornaProiezionePunteggio() {
       [1, 2].forEach(p => {
         document.getElementById(`p${p}-prev`).classList.remove('visible');
         const scoreEl = document.getElementById(`p${p}-score`);
@@ -374,65 +645,73 @@
         scoreEl.classList.remove('bust-text', 'win-text');
       });
 
-      // Se ci sono punti inseriti nel turno, mostra l'anteprima al giocatore attivo
-      if (totTurno > 0) {
-        const tempScore = scores[activePlayer] - totTurno;
+      if (turnDarts.length > 0) {
+        const esito = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
         const prevEl = document.getElementById(`p${activePlayer + 1}-prev`);
         const scoreEl = document.getElementById(`p${activePlayer + 1}-score`);
         
         prevEl.innerText = scores[activePlayer];
         prevEl.classList.add('visible');
         
-        if (tempScore < 0) {
+        if (esito.sballato) {
           scoreEl.innerText = "SBALLO";
           scoreEl.classList.add('bust-text');
-        } else if (tempScore === 0) {
-          scoreEl.innerText = tempScore;
+        } else if (esito.vinto) {
+          scoreEl.innerText = "0";
           scoreEl.classList.add('win-text');
         } else {
-          scoreEl.innerText = tempScore;
+          scoreEl.innerText = esito.scoreVisualizzato;
         }
       }
     }
 
     function apriZoomSettore(n, index) {
       if (turnDarts.length >= 3) return;
+      const statoAttuale = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
+      if (statoAttuale.sballato || statoAttuale.vinto) return;
+
       const cx = 200, cy = 200, angleStep = 360 / 20;
       let startAngle = (index * angleStep) - (angleStep / 2);
       let endAngle = (index * angleStep) + (angleStep / 2);
       const midAngleRad = (startAngle + angleStep / 2 - 90) * Math.PI / 180;
+      
       const viewCx = cx + 90 * Math.cos(midAngleRad);
       const viewCy = cy + 90 * Math.sin(midAngleRad);
-      const viewSize = 220; 
+      const viewSize = 180; 
 
-      let svgHTML = `<svg viewBox="${viewCx - viewSize/2} ${viewCy - viewSize/2} ${viewSize} ${viewSize}">`;
-      svgHTML += `<circle cx="${cx}" cy="${cy}" r="220" fill="#111" />`;
+      let svgHTML = `<svg viewBox="${viewCx - viewSize/2} ${viewCy - viewSize/2} ${viewSize} ${viewSize}">
+        <defs>
+          <filter id="sisalZoom">
+            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" result="noise" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" in="noise" result="coloredNoise" />
+            <feBlend in="SourceGraphic" in2="coloredNoise" mode="darken" />
+          </filter>
+        </defs>
+        <circle cx="${cx}" cy="${cy}" r="220" fill="#0a2e18" />
+        <g filter="url(#sisalZoom)">
+      `;
 
       for (let i = 0; i < 20; i++) {
         let sA = (i * angleStep) - (angleStep / 2);
         let eA = (i * angleStep) + (angleStep / 2);
         let cS = (i % 2 === 0) ? '#000000' : '#f0ece1';
         let cD = (i % 2 === 0) ? '#e3292e' : '#309f6a';
-        svgHTML += `<path fill="${cS}" opacity="0.3" d="${descriviArco(16, 100, cx, cy, sA, eA)}" />`;
-        svgHTML += `<path fill="${cD}" opacity="0.3" d="${descriviArco(100, 110, cx, cy, sA, eA)}" />`;
-        svgHTML += `<path fill="${cS}" opacity="0.3" d="${descriviArco(110, 160, cx, cy, sA, eA)}" />`;
-        svgHTML += `<path fill="${cD}" opacity="0.3" d="${descriviArco(160, 170, cx, cy, sA, eA)}" />`;
+        svgHTML += `<path fill="${cS}" opacity="0.15" d="${descriviArco(16, 100, cx, cy, sA, eA)}" />`;
+        svgHTML += `<path fill="${cD}" opacity="0.15" d="${descriviArco(100, 110, cx, cy, sA, eA)}" />`;
+        svgHTML += `<path fill="${cS}" opacity="0.15" d="${descriviArco(110, 160, cx, cy, sA, eA)}" />`;
+        svgHTML += `<path fill="${cD}" opacity="0.15" d="${descriviArco(160, 170, cx, cy, sA, eA)}" />`;
       }
-      svgHTML += `<circle cx="${cx}" cy="${cy}" r="16" fill="#309f6a" opacity="0.3" />`;
-      svgHTML += `<circle cx="${cx}" cy="${cy}" r="8" fill="#e3292e" opacity="0.3" />`;
 
-      let actSingle = (index % 2 === 0) ? '#181818' : '#fcfaf5';
+      let actSingle = (index % 2 === 0) ? '#1c1c1e' : '#fcfaf5';
       let actDouble = (index % 2 === 0) ? '#ff3b30' : '#34c759';
-      let wire = `stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"`;
+      let wire = `stroke="#71717a" stroke-width="1.2" stroke-linejoin="round" style="filter: drop-shadow(1px 1px 1.5px rgba(0,0,0,0.8));"`;
 
-      svgHTML += `<path class="zoom-segment" fill="${actSingle}" ${wire} d="${descriviArco(16, 100, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n}, '${n}')" />`;
-      svgHTML += `<path class="zoom-segment" fill="${actDouble}" ${wire} d="${descriviArco(100, 110, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n * 3}, 'T${n}')" />`;
-      svgHTML += `<path class="zoom-segment" fill="${actSingle}" ${wire} d="${descriviArco(110, 160, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n}, '${n}')" />`;
-      svgHTML += `<path class="zoom-segment" fill="${actDouble}" ${wire} d="${descriviArco(160, 170, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n * 2}, 'D${n}')" />`;
+      svgHTML += `<path class="zoom-segment" fill="${actSingle}" ${wire} d="${descriviArco(16, 96, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n}, '${n}', false)" />`;
+      svgHTML += `<path class="zoom-segment" fill="${actDouble}" ${wire} d="${descriviArco(96, 114, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n * 3}, 'T${n}', false)" />`;
+      svgHTML += `<path class="zoom-segment" fill="${actSingle}" ${wire} d="${descriviArco(114, 156, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n}, '${n}', false)" />`;
+      svgHTML += `<path class="zoom-segment" fill="${actDouble}" ${wire} d="${descriviArco(156, 174, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n * 2}, 'D${n}', true)" />`;
 
-      const nx = cx + 186 * Math.cos(midAngleRad);
-      const ny = cy + 186 * Math.sin(midAngleRad);
-      svgHTML += `<text x="${nx}" y="${ny}" fill="white" font-size="18" font-weight="bold" pointer-events="none" text-anchor="middle" dominant-baseline="middle">${n}</text></svg>`;
+      svgHTML += `</g></svg>`;
 
       document.getElementById('zoom-title').innerText = `Settore ${n}`;
       document.getElementById('zoom-svg-container').innerHTML = svgHTML;
@@ -441,37 +720,57 @@
 
     function apriZoomBull() {
       if (turnDarts.length >= 3) return;
-      const cx = 200, cy = 200, viewSize = 140, angleStep = 360 / 20;
-      let svgHTML = `<svg viewBox="${cx - viewSize/2} ${cy - viewSize/2} ${viewSize} ${viewSize}">`;
-      svgHTML += `<circle cx="${cx}" cy="${cy}" r="220" fill="#111" />`;
+      const statoAttuale = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
+      if (statoAttuale.sballato || statoAttuale.vinto) return;
 
-      for (let i = 0; i < 20; i++) {
-        let sA = (i * angleStep) - (angleStep / 2);
-        let eA = (i * angleStep) + (angleStep / 2);
-        let cS = (i % 2 === 0) ? '#000000' : '#f0ece1';
-        svgHTML += `<path fill="${cS}" opacity="0.3" d="${descriviArco(16, 100, cx, cy, sA, eA)}" />`;
-      }
+      const cx = 200, cy = 200;
+      const viewSize = 54;
+      
+      let svgHTML = `<svg viewBox="${cx - viewSize/2} ${cy - viewSize/2} ${viewSize} ${viewSize}">
+        <defs>
+          <filter id="sisalBull">
+            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" result="noise" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" in="noise" result="coloredNoise" />
+            <feBlend in="SourceGraphic" in2="coloredNoise" mode="darken" />
+          </filter>
+        </defs>
+        <circle cx="${cx}" cy="${cy}" r="100" fill="#0a2e18" />
+        <g filter="url(#sisalBull)">
+      `;
 
-      let wire = `stroke="#ffffff" stroke-width="1.5"`;
-      svgHTML += `<circle class="zoom-segment" cx="${cx}" cy="${cy}" r="16" fill="#34c759" ${wire} onclick="selezionaEChiudi(25, '25')" />`;
-      svgHTML += `<circle class="zoom-segment" cx="${cx}" cy="${cy}" r="8" fill="#ff3b30" ${wire} onclick="selezionaEChiudi(50, 'D25')" />`;
-      svgHTML += `</svg>`;
+      let wire = `stroke="#71717a" stroke-width="0.8" style="filter: drop-shadow(0.5px 1px 1px rgba(0,0,0,0.8));"`;
+      svgHTML += `<circle class="zoom-segment" cx="${cx}" cy="${cy}" r="17" fill="#34c759" ${wire} onclick="selezionaEChiudi(25, '25', false)" />`;
+      svgHTML += `<circle class="zoom-segment" cx="${cx}" cy="${cy}" r="8.5" fill="#ff3b30" ${wire} onclick="selezionaEChiudi(50, 'D25', true)" />`;
+      svgHTML += `</g></svg>`;
 
       document.getElementById('zoom-title').innerText = `Centro`;
       document.getElementById('zoom-svg-container').innerHTML = svgHTML;
       document.getElementById('zoom-modal').style.display = 'flex';
     }
 
-    function selezionaEChiudi(punti, etichetta) {
+    function selezionaEChiudi(punti, etichetta, isDouble) {
       chiudiSelettore();
-      aggiungiTiro(punti, etichetta);
+      aggiungiTiro(punti, etichetta, isDouble);
     }
 
     function chiudiSelettore() { document.getElementById('zoom-modal').style.display = 'none'; }
 
+    // --- CONFERME E GESTIONE TURNI / LEG ---
     function chiediConfermaTurno() {
       const tot = turnDarts.reduce((acc, d) => acc + d.points, 0);
-      document.getElementById('popup-turn-text').innerHTML = `Hai totalizzato <strong>${tot}</strong> punti.<br>Confermi di passare il turno?`;
+      const esito = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
+      
+      if (esito.vinto) {
+        document.getElementById('popup-turn-text').innerHTML = 
+          `<span style="color:var(--success); font-size:22px; font-weight:900;">CHIUSURA! 🎯</span><br>Hai totalizzato <strong>${tot}</strong> punti e chiuso il leg!`;
+      } else if (esito.sballato) {
+        document.getElementById('popup-turn-text').innerHTML = 
+          `<span style="color:var(--danger); font-size:22px; font-weight:900;">SBALLO! ✕</span><br>Chiusura non valida o punteggio eccedente. I punti del turno non saranno contati.`;
+      } else {
+        document.getElementById('popup-turn-text').innerHTML = 
+          `Hai totalizzato <strong style="color:var(--primary); font-size:24px;">${tot}</strong> punti.<br>Confermi di passare il turno?`;
+      }
+      
       document.getElementById('popup-turn').style.display = 'flex';
     }
 
@@ -480,25 +779,52 @@
     function chiudiPopups() {
       document.getElementById('popup-turn').style.display = 'none';
       document.getElementById('popup-exit').style.display = 'none';
+      document.getElementById('popup-leg-win').style.display = 'none';
     }
 
     function confermaUscita() { chiudiPopups(); tornaAllaLobby(); }
 
     function confermaEPassa() {
       chiudiPopups();
-      const tot = turnDarts.reduce((acc, d) => acc + d.points, 0);
-      let nuovoPunteggio = scores[activePlayer] - tot;
+      const esito = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
       
-      if (nuovoPunteggio === 0) {
-        mostraVittoria(names[activePlayer]);
-        return;
+      if (esito.vinto) {
+        legs[activePlayer]++;
+        aggiornaUI();
+        
+        if (legs[activePlayer] >= legsToWin) {
+          mostraVittoriaMatch(names[activePlayer]);
+          return;
+        } else {
+          mostraPopupLegVinto(activePlayer);
+          return;
+        }
       }
       
-      if (nuovoPunteggio > 0) {
-        scores[activePlayer] = nuovoPunteggio;
+      if (!esito.sballato) {
+        scores[activePlayer] = esito.scoreFinale;
       }
       
       activePlayer = activePlayer === 0 ? 1 : 0;
+      resetTurno();
+      aggiornaUI();
+    }
+
+    function mostraPopupLegVinto(winnerIdx) {
+      document.getElementById('popup-leg-win-text').innerHTML = 
+        `<strong>${names[winnerIdx]}</strong> ha vinto il Leg!<br><br>` +
+        `Situazione Match:<br>` +
+        `<span style="font-size:22px; font-weight:900; color:var(--primary);">${names[0]} [${legs[0]}] — [${legs[1]}] ${names[1]}</span>`;
+      document.getElementById('popup-leg-win').style.display = 'flex';
+    }
+
+    function avviaProssimoLeg() {
+      chiudiPopups();
+      // Alternanza ufficiale di chi tira per primo nel nuovo leg
+      starterPlayerForLeg = starterPlayerForLeg === 0 ? 1 : 0;
+      activePlayer = starterPlayerForLeg;
+      
+      scores = [punteggioScelto, punteggioScelto];
       resetTurno();
       aggiornaUI();
     }
@@ -509,17 +835,19 @@
     }
 
     function aggiornaUI() {
-      // Aggiornamento classi per player attivo
       document.getElementById('p1-panel').classList.toggle('active', activePlayer === 0);
       document.getElementById('p2-panel').classList.toggle('active', activePlayer === 1);
       
-      // Assicura che i punteggi siano visualizzati puliti (chiama l'aggiornamento proiezioni con tot=0)
-      aggiornaProiezionePunteggio(0);
+      document.getElementById('p1-legs').innerText = legsToWin > 1 ? `${legs[0]}/${legsToWin}` : `${legs[0]} L`;
+      document.getElementById('p2-legs').innerText = legsToWin > 1 ? `${legs[1]}/${legsToWin}` : `${legs[1]} L`;
+
+      aggiornaProiezionePunteggio();
     }
 
-    function mostraVittoria(vincitore) {
+    function mostraVittoriaMatch(vincitore) {
       document.getElementById('game-screen').style.display = 'none';
       document.getElementById('winner-display').innerText = vincitore;
+      document.getElementById('winner-match-score').innerText = `Ha vinto il match con ${legs[activePlayer]} Leg a ${legs[activePlayer === 0 ? 1 : 0]}!`;
       document.getElementById('victory-screen').style.display = 'flex';
     }
 
@@ -529,30 +857,61 @@
       document.getElementById('lobby-screen').style.display = 'flex';
     }
 
+    // --- TABELLA INPUT ---
     function costruisciTabella() {
       const container = document.getElementById('table-container');
       if (container.innerHTML !== "") return;
+      
       let html = `<table class="darts-table"><thead><tr><th>Singolo</th><th>Doppio</th><th>Triplo</th></tr></thead><tbody>`;
+      
       for (let i = 1; i <= 20; i++) {
         html += `<tr>
-            <td><button type="button" class="tbl-btn btn-single" onclick="aggiungiTiro(${i}, '${i}')">${i}</button></td>
-            <td><button type="button" class="tbl-btn btn-double" onclick="aggiungiTiro(${i * 2}, 'D${i}')">D${i}</button></td>
-            <td><button type="button" class="tbl-btn btn-triple" onclick="aggiungiTiro(${i * 3}, 'T${i}')">T${i}</button></td>
+            <td><button type="button" class="tbl-btn btn-single" onclick="aggiungiTiro(${i}, '${i}', false)">${i}</button></td>
+            <td><button type="button" class="tbl-btn btn-double" onclick="aggiungiTiro(${i * 2}, 'D${i}', true)">D${i}</button></td>
+            <td><button type="button" class="tbl-btn btn-triple" onclick="aggiungiTiro(${i * 3}, 'T${i}', false)">T${i}</button></td>
           </tr>`;
       }
+      
       html += `<tr>
-            <td><button type="button" class="tbl-btn btn-bull" onclick="aggiungiTiro(25, '25')">25</button></td>
-            <td><button type="button" class="tbl-btn btn-bull" onclick="aggiungiTiro(50, 'D25')">D25</button></td>
-            <td style="color:#666; font-size:12px;">—</td>
+            <td colspan="3" style="padding: 4px;">
+              <div style="display: flex; gap: 8px; width: 100%;">
+                <button type="button" class="tbl-btn btn-double" style="flex: 1;" onclick="aggiungiTiro(25, '25', false)">Bull (25)</button>
+                <button type="button" class="tbl-btn btn-triple" style="flex: 1;" onclick="aggiungiTiro(50, 'D25', true)">Bullseye (50)</button>
+              </div>
+            </td>
           </tr></tbody></table>`;
+          
       container.innerHTML = html;
+    }
+
+    // --- BERSAGLIO SVG ---
+    function descriviArco(rIn, rOut, cx, cy, startA, endA) {
+      const rad = (a) => (a - 90) * Math.PI / 180;
+      const pInS = { x: cx + rIn * Math.cos(rad(endA)), y: cy + rIn * Math.sin(rad(endA)) };
+      const pInE = { x: cx + rIn * Math.cos(rad(startA)), y: cy + rIn * Math.sin(rad(startA)) };
+      const pOutS = { x: cx + rOut * Math.cos(rad(endA)), y: cy + rOut * Math.sin(rad(endA)) };
+      const pOutE = { x: cx + rOut * Math.cos(rad(startA)), y: cy + rOut * Math.sin(rad(startA)) };
+      return `M ${pOutE.x} ${pOutE.y} A ${rOut} ${rOut} 0 0 1 ${pOutS.x} ${pOutS.y} L ${pInS.x} ${pInS.y} A ${rIn} ${rIn} 0 0 0 ${pInE.x} ${pInE.y} Z`;
     }
 
     function disegnaBersaglio() {
       const container = document.getElementById('dartboard-container');
       if (container.innerHTML !== "") return;
       const cx = 200, cy = 200, angleStep = 360 / 20;
-      let svgHTML = `<svg viewBox="0 0 400 400"><circle cx="${cx}" cy="${cy}" r="198" fill="#111" />`;
+      
+      let svgHTML = `<svg viewBox="0 0 400 400">
+        <defs>
+          <filter id="sisalBoard" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" result="noise" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" in="noise" result="coloredNoise" />
+            <feBlend in="SourceGraphic" in2="coloredNoise" mode="darken" />
+          </filter>
+        </defs>
+        
+        <circle cx="${cx}" cy="${cy}" r="198" fill="#111" />
+        
+        <g filter="url(#sisalBoard)">
+      `;
 
       for (let i = 0; i < 20; i++) {
         let n = boardOrder[i];
@@ -579,7 +938,9 @@
         <g class="sector-wedge" onclick="apriZoomBull()">
           <circle cx="${cx}" cy="${cy}" r="16" fill="#309f6a" />
           <circle cx="${cx}" cy="${cy}" r="8" fill="#e3292e" />
-        </g></svg>`;
+        </g>
+        </g>
+        </svg>`;
       container.innerHTML = svgHTML;
     }
   </script>
