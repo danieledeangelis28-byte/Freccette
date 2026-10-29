@@ -77,112 +77,75 @@
       background-color: var(--card-alt); border-radius: 8px;
     }
 
-    /* SCOREBOARD */
+    /* SCOREBOARD DINAMICA */
     .scoreboard {
       display: flex; justify-content: space-between;
-      background: var(--card-bg); border-radius: 12px; padding: 10px 14px;
+      background: var(--card-bg); border-radius: 12px; padding: 12px 14px;
       margin-bottom: 12px;
     }
     .player-score { text-align: center; flex: 1; opacity: 0.45; transition: 0.25s; }
     .player-score.active { opacity: 1; transform: scale(1.05); }
     .player-score h2 { margin: 0; font-size: 15px; color: #aaa; }
-    .player-score .points { font-size: 34px; font-weight: 800; margin-top: 2px; }
     
-    /* CONTENITORE INGRESSI (BERSAGLIO O TABELLA) */
-    .input-wrapper {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 12px;
-      min-height: 350px;
+    .score-wrapper { margin-top: 4px; }
+    
+    /* Il punteggio pre-tiro, invisibile di default ma occupa spazio */
+    .prev-score {
+      font-size: 14px; color: #8e8e93; text-decoration: line-through;
+      height: 16px; opacity: 0; transition: opacity 0.2s;
     }
-
-    /* BERSAGLIO SVG */
-    #dartboard-container {
-      width: 100%; aspect-ratio: 1; max-width: 360px;
+    .prev-score.visible { opacity: 0.6; }
+    
+    .player-score .points {
+      font-size: 36px; font-weight: 800; line-height: 1;
+      transition: color 0.2s, font-size 0.2s;
     }
+    
+    /* Stati speciali del punteggio (Sballo / Vittoria) */
+    .bust-text { color: var(--danger) !important; font-size: 26px !important; line-height: 36px; }
+    .win-text { color: var(--success) !important; }
+    
+    /* AREA INGRESSI */
+    .input-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; min-height: 350px; }
+    #dartboard-container { width: 100%; aspect-ratio: 1; max-width: 360px; }
     svg { width: 100%; height: 100%; touch-action: manipulation; }
-    .segment { cursor: pointer; }
-    .segment:active { opacity: 0.6; }
+    .sector-wedge { cursor: pointer; }
+    .sector-wedge:active path { opacity: 0.65; }
     
     /* TABELLA INPUT */
-    #table-container {
-      width: 100%;
-      max-height: 360px;
-      overflow-y: auto;
-      border-radius: 10px;
-      background: var(--card-bg);
-      border: 1px solid #3a3a3c;
-    }
-    .darts-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: center;
-    }
-    .darts-table th {
-      position: sticky;
-      top: 0;
-      background: #252528;
-      padding: 10px 4px;
-      font-size: 13px;
-      color: #aaa;
-      border-bottom: 1px solid #444;
-      z-index: 2;
-    }
-    .darts-table td {
-      padding: 4px;
-      border-bottom: 1px solid #353538;
-    }
-    .tbl-btn {
-      width: 100%;
-      padding: 10px 2px;
-      font-size: 15px;
-      font-weight: 700;
-      border-radius: 6px;
-    }
+    #table-container { width: 100%; max-height: 360px; overflow-y: auto; border-radius: 10px; background: var(--card-bg); border: 1px solid #3a3a3c; }
+    .darts-table { width: 100%; border-collapse: collapse; text-align: center; }
+    .darts-table th { position: sticky; top: 0; background: #252528; padding: 10px 4px; font-size: 13px; color: #aaa; border-bottom: 1px solid #444; z-index: 2; }
+    .darts-table td { padding: 4px; border-bottom: 1px solid #353538; }
+    .tbl-btn { width: 100%; padding: 10px 2px; font-size: 15px; font-weight: 700; border-radius: 6px; }
     .btn-single { background-color: #48484a; color: #fff; }
     .btn-double { background-color: #1b5e20; color: #4ade80; }
     .btn-triple { background-color: #b71c1c; color: #fca5a5; }
     .btn-bull { background-color: #0077b6; color: #90e0ef; }
 
     /* CONTROLLI TURNO */
-    .turn-controls {
-      display: flex; flex-direction: column; gap: 8px;
-      background: var(--card-bg); padding: 12px; border-radius: 12px;
-    }
-    .darts-info { 
-      display: flex; justify-content: space-between; font-size: 15px; 
-      align-items: center; padding: 0 4px;
-    }
+    .turn-controls { display: flex; flex-direction: column; gap: 8px; background: var(--card-bg); padding: 12px; border-radius: 12px; }
+    .darts-info { display: flex; justify-content: space-between; font-size: 15px; align-items: center; padding: 0 4px; }
     .dart-slot { font-weight: bold; color: #ffeb3b; min-width: 34px; text-align: center; }
-    
     .action-row { display: flex; gap: 8px; }
     .btn-miss { background-color: #48484a; flex: 1; padding: 11px; }
     .btn-undo { background-color: var(--warning); flex: 1; padding: 11px; }
     .btn-confirm { background-color: var(--success); }
     
-    /* POPUP GENERALI */
-    .modal-overlay {
-      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8); z-index: 1000;
-      justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
-    }
-    .modal-box {
-      background: var(--card-bg); padding: 24px; border-radius: 16px;
-      text-align: center; width: 100%; max-width: 320px;
-    }
+    /* POPUP GENERALI & ZOOM */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+    .modal-box { background: var(--card-bg); padding: 24px; border-radius: 16px; text-align: center; width: 100%; max-width: 340px; }
     .modal-box h3 { margin-top: 0; font-size: 20px; }
     .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
     .btn-modal-cancel { background-color: #555; }
     .btn-modal-danger { background-color: var(--danger); }
     .btn-modal-ok { background-color: var(--success); }
+    
+    #zoom-svg-container { width: 100%; aspect-ratio: 1; margin: 15px 0; border-radius: 12px; overflow: hidden; background: #111; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
+    .zoom-segment { cursor: pointer; transition: filter 0.1s; }
+    .zoom-segment:active { filter: brightness(1.5); }
 
-    /* VITTORIA */
-    #victory-screen {
-      justify-content: center; align-items: center; text-align: center;
-      cursor: pointer;
-    }
+    #victory-screen { justify-content: center; align-items: center; text-align: center; cursor: pointer; }
     .trophy { font-size: 70px; margin-bottom: 10px; }
     .winner-name { font-size: 34px; font-weight: 800; color: #ffeb3b; margin: 10px 0; }
   </style>
@@ -193,14 +156,19 @@
   <div id="lobby-screen" class="screen">
     <h1>Freccette 🎯</h1>
     
+    <!-- onfocus pulisce il campo solo se è quello di default -->
     <div class="form-group">
       <label>Giocatore 1</label>
-      <input type="text" id="player1" value="Giocatore 1">
+      <input type="text" id="player1" value="Giocatore 1" 
+             onfocus="if(this.value==='Giocatore 1') this.value='';" 
+             onblur="if(this.value.trim()==='') this.value='Giocatore 1';">
     </div>
     
     <div class="form-group">
       <label>Giocatore 2</label>
-      <input type="text" id="player2" value="Giocatore 2">
+      <input type="text" id="player2" value="Giocatore 2"
+             onfocus="if(this.value==='Giocatore 2') this.value='';" 
+             onblur="if(this.value.trim()==='') this.value='Giocatore 2';">
     </div>
     
     <div class="form-group">
@@ -233,15 +201,20 @@
     <div class="scoreboard">
       <div id="p1-panel" class="player-score active">
         <h2 id="p1-name">G1</h2>
-        <div id="p1-score" class="points">501</div>
+        <div class="score-wrapper">
+          <div id="p1-prev" class="prev-score">501</div>
+          <div id="p1-score" class="points">501</div>
+        </div>
       </div>
       <div id="p2-panel" class="player-score">
         <h2 id="p2-name">G2</h2>
-        <div id="p2-score" class="points">501</div>
+        <div class="score-wrapper">
+          <div id="p2-prev" class="prev-score">501</div>
+          <div id="p2-score" class="points">501</div>
+        </div>
       </div>
     </div>
 
-    <!-- AREA DI INPUT: BERSAGLIO O TABELLA -->
     <div class="input-wrapper">
       <div id="dartboard-container"></div>
       <div id="table-container" style="display: none;"></div>
@@ -274,7 +247,17 @@
     <div style="color: #8e8e93; font-size: 14px; margin-top: 30px;">Tocca ovunque per tornare alla lobby</div>
   </div>
 
-  <!-- POPUP 1: CONFERMA TURNO -->
+  <!-- POPUP ZOOM SETTORE -->
+  <div id="zoom-modal" class="modal-overlay" onclick="chiudiSelettore()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <h3 id="zoom-title" style="margin-bottom: 4px; font-size: 22px;">Mirino</h3>
+      <p style="color: #8e8e93; font-size: 14px; margin: 0 0 5px 0;">Tocca l'esatto punto d'impatto</p>
+      <div id="zoom-svg-container"></div>
+      <button class="btn-modal-cancel" style="width: 100%; padding: 14px;" onclick="chiudiSelettore()">Annulla</button>
+    </div>
+  </div>
+
+  <!-- POPUP CONFERMA TURNO -->
   <div id="popup-turn" class="modal-overlay">
     <div class="modal-box">
       <h3>Conferma Turno</h3>
@@ -286,7 +269,7 @@
     </div>
   </div>
 
-  <!-- POPUP 2: CONFERMA USCITA LOBBY -->
+  <!-- POPUP CONFERMA USCITA LOBBY -->
   <div id="popup-exit" class="modal-overlay">
     <div class="modal-box">
       <h3>Abbandonare la partita?</h3>
@@ -300,13 +283,22 @@
 
   <script>
     let punteggioScelto = 501;
-    let interfacciaScelta = 'board'; // 'board' o 'table'
+    let interfacciaScelta = 'board';
     let scores = [501, 501];
     let names = ["", ""];
     let activePlayer = 0;
     let turnDarts = [];
+    const boardOrder = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
 
-    // --- SELEZIONI LOBBY ---
+    function descriviArco(rIn, rOut, cx, cy, startA, endA) {
+      const rad = (a) => (a - 90) * Math.PI / 180;
+      const pInS = { x: cx + rIn * Math.cos(rad(endA)), y: cy + rIn * Math.sin(rad(endA)) };
+      const pInE = { x: cx + rIn * Math.cos(rad(startA)), y: cy + rIn * Math.sin(rad(startA)) };
+      const pOutS = { x: cx + rOut * Math.cos(rad(endA)), y: cy + rOut * Math.sin(rad(endA)) };
+      const pOutE = { x: cx + rOut * Math.cos(rad(startA)), y: cy + rOut * Math.sin(rad(startA)) };
+      return `M ${pOutE.x} ${pOutE.y} A ${rOut} ${rOut} 0 0 1 ${pOutS.x} ${pOutS.y} L ${pInS.x} ${pInS.y} A ${rIn} ${rIn} 0 0 0 ${pInE.x} ${pInE.y} Z`;
+    }
+
     function selezionaPunteggio(pts) {
       punteggioScelto = pts;
       document.getElementById('btn-301').classList.toggle('active', pts === 301);
@@ -320,8 +312,8 @@
     }
 
     function iniziaPartita() {
-      names[0] = document.getElementById('player1').value || "Giocatore 1";
-      names[1] = document.getElementById('player2').value || "Giocatore 2";
+      names[0] = document.getElementById('player1').value.trim() || "Giocatore 1";
+      names[1] = document.getElementById('player2').value.trim() || "Giocatore 2";
       scores = [punteggioScelto, punteggioScelto];
       activePlayer = 0;
       
@@ -329,7 +321,6 @@
       document.getElementById('p2-name').innerText = names[1];
       document.getElementById('active-mode-label').innerText = `${punteggioScelto} • ${interfacciaScelta === 'board' ? 'Bersaglio' : 'Tabella'}`;
       
-      // Impostazione dell'interfaccia scelta
       const boardContainer = document.getElementById('dartboard-container');
       const tableContainer = document.getElementById('table-container');
       
@@ -351,7 +342,6 @@
       document.getElementById('game-screen').style.display = 'flex';
     }
 
-    // --- LOGICA GIOCO ---
     function aggiungiTiro(punti, etichetta) {
       if (turnDarts.length >= 3) return;
       turnDarts.push({ points: punti, label: etichetta });
@@ -370,28 +360,129 @@
       document.getElementById('dart-2').innerText = turnDarts[1] ? turnDarts[1].label : "-";
       document.getElementById('dart-3').innerText = turnDarts[2] ? turnDarts[2].label : "-";
       document.getElementById('turn-total').innerText = tot;
+      
+      // Aggiorna l'anteprima in tempo reale
+      aggiornaProiezionePunteggio(tot);
     }
 
-    // POPUPS
+    function aggiornaProiezionePunteggio(totTurno) {
+      // Ripristina l'UI per entrambi i giocatori
+      [1, 2].forEach(p => {
+        document.getElementById(`p${p}-prev`).classList.remove('visible');
+        const scoreEl = document.getElementById(`p${p}-score`);
+        scoreEl.innerText = scores[p-1];
+        scoreEl.classList.remove('bust-text', 'win-text');
+      });
+
+      // Se ci sono punti inseriti nel turno, mostra l'anteprima al giocatore attivo
+      if (totTurno > 0) {
+        const tempScore = scores[activePlayer] - totTurno;
+        const prevEl = document.getElementById(`p${activePlayer + 1}-prev`);
+        const scoreEl = document.getElementById(`p${activePlayer + 1}-score`);
+        
+        prevEl.innerText = scores[activePlayer];
+        prevEl.classList.add('visible');
+        
+        if (tempScore < 0) {
+          scoreEl.innerText = "SBALLO";
+          scoreEl.classList.add('bust-text');
+        } else if (tempScore === 0) {
+          scoreEl.innerText = tempScore;
+          scoreEl.classList.add('win-text');
+        } else {
+          scoreEl.innerText = tempScore;
+        }
+      }
+    }
+
+    function apriZoomSettore(n, index) {
+      if (turnDarts.length >= 3) return;
+      const cx = 200, cy = 200, angleStep = 360 / 20;
+      let startAngle = (index * angleStep) - (angleStep / 2);
+      let endAngle = (index * angleStep) + (angleStep / 2);
+      const midAngleRad = (startAngle + angleStep / 2 - 90) * Math.PI / 180;
+      const viewCx = cx + 90 * Math.cos(midAngleRad);
+      const viewCy = cy + 90 * Math.sin(midAngleRad);
+      const viewSize = 220; 
+
+      let svgHTML = `<svg viewBox="${viewCx - viewSize/2} ${viewCy - viewSize/2} ${viewSize} ${viewSize}">`;
+      svgHTML += `<circle cx="${cx}" cy="${cy}" r="220" fill="#111" />`;
+
+      for (let i = 0; i < 20; i++) {
+        let sA = (i * angleStep) - (angleStep / 2);
+        let eA = (i * angleStep) + (angleStep / 2);
+        let cS = (i % 2 === 0) ? '#000000' : '#f0ece1';
+        let cD = (i % 2 === 0) ? '#e3292e' : '#309f6a';
+        svgHTML += `<path fill="${cS}" opacity="0.3" d="${descriviArco(16, 100, cx, cy, sA, eA)}" />`;
+        svgHTML += `<path fill="${cD}" opacity="0.3" d="${descriviArco(100, 110, cx, cy, sA, eA)}" />`;
+        svgHTML += `<path fill="${cS}" opacity="0.3" d="${descriviArco(110, 160, cx, cy, sA, eA)}" />`;
+        svgHTML += `<path fill="${cD}" opacity="0.3" d="${descriviArco(160, 170, cx, cy, sA, eA)}" />`;
+      }
+      svgHTML += `<circle cx="${cx}" cy="${cy}" r="16" fill="#309f6a" opacity="0.3" />`;
+      svgHTML += `<circle cx="${cx}" cy="${cy}" r="8" fill="#e3292e" opacity="0.3" />`;
+
+      let actSingle = (index % 2 === 0) ? '#181818' : '#fcfaf5';
+      let actDouble = (index % 2 === 0) ? '#ff3b30' : '#34c759';
+      let wire = `stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"`;
+
+      svgHTML += `<path class="zoom-segment" fill="${actSingle}" ${wire} d="${descriviArco(16, 100, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n}, '${n}')" />`;
+      svgHTML += `<path class="zoom-segment" fill="${actDouble}" ${wire} d="${descriviArco(100, 110, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n * 3}, 'T${n}')" />`;
+      svgHTML += `<path class="zoom-segment" fill="${actSingle}" ${wire} d="${descriviArco(110, 160, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n}, '${n}')" />`;
+      svgHTML += `<path class="zoom-segment" fill="${actDouble}" ${wire} d="${descriviArco(160, 170, cx, cy, startAngle, endAngle)}" onclick="selezionaEChiudi(${n * 2}, 'D${n}')" />`;
+
+      const nx = cx + 186 * Math.cos(midAngleRad);
+      const ny = cy + 186 * Math.sin(midAngleRad);
+      svgHTML += `<text x="${nx}" y="${ny}" fill="white" font-size="18" font-weight="bold" pointer-events="none" text-anchor="middle" dominant-baseline="middle">${n}</text></svg>`;
+
+      document.getElementById('zoom-title').innerText = `Settore ${n}`;
+      document.getElementById('zoom-svg-container').innerHTML = svgHTML;
+      document.getElementById('zoom-modal').style.display = 'flex';
+    }
+
+    function apriZoomBull() {
+      if (turnDarts.length >= 3) return;
+      const cx = 200, cy = 200, viewSize = 140, angleStep = 360 / 20;
+      let svgHTML = `<svg viewBox="${cx - viewSize/2} ${cy - viewSize/2} ${viewSize} ${viewSize}">`;
+      svgHTML += `<circle cx="${cx}" cy="${cy}" r="220" fill="#111" />`;
+
+      for (let i = 0; i < 20; i++) {
+        let sA = (i * angleStep) - (angleStep / 2);
+        let eA = (i * angleStep) + (angleStep / 2);
+        let cS = (i % 2 === 0) ? '#000000' : '#f0ece1';
+        svgHTML += `<path fill="${cS}" opacity="0.3" d="${descriviArco(16, 100, cx, cy, sA, eA)}" />`;
+      }
+
+      let wire = `stroke="#ffffff" stroke-width="1.5"`;
+      svgHTML += `<circle class="zoom-segment" cx="${cx}" cy="${cy}" r="16" fill="#34c759" ${wire} onclick="selezionaEChiudi(25, '25')" />`;
+      svgHTML += `<circle class="zoom-segment" cx="${cx}" cy="${cy}" r="8" fill="#ff3b30" ${wire} onclick="selezionaEChiudi(50, 'D25')" />`;
+      svgHTML += `</svg>`;
+
+      document.getElementById('zoom-title').innerText = `Centro`;
+      document.getElementById('zoom-svg-container').innerHTML = svgHTML;
+      document.getElementById('zoom-modal').style.display = 'flex';
+    }
+
+    function selezionaEChiudi(punti, etichetta) {
+      chiudiSelettore();
+      aggiungiTiro(punti, etichetta);
+    }
+
+    function chiudiSelettore() { document.getElementById('zoom-modal').style.display = 'none'; }
+
     function chiediConfermaTurno() {
       const tot = turnDarts.reduce((acc, d) => acc + d.points, 0);
       document.getElementById('popup-turn-text').innerHTML = `Hai totalizzato <strong>${tot}</strong> punti.<br>Confermi di passare il turno?`;
       document.getElementById('popup-turn').style.display = 'flex';
     }
 
-    function chiediConfermaUscita() {
-      document.getElementById('popup-exit').style.display = 'flex';
-    }
+    function chiediConfermaUscita() { document.getElementById('popup-exit').style.display = 'flex'; }
 
     function chiudiPopups() {
       document.getElementById('popup-turn').style.display = 'none';
       document.getElementById('popup-exit').style.display = 'none';
     }
 
-    function confermaUscita() {
-      chiudiPopups();
-      tornaAllaLobby();
-    }
+    function confermaUscita() { chiudiPopups(); tornaAllaLobby(); }
 
     function confermaEPassa() {
       chiudiPopups();
@@ -405,7 +496,7 @@
       
       if (nuovoPunteggio > 0) {
         scores[activePlayer] = nuovoPunteggio;
-      } // Se < 0 è busto (sballo): i punti restano inalterati
+      }
       
       activePlayer = activePlayer === 0 ? 1 : 0;
       resetTurno();
@@ -418,11 +509,12 @@
     }
 
     function aggiornaUI() {
-      document.getElementById('p1-score').innerText = scores[0];
-      document.getElementById('p2-score').innerText = scores[1];
-      
+      // Aggiornamento classi per player attivo
       document.getElementById('p1-panel').classList.toggle('active', activePlayer === 0);
       document.getElementById('p2-panel').classList.toggle('active', activePlayer === 1);
+      
+      // Assicura che i punteggi siano visualizzati puliti (chiama l'aggiornamento proiezioni con tot=0)
+      aggiornaProiezionePunteggio(0);
     }
 
     function mostraVittoria(vincitore) {
@@ -437,92 +529,57 @@
       document.getElementById('lobby-screen').style.display = 'flex';
     }
 
-    // --- COSTRUZIONE TABELLA INPUT (1-20 + 25) ---
     function costruisciTabella() {
       const container = document.getElementById('table-container');
-      if (container.innerHTML !== "") return; // Già costruita
-
-      let html = `
-        <table class="darts-table">
-          <thead>
-            <tr>
-              <th>Singolo</th>
-              <th>Doppio</th>
-              <th>Triplo</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      // Righe da 1 a 20
+      if (container.innerHTML !== "") return;
+      let html = `<table class="darts-table"><thead><tr><th>Singolo</th><th>Doppio</th><th>Triplo</th></tr></thead><tbody>`;
       for (let i = 1; i <= 20; i++) {
-        html += `
-          <tr>
+        html += `<tr>
             <td><button type="button" class="tbl-btn btn-single" onclick="aggiungiTiro(${i}, '${i}')">${i}</button></td>
-            <td><button type="button" class="tbl-btn btn-double" onclick="aggiungiTiro(${i * 2}, 'D${i}')">D${i} (${i * 2})</button></td>
-            <td><button type="button" class="tbl-btn btn-triple" onclick="aggiungiTiro(${i * 3}, 'T${i}')">T${i} (${i * 3})</button></td>
-          </tr>
-        `;
+            <td><button type="button" class="tbl-btn btn-double" onclick="aggiungiTiro(${i * 2}, 'D${i}')">D${i}</button></td>
+            <td><button type="button" class="tbl-btn btn-triple" onclick="aggiungiTiro(${i * 3}, 'T${i}')">T${i}</button></td>
+          </tr>`;
       }
-
-      // Riga speciale per il 25 (Bull) e Doppio 25 (Bullseye / 50)
-      html += `
-          <tr>
+      html += `<tr>
             <td><button type="button" class="tbl-btn btn-bull" onclick="aggiungiTiro(25, '25')">25</button></td>
-            <td><button type="button" class="tbl-btn btn-bull" onclick="aggiungiTiro(50, 'D25')">D25 (50)</button></td>
+            <td><button type="button" class="tbl-btn btn-bull" onclick="aggiungiTiro(50, 'D25')">D25</button></td>
             <td style="color:#666; font-size:12px;">—</td>
-          </tr>
-        </tbody>
-      </table>
-      `;
-
+          </tr></tbody></table>`;
       container.innerHTML = html;
     }
 
-    // --- COSTRUZIONE BERSAGLIO SVG ---
     function disegnaBersaglio() {
       const container = document.getElementById('dartboard-container');
       if (container.innerHTML !== "") return;
-      
-      const order = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
-      const cx = 200, cy = 200;
-      const angleStep = 360 / 20;
-
-      function descriviArco(rIn, rOut, startA, endA) {
-        const rad = (a) => (a - 90) * Math.PI / 180;
-        const pInS = { x: cx + rIn * Math.cos(rad(endA)), y: cy + rIn * Math.sin(rad(endA)) };
-        const pInE = { x: cx + rIn * Math.cos(rad(startA)), y: cy + rIn * Math.sin(rad(startA)) };
-        const pOutS = { x: cx + rOut * Math.cos(rad(endA)), y: cy + rOut * Math.sin(rad(endA)) };
-        const pOutE = { x: cx + rOut * Math.cos(rad(startA)), y: cy + rOut * Math.sin(rad(startA)) };
-        return `M ${pOutE.x} ${pOutE.y} A ${rOut} ${rOut} 0 0 1 ${pOutS.x} ${pOutS.y} L ${pInS.x} ${pInS.y} A ${rIn} ${rIn} 0 0 0 ${pInE.x} ${pInE.y} Z`;
-      }
-
-      let svgHTML = `<svg viewBox="0 0 400 400">`;
-      svgHTML += `<circle cx="200" cy="200" r="198" fill="#111" />`;
+      const cx = 200, cy = 200, angleStep = 360 / 20;
+      let svgHTML = `<svg viewBox="0 0 400 400"><circle cx="${cx}" cy="${cy}" r="198" fill="#111" />`;
 
       for (let i = 0; i < 20; i++) {
-        let n = order[i];
+        let n = boardOrder[i];
         let startAngle = (i * angleStep) - (angleStep / 2);
         let endAngle = (i * angleStep) + (angleStep / 2);
-        
         let cSingle = (i % 2 === 0) ? '#000000' : '#f0ece1';
         let cDouble = (i % 2 === 0) ? '#e3292e' : '#309f6a';
-        
-        svgHTML += `<path class="segment" fill="${cSingle}" d="${descriviArco(16, 100, startAngle, endAngle)}" onclick="aggiungiTiro(${n}, '${n}')" />`;
-        svgHTML += `<path class="segment" fill="${cDouble}" d="${descriviArco(100, 110, startAngle, endAngle)}" onclick="aggiungiTiro(${n * 3}, 'T${n}')" />`;
-        svgHTML += `<path class="segment" fill="${cSingle}" d="${descriviArco(110, 160, startAngle, endAngle)}" onclick="aggiungiTiro(${n}, '${n}')" />`;
-        svgHTML += `<path class="segment" fill="${cDouble}" d="${descriviArco(160, 170, startAngle, endAngle)}" onclick="aggiungiTiro(${n * 2}, 'D${n}')" />`;
-        
         const radNum = (startAngle + angleStep / 2 - 90) * Math.PI / 180;
         const nx = cx + 184 * Math.cos(radNum);
         const ny = cy + 184 * Math.sin(radNum);
-        svgHTML += `<text x="${nx}" y="${ny}" fill="white" font-size="15" font-weight="bold" text-anchor="middle" dominant-baseline="middle">${n}</text>`;
+
+        svgHTML += `
+          <g class="sector-wedge" onclick="apriZoomSettore(${n}, ${i})">
+            <path fill="transparent" d="${descriviArco(160, 200, cx, cy, startAngle, endAngle)}" />
+            <path fill="${cSingle}" d="${descriviArco(16, 100, cx, cy, startAngle, endAngle)}" />
+            <path fill="${cDouble}" d="${descriviArco(100, 110, cx, cy, startAngle, endAngle)}" />
+            <path fill="${cSingle}" d="${descriviArco(110, 160, cx, cy, startAngle, endAngle)}" />
+            <path fill="${cDouble}" d="${descriviArco(160, 170, cx, cy, startAngle, endAngle)}" />
+            <text x="${nx}" y="${ny}" fill="white" font-size="15" font-weight="bold" pointer-events="none" text-anchor="middle" dominant-baseline="middle">${n}</text>
+          </g>
+        `;
       }
-      
-      svgHTML += `<circle class="segment" cx="200" cy="200" r="16" fill="#309f6a" onclick="aggiungiTiro(25, '25')" />`;
-      svgHTML += `<circle class="segment" cx="200" cy="200" r="8" fill="#e3292e" onclick="aggiungiTiro(50, 'D25')" />`;
-      
-      svgHTML += `</svg>`;
+      svgHTML += `
+        <g class="sector-wedge" onclick="apriZoomBull()">
+          <circle cx="${cx}" cy="${cy}" r="16" fill="#309f6a" />
+          <circle cx="${cx}" cy="${cy}" r="8" fill="#e3292e" />
+        </g></svg>`;
       container.innerHTML = svgHTML;
     }
   </script>
