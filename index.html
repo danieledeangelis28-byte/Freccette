@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
   
   <style>
+    /* RIMOZIONE LAMP DEL TAP E OUTLINE AZZURRI SU MOBILE */
     *, *::before, *::after {
       -webkit-tap-highlight-color: transparent;
       -webkit-touch-callout: none;
@@ -114,6 +115,7 @@
       border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
     }
 
+    /* SCOREBOARD */
     .scoreboard {
       display: flex; justify-content: space-between;
       background: linear-gradient(145deg, rgba(20,83,45,0.9), rgba(10,50,25,0.95)); 
@@ -129,11 +131,23 @@
     .player-score h2 { margin: 0; font-size: 13px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
     
     .leg-badge { font-size: 11px; font-weight: 900; padding: 2px 7px; border-radius: 12px; background: rgba(0,0,0,0.4); color: var(--primary); border: 1px solid rgba(251, 191, 36, 0.3); letter-spacing: 0.5px; }
-    .score-wrapper { margin-top: 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .prev-score { font-size: 13px; color: var(--text-muted); text-decoration: line-through; height: 14px; opacity: 0; transition: opacity 0.2s; font-weight: 600; }
-    .prev-score.visible { opacity: 0.7; }
-    .player-score .points { font-size: 38px; font-weight: 900; line-height: 1; margin-top: 1px; transition: color 0.2s, font-size 0.2s; font-variant-numeric: tabular-nums; text-shadow: 0 2px 6px rgba(0,0,0,0.5); }
     
+    .score-wrapper { 
+      margin-top: 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 58px; 
+    }
+    .prev-score { 
+      font-size: 12px; color: var(--text-muted); min-height: 16px; opacity: 0; 
+      transition: opacity 0.2s; font-weight: 700; display: flex; gap: 6px; 
+      align-items: center; justify-content: center; flex-wrap: wrap; 
+    }
+    .prev-score.visible { opacity: 1; }
+    .prev-item {
+      text-decoration: line-through;
+      opacity: 0.6;
+      letter-spacing: 0.5px;
+    }
+
+    .player-score .points { font-size: 38px; font-weight: 900; line-height: 1; margin-top: 1px; transition: color 0.2s, font-size 0.2s; font-variant-numeric: tabular-nums; text-shadow: 0 2px 6px rgba(0,0,0,0.5); }
     .bust-text { color: var(--danger) !important; font-size: 22px !important; line-height: 38px; letter-spacing: 1px; }
     .win-text { color: var(--success) !important; }
     
@@ -143,7 +157,7 @@
     .sector-wedge { cursor: pointer; }
     .sector-wedge:active path, .sector-wedge:active circle { filter: brightness(1.2); }
     
-    /* FRECCE TUNGSTENO PRO & ANIMAZIONI */
+    /* FRECCE TUNGSTENO PRO */
     .dart-anchor {
       pointer-events: none;
     }
@@ -221,7 +235,10 @@
       background: radial-gradient(circle at 50% 50%, #2b221a, #0c0a08); 
       border: 1px solid rgba(255,255,255,0.15); box-shadow: inset 0 0 30px rgba(0,0,0,0.8); position: relative;
     }
-    
+    .zoom-segment { cursor: pointer; transition: filter 0.08s; }
+    .zoom-segment:active { filter: brightness(1.4); }
+
+    /* VITTORIA */
     #victory-screen { justify-content: center; align-items: center; text-align: center; cursor: pointer; }
     .trophy { font-size: 84px; margin-bottom: 8px; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.6)); }
     .winner-name { font-size: 38px; font-weight: 900; color: var(--primary); margin: 8px 0; text-transform: uppercase; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
@@ -294,7 +311,7 @@
             <span class="leg-badge" id="p1-legs">0</span>
           </div>
           <div class="score-wrapper">
-            <div id="p1-prev" class="prev-score">501</div>
+            <div id="p1-prev" class="prev-score"></div>
             <div id="p1-score" class="points">501</div>
           </div>
         </div>
@@ -304,7 +321,7 @@
             <span class="leg-badge" id="p2-legs">0</span>
           </div>
           <div class="score-wrapper">
-            <div id="p2-prev" class="prev-score">501</div>
+            <div id="p2-prev" class="prev-score"></div>
             <div id="p2-score" class="points">501</div>
           </div>
         </div>
@@ -328,7 +345,7 @@
           </div>
         </div>
         <div class="action-row">
-          <button class="btn-miss" onclick="aggiungiTiro(0, 'Miss', false, null)">Fuori</button>
+          <button class="btn-miss" onclick="tiraFuori()">Fuori</button>
           <button class="btn-undo" onclick="annullaUltimoTiro()">↩ Annulla</button>
         </div>
         <button class="btn-gold" onclick="chiediConfermaTurno()">CONFERMA TURNO</button>
@@ -486,33 +503,73 @@
         costruisciTabella(); 
       }
       
-      aggiornaUI(); resetTurno();
+      // PULIZIA TOTALE FRECCETTE DA PARTITE PRECEDENTI
+      svuotaFrecceSVG();
+      resetTurno();
+      aggiornaUI();
+      
       document.getElementById('lobby-screen').style.display = 'none'; 
       document.getElementById('victory-screen').style.display = 'none'; 
       document.getElementById('game-screen').style.display = 'flex';
     }
 
+    // --- CALCOLO PROGRESSIVO TURNO CON TUTTI I PARZIALI ---
     function valutaTiriTurno(scoreIniziale, tiri, doubleOutAttivo) {
-      let scoreCorrente = scoreIniziale; let sballato = false; let vinto = false;
+      let scoreCorrente = scoreIniziale;
+      let cronologia = [scoreIniziale];
+      let sballato = false;
+      let vinto = false;
+
       for (let i = 0; i < tiri.length; i++) {
-        const t = tiri[i]; const rimanente = scoreCorrente - t.points;
+        const t = tiri[i];
+        const rimanente = scoreCorrente - t.points;
         if (doubleOutAttivo) {
-          if (rimanente < 0 || rimanente === 1) { sballato = true; break; } 
-          else if (rimanente === 0) { if (t.isDouble) { vinto = true; scoreCorrente = 0; break; } else { sballato = true; break; } } 
-          else { scoreCorrente = rimanente; }
+          if (rimanente < 0 || rimanente === 1) {
+            sballato = true;
+            break;
+          } else if (rimanente === 0) {
+            if (t.isDouble) {
+              vinto = true;
+              scoreCorrente = 0;
+              cronologia.push(0);
+              break;
+            } else {
+              sballato = true;
+              break;
+            }
+          } else {
+            scoreCorrente = rimanente;
+            cronologia.push(scoreCorrente);
+          }
         } else {
-          if (rimanente < 0) { sballato = true; break; } else if (rimanente === 0) { vinto = true; scoreCorrente = 0; break; } else { scoreCorrente = rimanente; }
+          if (rimanente < 0) {
+            sballato = true;
+            break;
+          } else if (rimanente === 0) {
+            vinto = true;
+            scoreCorrente = 0;
+            cronologia.push(0);
+            break;
+          } else {
+            scoreCorrente = rimanente;
+            cronologia.push(scoreCorrente);
+          }
         }
       }
-      return { scoreFinale: sballato ? scoreIniziale : scoreCorrente, sballato: sballato, vinto: vinto, scoreVisualizzato: sballato ? "SBALLO" : scoreCorrente };
+
+      return {
+        scoreFinale: sballato ? scoreIniziale : scoreCorrente,
+        sballato: sballato,
+        vinto: vinto,
+        scoreVisualizzato: sballato ? "SBALLO" : scoreCorrente,
+        cronologia: cronologia
+      };
     }
 
-    // --- AGGIUNTA FRECCIA CON CLUSTERING CORRETTO ---
     function aggiungiFrecciaSVG(targetId, targetCx, targetCy, clusterIndex) {
       const layer = document.getElementById('darts-layer');
       if (!layer) return null;
 
-      // Logica corretta di Offset: ogni freccia ha coordinate uniche e salde
       let offsetX = 0, offsetY = 0, rotationDeg = 15;
       if (clusterIndex === 0) { 
         offsetX = 0; offsetY = 0; rotationDeg = 18; 
@@ -522,7 +579,7 @@
         offsetX = 7; offsetY = 6; rotationDeg = 5; 
       }
 
-      const fillColor = activePlayer === 0 ? '#38bdf8' : '#ef4444'; // Azzurro elettrico G1, Rosso rubino G2
+      const fillColor = activePlayer === 0 ? '#38bdf8' : '#ef4444';
       const px = targetCx + offsetX;
       const py = targetCy + offsetY;
 
@@ -554,8 +611,6 @@
       if (statoAttuale.sballato || statoAttuale.vinto) return;
       
       const sectorId = coordData ? coordData.id : 'miss';
-      
-      // Calcola e fissa la posizione (clusterIndex) della freccia in questo settore
       const clusterIndex = turnDarts.filter(d => d.sectorId === sectorId).length;
       let elementId = null;
 
@@ -576,20 +631,28 @@
       aggiornaSlotTiri();
     }
 
-    // --- ANNULLA CORRETTO ---
+    // --- TIRO FUORI (MISS): COLPISCE L'ANELLO NERO ESTERNO DEI NUMERI ---
+    function tiraFuori() {
+      if (turnDarts.length >= 3) return;
+      const statoAttuale = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
+      if (statoAttuale.sballato || statoAttuale.vinto) return;
+
+      const randomAngle = Math.random() * Math.PI * 2;
+      const randomR = 175 + Math.random() * 17; // Anello nero esterno dove sono incisi i numeri (175 - 192)
+      const missX = cx + randomR * Math.cos(randomAngle);
+      const missY = cy + randomR * Math.sin(randomAngle);
+      const missId = `miss_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+
+      aggiungiTiro(0, 'Miss', false, { id: missId, x: missX, y: missY });
+    }
+
     function annullaUltimoTiro() { 
       if (turnDarts.length === 0) return; 
-      
-      // Rimuove l'ultima freccia dallo storico
       const removedDart = turnDarts.pop(); 
-      
-      // La rimuove fisicamente e chirurgicamente dal bersaglio SVG
       if (removedDart.elementId) {
         const el = document.getElementById(removedDart.elementId);
         if (el) el.remove();
       }
-      
-      // Non tocchiamo le altre frecce già piazzate!
       aggiornaSlotTiri(); 
     }
 
@@ -753,11 +816,14 @@
       document.getElementById('popup-checkout').style.display = 'flex';
     }
 
+    // --- AGGIORNAMENTO PROIEZIONE PUNTEGGIO CON TUTTI I PARZIALI SBARPATI ---
     function aggiornaProiezionePunteggio() {
       [1, 2].forEach(p => {
-        document.getElementById(`p${p}-prev`).classList.remove('visible');
+        const prevEl = document.getElementById(`p${p}-prev`);
+        prevEl.innerHTML = '';
+        prevEl.classList.remove('visible');
         const scoreEl = document.getElementById(`p${p}-score`);
-        scoreEl.innerText = scores[p-1];
+        scoreEl.innerText = scores[p - 1];
         scoreEl.classList.remove('bust-text', 'win-text');
       });
 
@@ -767,11 +833,25 @@
       if (turnDarts.length > 0) {
         const prevEl = document.getElementById(`p${activePlayer + 1}-prev`);
         const scoreEl = document.getElementById(`p${activePlayer + 1}-score`);
-        prevEl.innerText = scores[activePlayer];
+
+        // Mostra tutti i passaggi intermedi attraversati prima dell'ultimo valore
+        let daSbarrare = [];
+        if (esito.sballato) {
+          daSbarrare = esito.cronologia;
+        } else {
+          daSbarrare = esito.cronologia.slice(0, -1);
+        }
+
+        prevEl.innerHTML = daSbarrare.map(num => `<span class="prev-item">${num}</span>`).join('');
         prevEl.classList.add('visible');
-        if (esito.sballato) { scoreEl.innerText = "SBALLO"; scoreEl.classList.add('bust-text'); } 
-        else if (esito.vinto) { scoreEl.innerText = "0"; scoreEl.classList.add('win-text'); } 
-        else { scoreEl.innerText = esito.scoreVisualizzato; }
+
+        if (esito.sballato) { 
+          scoreEl.innerText = "SBALLO"; scoreEl.classList.add('bust-text'); 
+        } else if (esito.vinto) { 
+          scoreEl.innerText = "0"; scoreEl.classList.add('win-text'); 
+        } else { 
+          scoreEl.innerText = esito.scoreVisualizzato; 
+        }
       }
     }
 
@@ -933,7 +1013,14 @@
       document.getElementById('winner-match-score').innerText = `Ha vinto il match con ${legs[activePlayer]} Leg a ${legs[activePlayer === 0 ? 1 : 0]}!`;
       document.getElementById('victory-screen').style.display = 'flex';
     }
-    function tornaAllaLobby() { document.getElementById('victory-screen').style.display = 'none'; document.getElementById('game-screen').style.display = 'none'; document.getElementById('lobby-screen').style.display = 'flex'; }
+    
+    function tornaAllaLobby() { 
+      svuotaFrecceSVG();
+      turnDarts = [];
+      document.getElementById('victory-screen').style.display = 'none'; 
+      document.getElementById('game-screen').style.display = 'none'; 
+      document.getElementById('lobby-screen').style.display = 'flex'; 
+    }
 
     function costruisciTabella() {
       const container = document.getElementById('table-container');
@@ -1017,7 +1104,6 @@
           </g>
         </g>
         
-        <!-- LAYER DEDICATO ALLA VISUALIZZAZIONE DELLE FRECCETTE -->
         <g id="darts-layer"></g>
       </svg>`;
 
