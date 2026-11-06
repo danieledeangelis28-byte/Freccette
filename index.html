@@ -18,20 +18,20 @@
     }
 
     :root {
-      --bg: #03180e;          
-      --cabinet-bg: #1a0f08;
-      --wood-border: #4a2c17;
-      --brass: #d4af37;
-      --brass-glow: rgba(212, 175, 55, 0.25);
-      --card-bg: rgba(20, 12, 7, 0.9); 
-      --text: #fef3c7;        
-      --text-muted: #94a3b8;
-      --primary: #fbbf24;     
-      --primary-text: #451a03;
+      --bg: #093320;          
+      --cabinet-bg: #2b180d;
+      --wood-border: #714222;
+      --brass: #facc15;
+      --brass-glow: rgba(250, 204, 21, 0.35);
+      --card-bg: rgba(43, 24, 13, 0.95); 
+      --text: #fffbeb;        
+      --text-muted: #cbd5e1;
+      --primary: #f59e0b;     
+      --primary-text: #2d1303;
       --danger: #f87171;
       --warning: #fbbf24;
       --success: #34d399;
-      --shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
+      --shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
     }
     
     body {
@@ -42,8 +42,8 @@
       user-select: none; -webkit-user-select: none;
       background-color: var(--bg);
       background-image: 
-        radial-gradient(circle at 50% 12%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
-        radial-gradient(circle at 50% 90%, #010805 0%, #03180e 100%);
+        radial-gradient(circle at 50% 12%, rgba(255, 255, 255, 0.18) 0%, transparent 65%),
+        radial-gradient(circle at 50% 85%, #082819 0%, #0d462c 100%);
     }
 
     #app-container {
@@ -57,7 +57,7 @@
       width: 100%; padding: 8px 10px;
       display: flex; flex-direction: column;
     }
-    #game-screen, #victory-screen { display: none; }
+    #game-screen, #victory-screen, #summary-screen { display: none; }
     
     h1 { 
       text-align: center; margin: 10px 0 14px 0; padding: 0 45px;
@@ -69,10 +69,10 @@
     #btn-fullscreen {
       position: absolute; top: 12px; right: 12px; width: 38px; height: 38px;
       padding: 0; display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(145deg, #24140b, #120a05);
-      border: 1px solid var(--brass); border-radius: 50%;
+      background: linear-gradient(145deg, #381f11, #1e0e06);
+      border: 1.5px solid var(--brass); border-radius: 50%;
       z-index: 900; cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255,255,255,0.2);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255,255,255,0.25);
     }
     #btn-fullscreen svg {
       width: 17px; height: 17px; fill: none; stroke: var(--brass);
@@ -80,16 +80,16 @@
     }
     
     .glass-panel {
-      background: linear-gradient(180deg, #23140a 0%, #150b05 100%);
+      background: linear-gradient(180deg, #321c0f 0%, #201107 100%);
       border-radius: 22px; padding: 14px;
       border: 2px solid var(--wood-border);
-      box-shadow: var(--shadow), inset 0 1px 2px rgba(255,255,255,0.15);
+      box-shadow: var(--shadow), inset 0 1px 2px rgba(255,255,255,0.2);
       position: relative;
     }
 
     .bolt {
       position: absolute; width: 7px; height: 7px; border-radius: 50%;
-      background: radial-gradient(circle, #fef08a 10%, #b45309 85%);
+      background: radial-gradient(circle, #fef08a 15%, #b45309 85%);
       box-shadow: 0 1px 2px rgba(0,0,0,0.8);
     }
     .bolt-tl { top: 7px; left: 7px; }
@@ -101,20 +101,20 @@
     label { display: block; font-size: 11px; margin-bottom: 5px; color: var(--brass); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
     input[type="text"] {
       width: 100%; padding: 11px 13px; font-size: 16px; font-family: 'Outfit', sans-serif; font-weight: 600;
-      background: rgba(0,0,0,0.5); color: var(--text);
-      border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 12px; outline: none; transition: all 0.2s;
+      background: rgba(14, 7, 3, 0.55); color: var(--text);
+      border: 1.5px solid rgba(250, 204, 21, 0.4); border-radius: 12px; outline: none; transition: all 0.2s;
     }
     input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--brass-glow); }
     
     .toggle-group { display: flex; gap: 8px; }
     .toggle-btn {
-      flex: 1; background-color: rgba(0,0,0,0.4); color: var(--text-muted); margin: 0;
-      padding: 10px 8px; font-size: 13px; border-radius: 12px; font-weight: 800; border: 1px solid rgba(255,255,255,0.06);
+      flex: 1; background-color: rgba(22, 11, 5, 0.55); color: var(--text-muted); margin: 0;
+      padding: 10px 8px; font-size: 13px; border-radius: 12px; font-weight: 800; border: 1px solid rgba(255,255,255,0.12);
     }
     .toggle-btn.active, button.btn-gold { 
       background: linear-gradient(180deg, #fde047 0%, #fbbf24 45%, #d97706 100%);
       color: var(--primary-text); border: none; border-top: 1px solid #fef08a; border-bottom: 2px solid #78350f;
-      box-shadow: 0 5px 15px rgba(217, 119, 6, 0.35); text-shadow: 0 1px 1px rgba(255,255,255,0.4);
+      box-shadow: 0 5px 15px rgba(217, 119, 6, 0.4); text-shadow: 0 1px 1px rgba(255,255,255,0.4);
     }
     
     button {
@@ -126,30 +126,30 @@
     .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
     .btn-header {
       width: auto; padding: 5px 12px; font-size: 12px; font-weight: 800;
-      background-color: rgba(0,0,0,0.45); color: var(--brass); border-radius: 50px;
-      border: 1px solid rgba(212,175,55,0.3);
+      background-color: rgba(26, 13, 6, 0.65); color: var(--brass); border-radius: 50px;
+      border: 1.5px solid rgba(250, 204, 21, 0.45);
     }
 
     /* SCOREBOARD */
     .scoreboard {
       display: flex; justify-content: space-between; gap: 8px;
-      background: linear-gradient(180deg, #1f120a 0%, #120904 100%); 
+      background: linear-gradient(180deg, #301a0e 0%, #1d0f06 100%); 
       border-radius: 18px; padding: 8px 10px; margin-bottom: 6px;
       border: 1.5px solid var(--wood-border); box-shadow: var(--shadow);
     }
     .player-score { 
-      text-align: center; flex: 1; opacity: 0.45; transition: all 0.25s ease; 
+      text-align: center; flex: 1; opacity: 0.65; transition: all 0.25s ease; 
       padding: 5px; border-radius: 14px; border: 1px solid transparent; 
     }
     .player-score.active { 
-      opacity: 1; transform: scale(1.02); background: rgba(0,0,0,0.35); 
-      border-color: rgba(212, 175, 55, 0.5); box-shadow: 0 0 15px var(--brass-glow);
+      opacity: 1; transform: scale(1.02); background: rgba(0, 0, 0, 0.35); 
+      border-color: rgba(250, 204, 21, 0.65); box-shadow: 0 0 15px var(--brass-glow);
     }
     .player-title-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
     .player-score h2 { margin: 0; font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
     .player-score.active h2 { color: var(--brass); }
     
-    .leg-badge { font-size: 11px; font-weight: 900; padding: 2px 6px; border-radius: 10px; background: rgba(0,0,0,0.5); color: var(--primary); border: 1px solid rgba(251, 191, 36, 0.3); }
+    .leg-badge { font-size: 11px; font-weight: 900; padding: 2px 6px; border-radius: 10px; background: rgba(0,0,0,0.45); color: var(--primary); border: 1px solid rgba(251, 191, 36, 0.4); }
     
     .score-wrapper { margin-top: 1px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 52px; }
     .prev-score { 
@@ -157,7 +157,7 @@
       font-weight: 700; display: flex; gap: 5px; align-items: center; justify-content: center; 
     }
     .prev-score.visible { opacity: 1; }
-    .prev-item { text-decoration: line-through; opacity: 0.55; }
+    .prev-item { text-decoration: line-through; opacity: 0.6; }
 
     .player-score .points { font-size: 36px; font-weight: 900; line-height: 1; margin-top: 1px; font-variant-numeric: tabular-nums; text-shadow: 0 2px 6px rgba(0,0,0,0.6); }
     .bust-text { color: var(--danger) !important; font-size: 20px !important; line-height: 36px; }
@@ -168,28 +168,93 @@
     #dartboard-container { 
       width: 100%; aspect-ratio: 1; max-width: 430px; position: relative; 
       border-radius: 50%;
-      box-shadow: 0 16px 30px rgba(0,0,0,0.9), 0 0 0 5px #140b05, 0 0 0 7px rgba(212, 175, 55, 0.25);
+      box-shadow: 0 16px 30px rgba(0,0,0,0.85), 0 0 0 5px #221208, 0 0 0 7px rgba(250, 204, 21, 0.4);
     }
     svg { width: 100%; height: 100%; touch-action: manipulation; }
     
     .sector-wedge { cursor: pointer; }
     .sector-wedge path, .sector-wedge circle { pointer-events: all; }
     .sector-wedge:active path, .sector-wedge:active circle { filter: brightness(1.25); }
+
+    /* CONTENITORE TABELLA & COLORI TASTI */
+    #table-container {
+      width: 100%;
+      max-height: 38vh;
+      overflow-y: auto;
+      padding: 4px 2px;
+    }
+    .darts-table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: separate;
+      border-spacing: 5px;
+    }
+    .darts-table th {
+      color: var(--brass);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding-bottom: 5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    }
+    .tbl-btn {
+      width: 100%;
+      padding: 10px 2px;
+      font-size: 15px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.08s, filter 0.12s;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+    }
+    .tbl-btn:active {
+      transform: scale(0.94);
+    }
+
+    /* Singoli: mogano caldo e oro */
+    .btn-single {
+      background: linear-gradient(180deg, #3a2213 0%, #221209 100%);
+      color: #fffbeb;
+      border: 1px solid rgba(250, 204, 21, 0.45);
+    }
+
+    /* Doppi & Bull (25): Verde vivo stile pub */
+    .btn-double {
+      background: linear-gradient(180deg, #10b981 0%, #047857 100%);
+      color: #ffffff;
+      border: 1px solid #6ee7b7;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 3px 10px rgba(4, 120, 87, 0.45);
+    }
+
+    /* Tripli & Double Bull (50): Rosso rubino vivo stile pub */
+    .btn-triple {
+      background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+      color: #ffffff;
+      border: 1px solid #fca5a5;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 3px 10px rgba(185, 28, 28, 0.45);
+    }
     
     /* NUMERI IN FIL DI FERRO & GABBIA */
     .wire-number {
-      fill: none; stroke: #f1f5f9; stroke-width: 1.8;
+      fill: none; stroke: #f8fafc; stroke-width: 1.8;
       stroke-linecap: round; stroke-linejoin: round;
       filter: drop-shadow(0.8px 1.6px 1.2px rgba(0, 0, 0, 0.95));
       pointer-events: none;
     }
     .wire-ring-support {
-      fill: none; stroke: #d4d4d8; stroke-width: 1.3;
+      fill: none; stroke: #e2e8f0; stroke-width: 1.3;
       filter: drop-shadow(0.8px 1.4px 1.3px rgba(0, 0, 0, 0.9));
       pointer-events: none;
     }
     .wire-bracket {
-      stroke: #a1a1aa; stroke-width: 2.2; stroke-linecap: round;
+      stroke: #cbd5e1; stroke-width: 2.2; stroke-linecap: round;
       filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.9)); pointer-events: none;
     }
 
@@ -221,8 +286,8 @@
       transform: translate(-50%, -50%) scale(1);
     }
     .tendina-card {
-      background: linear-gradient(160deg, rgba(35, 20, 12, 0.97) 0%, rgba(14, 8, 4, 0.98) 100%);
-      border: 1.6px solid var(--brass);
+      background: linear-gradient(160deg, rgba(46, 25, 14, 0.98) 0%, rgba(22, 11, 5, 0.98) 100%);
+      border: 1.8px solid var(--brass);
       border-radius: 18px;
       padding: 7px 10px 9px 10px;
       box-shadow: 0 14px 35px rgba(0,0,0,0.95), 0 0 15px var(--brass-glow);
@@ -237,7 +302,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+      border-bottom: 1px solid rgba(250, 204, 21, 0.35);
       padding-bottom: 4px;
     }
     .tendina-title {
@@ -273,8 +338,8 @@
       align-items: center;
       justify-content: center;
       transition: transform 0.08s;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(18, 9, 4, 0.65);
     }
     .btn-tendina:active {
       transform: scale(0.92);
@@ -283,7 +348,7 @@
       font-size: 10px;
       font-weight: 900;
       letter-spacing: 0.5px;
-      opacity: 0.85;
+      opacity: 0.9;
     }
     .btn-tendina .pts-tag {
       font-size: 15px;
@@ -293,37 +358,37 @@
     }
     .btn-tendina.btn-s {
       color: var(--text-muted);
-      border-color: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.18);
     }
     .btn-tendina.btn-d {
-      color: var(--success);
-      border-color: rgba(52, 211, 153, 0.35);
-      background: rgba(6, 78, 59, 0.35);
+      color: #34d399;
+      border-color: rgba(52, 211, 153, 0.55);
+      background: rgba(4, 120, 87, 0.45);
     }
     .btn-tendina.btn-t {
       color: var(--primary);
-      border-color: rgba(251, 191, 36, 0.4);
-      background: rgba(217, 119, 6, 0.25);
+      border-color: rgba(251, 191, 36, 0.55);
+      background: rgba(217, 119, 6, 0.35);
     }
 
     /* CONTROLLI TURNO */
     .turn-controls { 
       display: flex; flex-direction: column; gap: 7px; 
-      background: linear-gradient(180deg, #1f120a 0%, #120904 100%); 
+      background: linear-gradient(180deg, #301a0e 0%, #1d0f06 100%); 
       padding: 9px; border-radius: 18px; border: 1.5px solid var(--wood-border); box-shadow: var(--shadow); 
     }
     .darts-info { display: flex; justify-content: space-between; align-items: center; padding: 0 4px; gap: 6px; }
     .dart-badges { display: flex; gap: 6px; }
     .dart-slot { 
       width: 36px; height: 36px; border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.06), rgba(0,0,0,0.6));
-      border: 1px solid rgba(212,175,55,0.25); display: flex; justify-content: center; align-items: center;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.1), rgba(0,0,0,0.6));
+      border: 1.5px solid rgba(250, 204, 21, 0.4); display: flex; justify-content: center; align-items: center;
       font-weight: 900; font-size: 13px; color: var(--primary);
     }
 
     #checkout-assistant-btn {
-      display: none; background: rgba(212, 175, 55, 0.15);
-      border: 1px solid var(--brass); color: var(--brass); padding: 0 12px; height: 34px;
+      display: none; background: rgba(250, 204, 21, 0.2);
+      border: 1.5px solid var(--brass); color: var(--brass); padding: 0 12px; height: 34px;
       border-radius: 50px; font-size: 12px; font-weight: 800; cursor: pointer; width: auto;
     }
 
@@ -331,9 +396,9 @@
     
     .action-row { display: flex; gap: 8px; }
     .btn-miss, .btn-undo { 
-      background: linear-gradient(180deg, #332015 0%, #1c110b 100%); 
+      background: linear-gradient(180deg, #442716 0%, #29150a 100%); 
       color: var(--text); flex: 1; padding: 12px; 
-      border: 1px solid rgba(255,255,255,0.1); border-bottom: 2px solid #000;
+      border: 1px solid rgba(255,255,255,0.15); border-bottom: 2px solid #000;
     }
     
     .modal-overlay { 
@@ -342,7 +407,7 @@
       padding: 16px; backdrop-filter: blur(6px);
     }
     .modal-box { 
-      background: linear-gradient(145deg, #1f120a, #0c0603); padding: 20px; border-radius: 22px; 
+      background: linear-gradient(145deg, #2d180d, #140803); padding: 20px; border-radius: 22px; 
       text-align: center; width: 100%; max-width: 360px; border: 1.5px solid var(--wood-border);
     }
     .modal-box h3 { margin-top: 0; font-size: 20px; font-weight: 900; color: var(--primary); }
@@ -355,9 +420,133 @@
     .checkout-route .darts { font-weight: 900; color: #fff; font-size: 15px; }
     .checkout-route.optimal { border-color: var(--primary); background: rgba(251, 191, 36, 0.12); }
     
-    #victory-screen { justify-content: center; align-items: center; text-align: center; cursor: pointer; }
-    .trophy { font-size: 80px; margin-bottom: 6px; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.6)); }
-    .winner-name { font-size: 36px; font-weight: 900; color: var(--primary); margin: 6px 0; text-transform: uppercase; }
+    /* SCHERMATA VITTORIA A SCHERMO INTERO & EFFETTI */
+    #victory-screen { 
+      display: none;
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; height: 100%; height: 100dvh;
+      z-index: 1000;
+      background: radial-gradient(circle at 50% 30%, #3a1f10 0%, #102e1f 60%, #031109 100%);
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      text-align: center; 
+      cursor: pointer;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    #victory-confetti {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .victory-aura {
+      position: absolute;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(250, 204, 21, 0.28) 0%, rgba(217, 119, 6, 0.12) 45%, transparent 70%);
+      animation: victoryPulse 2.8s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @keyframes victoryPulse {
+      0% { transform: scale(0.85); opacity: 0.5; }
+      100% { transform: scale(1.3); opacity: 1; }
+    }
+
+    .victory-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none; /* Lascia passare i click allo sfondo */
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .trophy { 
+      font-size: 84px; 
+      margin-bottom: 8px; 
+      filter: drop-shadow(0 0 25px rgba(250, 204, 21, 0.8)) drop-shadow(0 15px 20px rgba(0,0,0,0.8)); 
+      animation: trophyFloat 2.2s ease-in-out infinite;
+    }
+    @keyframes trophyFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-10px) scale(1.06); }
+    }
+
+    .victory-title {
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #fffbeb 0%, #fde047 30%, #f59e0b 70%, #b45309 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));
+    }
+
+    .winner-card {
+      background: linear-gradient(180deg, rgba(48, 26, 14, 0.95), rgba(20, 10, 5, 0.95));
+      border: 1.8px solid var(--brass);
+      border-radius: 20px;
+      padding: 14px 22px;
+      margin: 16px 0;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px var(--brass-glow);
+      width: 100%;
+    }
+
+    .winner-name { 
+      font-size: 32px; 
+      font-weight: 900; 
+      color: var(--primary); 
+      margin: 0; 
+      text-transform: uppercase; 
+      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    }
+
+    .tap-prompt {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(250, 204, 21, 0.15);
+      border: 1px solid rgba(250, 204, 21, 0.4);
+      padding: 10px 20px;
+      border-radius: 30px;
+      color: var(--brass);
+      font-size: 13px;
+      font-weight: 800;
+      margin-top: 18px;
+      animation: promptPulse 1.8s infinite;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    @keyframes promptPulse {
+      0%, 100% { opacity: 0.7; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+
+    /* RIEPILOGO STYLES */
+    .summary-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px; padding: 12px;
+      background: rgba(0,0,0,0.4); border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .summary-label {
+      font-size: 11px; font-weight: 800; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.5px; text-align: center; flex: 1.5;
+    }
+    .summary-val {
+      font-size: 22px; font-weight: 900; color: var(--text);
+      flex: 1; text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -370,7 +559,7 @@
     </button>
 
     <div id="lobby-screen" class="screen">
-      <h1>FRECCETTE</h1>
+      <h1>DART_POINT</h1>
       <div class="glass-panel">
         <div class="bolt bolt-tl"></div><div class="bolt bolt-tr"></div>
         <div class="bolt bolt-bl"></div><div class="bolt bolt-br"></div>
@@ -482,12 +671,61 @@
       </div>
     </div>
 
-    <div id="victory-screen" class="screen" onclick="tornaAllaLobby()">
-      <div class="trophy">🏆</div>
-      <h1 style="margin: 0; font-size: 26px;">VITTORIA!</h1>
-      <div class="winner-name" id="winner-display">Giocatore 1</div>
-      <p id="winner-match-score" style="font-size: 16px; color: var(--text-muted); font-weight: 700; margin: 4px 0 0 0;">Ha chiuso il match!</p>
-      <div style="color: var(--text-muted); font-size: 13px; margin-top: 30px; font-weight: 600;">Tocca ovunque per tornare alla lobby</div>
+    <!-- SCHERMATA VITTORIA CON COPERTURA TOTALE DELLO SCHERMO E CORIANDOLI CONTINUI -->
+    <div id="victory-screen" onclick="mostraRiepilogo()">
+      <canvas id="victory-confetti"></canvas>
+      <div class="victory-aura"></div>
+      <div class="victory-content">
+        <div class="trophy">🏆</div>
+        <h1 class="victory-title">VITTORIA!</h1>
+        <div class="winner-card">
+          <div class="winner-name" id="winner-display">Giocatore 1</div>
+          <p id="winner-match-score" style="font-size: 15px; color: var(--text-muted); font-weight: 700; margin: 6px 0 0 0;">Ha chiuso il match!</p>
+        </div>
+        <div class="tap-prompt">
+          <span>✨</span> Clicca per il riepilogo <span>✨</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHERMATA RIEPILOGO -->
+    <div id="summary-screen" class="screen">
+      <h1 style="margin-bottom: 20px;">RIEPILOGO</h1>
+      <div class="glass-panel" style="flex: 1; margin-bottom: 14px; padding: 20px 14px;">
+        <div class="bolt bolt-tl"></div><div class="bolt bolt-tr"></div>
+        <div class="bolt bolt-bl"></div><div class="bolt bolt-br"></div>
+        
+        <div style="display: flex; border-bottom: 1.5px solid rgba(250, 204, 21, 0.25); padding-bottom: 12px; margin-bottom: 16px;">
+          <div style="flex: 1; text-align: center; color: var(--primary); font-weight: 900; font-size: 20px; text-transform: uppercase;" id="sum-name-1">G1</div>
+          <div style="width: 20px;"></div>
+          <div style="flex: 1; text-align: center; color: var(--primary); font-weight: 900; font-size: 20px; text-transform: uppercase;" id="sum-name-2">G2</div>
+        </div>
+
+        <div class="summary-row">
+          <div class="summary-val" id="sum-legs-1">0</div>
+          <div class="summary-label">Leg Vinti</div>
+          <div class="summary-val" id="sum-legs-2">0</div>
+        </div>
+
+        <div class="summary-row">
+          <div class="summary-val" id="sum-rem-1">0</div>
+          <div class="summary-label">Punti Rimasti</div>
+          <div class="summary-val" id="sum-rem-2">0</div>
+        </div>
+
+        <div class="summary-row">
+          <div class="summary-val" id="sum-darts-1">0</div>
+          <div class="summary-label">Frecce Usate</div>
+          <div class="summary-val" id="sum-darts-2">0</div>
+        </div>
+
+        <div class="summary-row">
+          <div class="summary-val" id="sum-avg-1" style="color: var(--brass);">0.0</div>
+          <div class="summary-label">Media (3 frecce)</div>
+          <div class="summary-val" id="sum-avg-2" style="color: var(--brass);">0.0</div>
+        </div>
+      </div>
+      <button class="btn-gold" onclick="tornaAllaLobby()">TORNA ALLA LOBBY</button>
     </div>
 
   </div>
@@ -543,6 +781,12 @@
     let activePlayer = 0;
     let starterPlayerForLeg = 0;
     let turnDarts = [];
+    
+    // Statistiche di riepilogo
+    let matchDarts = [0, 0]; 
+    let matchPointsScored = [0, 0];
+    let confettiAnimationId = null;
+    let confettiParticles = [];
     
     const boardOrder = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
     const cx = 200, cy = 200, angleStep = 360 / 20;
@@ -636,7 +880,10 @@
     function iniziaPartita() {
       names[0] = document.getElementById('player1').value.trim() || "Giocatore 1"; 
       names[1] = document.getElementById('player2').value.trim() || "Giocatore 2";
-      scores = [punteggioScelto, punteggioScelto]; legs = [0, 0]; starterPlayerForLeg = 0; activePlayer = 0;
+      legs = [0, 0]; starterPlayerForLeg = 0; activePlayer = 0;
+      matchDarts = [0, 0]; matchPointsScored = [0, 0];
+      scores = [punteggioScelto, punteggioScelto];
+      
       document.getElementById('p1-name').innerText = names[0]; document.getElementById('p2-name').innerText = names[1];
       const legLabel = legsToWin === 1 ? '1 Leg' : `Primo a ${legsToWin}`; const outLabel = regolaDoubleOut ? 'Double-Out' : 'Aperta';
       document.getElementById('active-mode-label').innerText = `${punteggioScelto} • ${outLabel} • ${legLabel}`;
@@ -660,6 +907,7 @@
       
       document.getElementById('lobby-screen').style.display = 'none'; 
       document.getElementById('victory-screen').style.display = 'none'; 
+      document.getElementById('summary-screen').style.display = 'none';
       document.getElementById('game-screen').style.display = 'flex';
     }
 
@@ -823,8 +1071,14 @@
       aggiornaProiezionePunteggio();
     }
 
-    // --- NUOVA MECCANICA: TENDINA RADIALE VERSO L'INTERNO DEL BERSAGLIO ---
+    // --- MECCANICA: TENDINA RADIALE VERSO L'INTERNO DEL BERSAGLIO ---
     function apriTendinaSettore(n, index) {
+      const overlay = document.getElementById('tendina-overlay');
+      if (overlay.classList.contains('active')) {
+        chiudiTendina();
+        return;
+      }
+
       if (turnDarts.length >= 3) return;
       const statoAttuale = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
       if (statoAttuale.sballato || statoAttuale.vinto) return;
@@ -832,13 +1086,10 @@
       const midAngleDeg = index * angleStep;
       const rad = (midAngleDeg - 90) * Math.PI / 180;
 
-      // Coordinate esatte di atterraggio per ciascun anello
       const cordD = { x: cx + 165 * Math.cos(rad), y: cy + 165 * Math.sin(rad) };
       const cordT = { x: cx + 105 * Math.cos(rad), y: cy + 105 * Math.sin(rad) };
       const cordS = { x: cx + 135 * Math.cos(rad), y: cy + 135 * Math.sin(rad) };
 
-      // Posizione della tendina spostata VERSO L'INTERNO del cerchio (raggio 85px)
-      // Garantisce di rimanere sempre all'interno del viewport e mai tagliata dai bordi del telefono
       const tendinaPosR = 85; 
       const tendinaX = cx + tendinaPosR * Math.cos(rad);
       const tendinaY = cy + tendinaPosR * Math.sin(rad);
@@ -846,7 +1097,6 @@
       const pctX = (tendinaX / 400) * 100;
       const pctY = (tendinaY / 400) * 100;
 
-      const overlay = document.getElementById('tendina-overlay');
       overlay.style.left = `${pctX}%`;
       overlay.style.top = `${pctY}%`;
 
@@ -870,13 +1120,18 @@
     }
 
     function apriTendinaBull() {
+      const overlay = document.getElementById('tendina-overlay');
+      if (overlay.classList.contains('active')) {
+        chiudiTendina();
+        return;
+      }
+
       if (turnDarts.length >= 3) return;
       const statoAttuale = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
       if (statoAttuale.sballato || statoAttuale.vinto) return;
 
-      const overlay = document.getElementById('tendina-overlay');
       overlay.style.left = `50%`;
-      overlay.style.top = `38%`; // Mostrato leggermente sopra il centro per non coprirlo
+      overlay.style.top = `38%`;
 
       const cordGreen = { x: cx + 11 * Math.cos(Math.PI / 4), y: cy + 11 * Math.sin(Math.PI / 4) };
 
@@ -1107,11 +1362,20 @@
     function confermaEPassa() {
       chiudiPopups();
       const esito = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
+      
+      // Calcolo e registrazione statistiche del turno per il riepilogo
+      let puntiFatti = esito.sballato ? 0 : (esito.vinto ? scores[activePlayer] : (scores[activePlayer] - esito.scoreFinale));
+      matchDarts[activePlayer] += turnDarts.length;
+      matchPointsScored[activePlayer] += puntiFatti;
+
       if (esito.vinto) {
-        legs[activePlayer]++; aggiornaUI(); svuotaFrecceSVG();
+        scores[activePlayer] = 0; 
+        legs[activePlayer]++; 
+        aggiornaUI(); svuotaFrecceSVG();
         if (legs[activePlayer] >= legsToWin) { mostraVittoriaMatch(names[activePlayer]); return; } 
         else { mostraPopupLegVinto(activePlayer); return; }
       }
+      
       if (!esito.sballato) { scores[activePlayer] = esito.scoreFinale; }
       activePlayer = activePlayer === 0 ? 1 : 0; resetTurno(); aggiornaUI();
       svuotaFrecceSVG();
@@ -1136,17 +1400,108 @@
       aggiornaProiezionePunteggio();
     }
 
+    /* GESTIONE CORIANDOLI CONTINUI SU CANVAS */
+    function avviaCoriandoli() {
+      const canvas = document.getElementById('victory-confetti');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#fde047', '#fbbf24', '#f59e0b', '#d97706', '#fef08a', '#ffffff', '#e2e8f0', '#34d399'];
+      const numParticles = 80;
+      confettiParticles = [];
+
+      for (let i = 0; i < numParticles; i++) {
+        confettiParticles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          w: Math.random() * 8 + 5,
+          h: Math.random() * 6 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: Math.random() * 2 - 1,
+          vy: Math.random() * 2.5 + 2,
+          rot: Math.random() * 360,
+          rotSpeed: Math.random() * 6 - 3,
+          swing: Math.random() * 2,
+          swingStep: Math.random() * 0.05
+        });
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let p of confettiParticles) {
+          p.y += p.vy;
+          p.x += Math.sin(p.swing) * 1.5 + p.vx;
+          p.swing += p.swingStep;
+          p.rot += p.rotSpeed;
+
+          if (p.y > canvas.height + 20) {
+            p.y = -20;
+            p.x = Math.random() * canvas.width;
+          }
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        }
+        confettiAnimationId = requestAnimationFrame(loop);
+      }
+
+      if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+      confettiAnimationId = requestAnimationFrame(loop);
+    }
+
+    function fermaCoriandoli() {
+      if (confettiAnimationId) {
+        cancelAnimationFrame(confettiAnimationId);
+        confettiAnimationId = null;
+      }
+    }
+
     function mostraVittoriaMatch(vincitore) {
-      document.getElementById('game-screen').style.display = 'none'; document.getElementById('winner-display').innerText = vincitore;
+      document.getElementById('game-screen').style.display = 'none'; 
+      document.getElementById('winner-display').innerText = vincitore;
       document.getElementById('winner-match-score').innerText = `Ha vinto il match con ${legs[activePlayer]} Leg a ${legs[activePlayer === 0 ? 1 : 0]}!`;
       document.getElementById('victory-screen').style.display = 'flex';
+      avviaCoriandoli();
+    }
+    
+    function mostraRiepilogo() {
+      fermaCoriandoli();
+      document.getElementById('victory-screen').style.display = 'none';
+      
+      document.getElementById('sum-name-1').innerText = names[0];
+      document.getElementById('sum-name-2').innerText = names[1];
+      
+      document.getElementById('sum-legs-1').innerText = legs[0];
+      document.getElementById('sum-legs-2').innerText = legs[1];
+      
+      document.getElementById('sum-rem-1').innerText = scores[0];
+      document.getElementById('sum-rem-2').innerText = scores[1];
+      
+      document.getElementById('sum-darts-1').innerText = matchDarts[0];
+      document.getElementById('sum-darts-2').innerText = matchDarts[1];
+      
+      let avg1 = matchDarts[0] > 0 ? (matchPointsScored[0] / matchDarts[0] * 3).toFixed(1) : "0.0";
+      let avg2 = matchDarts[1] > 0 ? (matchPointsScored[1] / matchDarts[1] * 3).toFixed(1) : "0.0";
+      document.getElementById('sum-avg-1').innerText = avg1;
+      document.getElementById('sum-avg-2').innerText = avg2;
+      
+      document.getElementById('summary-screen').style.display = 'flex';
     }
     
     function tornaAllaLobby() { 
+      fermaCoriandoli();
       svuotaFrecceSVG();
       chiudiTendina();
       turnDarts = [];
       document.getElementById('victory-screen').style.display = 'none'; 
+      document.getElementById('summary-screen').style.display = 'none'; 
       document.getElementById('game-screen').style.display = 'none'; 
       document.getElementById('lobby-screen').style.display = 'flex'; 
     }
@@ -1182,28 +1537,28 @@
             </linearGradient>
 
             <radialGradient id="topSpotlight" cx="50%" cy="16%" r="75%">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12" />
-              <stop offset="65%" stop-color="#000000" stop-opacity="0.28" />
-              <stop offset="100%" stop-color="#000000" stop-opacity="0.68" />
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18" />
+              <stop offset="65%" stop-color="#000000" stop-opacity="0.2" />
+              <stop offset="100%" stop-color="#000000" stop-opacity="0.55" />
             </radialGradient>
           </defs>
 
           <!-- Bordo esterno scuro del bersaglio -->
-          <circle cx="${cx}" cy="${cy}" r="198" fill="#150e09" />
+          <circle cx="${cx}" cy="${cy}" r="198" fill="#20130a" />
 
           <!-- Sisal Spicchi -->
           <g filter="url(#corkBoard)">
       `;
 
-      const strokeStyle = `stroke="#d4d4d8" stroke-width="1.15" stroke-linejoin="round" style="filter: drop-shadow(0.8px 1.4px 1.2px rgba(0,0,0,0.85));"`;
+      const strokeStyle = `stroke="#e2e8f0" stroke-width="1.15" stroke-linejoin="round" style="filter: drop-shadow(0.8px 1.4px 1.2px rgba(0,0,0,0.85));"`;
 
       for (let i = 0; i < 20; i++) {
         let n = boardOrder[i]; 
         let startAngle = (i * angleStep) - (angleStep / 2); 
         let endAngle = (i * angleStep) + (angleStep / 2);
         
-        let cSingle = (i % 2 === 0) ? '#1f1e1d' : '#d2b48c'; 
-        let cDouble = (i % 2 === 0) ? '#b91c1c' : '#047857';
+        let cSingle = (i % 2 === 0) ? '#2a2725' : '#e2caa2'; 
+        let cDouble = (i % 2 === 0) ? '#dc2626' : '#059669';
 
         svgHTML += `
           <g class="sector-wedge" onclick="event.stopPropagation(); apriTendinaSettore(${n}, ${i})">
@@ -1218,8 +1573,8 @@
 
       svgHTML += `
           <g class="sector-wedge" onclick="event.stopPropagation(); apriTendinaBull()">
-            <circle cx="${cx}" cy="${cy}" r="16" fill="#047857" ${strokeStyle} />
-            <circle cx="${cx}" cy="${cy}" r="8" fill="#b91c1c" ${strokeStyle} />
+            <circle cx="${cx}" cy="${cy}" r="16" fill="#059669" ${strokeStyle} />
+            <circle cx="${cx}" cy="${cy}" r="8" fill="#dc2626" ${strokeStyle} />
           </g>
         </g>
         
