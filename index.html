@@ -6,6 +6,13 @@
   <title>Freccette 🎯</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
   
+  <!-- Direttive di orientamento per browser mobili e PWA -->
+  <meta name="screen-orientation" content="portrait">
+  <meta name="x5-orientation" content="portrait">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href='data:application/manifest+json,{"name":"Freccette","short_name":"Freccette","display":"standalone","orientation":"portrait"}'>
+
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -216,14 +223,12 @@
       transform: scale(0.94);
     }
 
-    /* Singoli: mogano caldo e oro */
     .btn-single {
       background: linear-gradient(180deg, #3a2213 0%, #221209 100%);
       color: #fffbeb;
       border: 1px solid rgba(250, 204, 21, 0.45);
     }
 
-    /* Doppi & Bull (25): Verde vivo stile pub */
     .btn-double {
       background: linear-gradient(180deg, #10b981 0%, #047857 100%);
       color: #ffffff;
@@ -232,7 +237,6 @@
       box-shadow: 0 3px 10px rgba(4, 120, 87, 0.45);
     }
 
-    /* Tripli & Double Bull (50): Rosso rubino vivo stile pub */
     .btn-triple {
       background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
       color: #ffffff;
@@ -271,7 +275,7 @@
       100% { transform: scale(1) translate(0, 0); opacity: 1; }
     }
 
-    /* TENDINA RADIALE VERSO L'INTERNO DEL BERSAGLIO */
+    /* TENDINA RADIALE */
     #tendina-overlay {
       position: absolute;
       z-index: 120;
@@ -420,7 +424,7 @@
     .checkout-route .darts { font-weight: 900; color: #fff; font-size: 15px; }
     .checkout-route.optimal { border-color: var(--primary); background: rgba(251, 191, 36, 0.12); }
     
-    /* SCHERMATA VITTORIA A SCHERMO INTERO & EFFETTI */
+    /* SCHERMATA VITTORIA */
     #victory-screen { 
       display: none;
       position: fixed; 
@@ -465,7 +469,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      pointer-events: none; /* Lascia passare i click allo sfondo */
+      pointer-events: none;
       width: 100%;
       max-width: 380px;
     }
@@ -547,9 +551,70 @@
       font-size: 22px; font-weight: 900; color: var(--text);
       flex: 1; text-align: center;
     }
+
+    /* OVERLAY BLOCCO ORIENTAMENTO ORIZZONTALE */
+    #orientation-blocker {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh; height: 100dvh;
+      background: #093320;
+      background-image: 
+        radial-gradient(circle at 50% 30%, rgba(250, 204, 21, 0.18) 0%, transparent 60%),
+        radial-gradient(circle at 50% 85%, #082819 0%, #0d462c 100%);
+      z-index: 99999;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .orient-card {
+      background: linear-gradient(180deg, #321c0f 0%, #201107 100%);
+      border: 2px solid var(--brass);
+      border-radius: 24px;
+      padding: 26px 28px;
+      max-width: 360px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.8), 0 0 25px var(--brass-glow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .phone-icon-anim {
+      width: 48px; height: 48px; margin-bottom: 12px;
+      animation: rotatePhone 2.2s ease-in-out infinite;
+    }
+    @keyframes rotatePhone {
+      0% { transform: rotate(90deg); }
+      40% { transform: rotate(0deg); }
+      75% { transform: rotate(0deg); }
+      100% { transform: rotate(90deg); }
+    }
+
+    /* Attivazione automatica su schermi orientati orizzontalmente (smartphone/tablet touch) */
+    @media screen and (orientation: landscape) and (max-height: 560px) {
+      #orientation-blocker {
+        display: flex !important;
+      }
+    }
   </style>
 </head>
 <body>
+
+  <!-- SCHERMATA DI SICUREZZA ORIENTAMENTO VERTICALE -->
+  <div id="orientation-blocker">
+    <div class="orient-card">
+      <svg class="phone-icon-anim" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+      </svg>
+      <h2 style="color: var(--primary); font-size: 20px; font-weight: 900; margin: 0 0 8px 0; letter-spacing: 1px;">RUOTA IN VERTICALE</h2>
+      <p style="color: var(--text-muted); font-size: 13px; font-weight: 600; line-height: 1.5; margin: 0;">
+        Questa web app richiede l'orientamento verticale per garantire una corretta visualizzazione di tabellone e comandi.
+      </p>
+    </div>
+  </div>
 
   <div id="app-container">
 
@@ -637,7 +702,6 @@
 
       <div class="input-wrapper">
         <div id="dartboard-container">
-          <!-- TENDINA A COMPARSA VERSO L'INTERNO -->
           <div id="tendina-overlay">
             <div class="tendina-card">
               <div class="tendina-header">
@@ -671,7 +735,7 @@
       </div>
     </div>
 
-    <!-- SCHERMATA VITTORIA CON COPERTURA TOTALE DELLO SCHERMO E CORIANDOLI CONTINUI -->
+    <!-- SCHERMATA VITTORIA -->
     <div id="victory-screen" onclick="mostraRiepilogo()">
       <canvas id="victory-confetti"></canvas>
       <div class="victory-aura"></div>
@@ -770,6 +834,36 @@
   </div>
 
   <script>
+    /* ==========================================================
+       GESTIONE AUTOMATICA BLOCCO ORIENTAMENTO VERTICALE (PORTRAIT)
+       ========================================================== */
+    async function bloccaOrientamentoVerticale() {
+      try {
+        if (screen.orientation && typeof screen.orientation.lock === 'function') {
+          await screen.orientation.lock('portrait');
+        } else if (screen.lockOrientation) {
+          screen.lockOrientation('portrait');
+        } else if (screen.mozLockOrientation) {
+          screen.mozLockOrientation('portrait');
+        } else if (screen.msLockOrientation) {
+          screen.msLockOrientation('portrait');
+        }
+      } catch (err) {
+        // Se il browser richiede lo schermo intero o gesto utente, riprova silenziosamente
+      }
+    }
+
+    // Tentativo immediato all'apertura del documento
+    window.addEventListener('DOMContentLoaded', bloccaOrientamentoVerticale);
+    window.addEventListener('load', bloccaOrientamentoVerticale);
+
+    // Tentativo al primo tocco o click (se il browser richiede user gesture)
+    ['touchstart', 'pointerdown', 'click'].forEach(evt => {
+      window.addEventListener(evt, () => {
+        bloccaOrientamentoVerticale();
+      }, { passive: true });
+    });
+
     let punteggioScelto = 501;
     let interfacciaScelta = 'board';
     let regolaDoubleOut = true;
@@ -782,7 +876,6 @@
     let starterPlayerForLeg = 0;
     let turnDarts = [];
     
-    // Statistiche di riepilogo
     let matchDarts = [0, 0]; 
     let matchPointsScored = [0, 0];
     let confettiAnimationId = null;
@@ -857,16 +950,25 @@
       const requestFs = doc.requestFullscreen || doc.webkitRequestFullscreen;
       const exitFs = document.exitFullscreen || document.webkitExitFullscreen;
       
-      if (!requestFs) { alert("Su Safari usa 'Condividi' -> 'Aggiungi alla schermata Home' per lo schermo intero."); return; }
-      if (!isFs) { requestFs.call(doc).catch(()=>{}); } 
-      else if (exitFs) { exitFs.call(document).catch(()=>{}); }
+      if (!requestFs) { 
+        alert("Su Safari usa 'Condividi' -> 'Aggiungi alla schermata Home' per lo schermo intero."); 
+        return; 
+      }
+      if (!isFs) { 
+        requestFs.call(doc).then(() => bloccaOrientamentoVerticale()).catch(()=>{}); 
+      } else if (exitFs) { 
+        exitFs.call(document).then(() => bloccaOrientamentoVerticale()).catch(()=>{}); 
+      }
     }
 
     function aggiornaIconaFullscreen() {
       const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
       const iconEnter = document.getElementById('icon-fs-enter');
       const iconExit = document.getElementById('icon-fs-exit');
-      if (iconEnter && iconExit) { iconEnter.style.display = isFs ? 'none' : 'block'; iconExit.style.display = isFs ? 'block' : 'none'; }
+      if (iconEnter && iconExit) { 
+        iconEnter.style.display = isFs ? 'none' : 'block'; 
+        iconExit.style.display = isFs ? 'block' : 'none'; 
+      }
     }
 
     document.addEventListener('fullscreenchange', aggiornaIconaFullscreen);
@@ -878,6 +980,7 @@
     function selezionaInterfaccia(mode) { interfacciaScelta = mode; document.getElementById('btn-mode-board').classList.toggle('active', mode === 'board'); document.getElementById('btn-mode-table').classList.toggle('active', mode === 'table'); }
 
     function iniziaPartita() {
+      bloccaOrientamentoVerticale();
       names[0] = document.getElementById('player1').value.trim() || "Giocatore 1"; 
       names[1] = document.getElementById('player2').value.trim() || "Giocatore 2";
       legs = [0, 0]; starterPlayerForLeg = 0; activePlayer = 0;
@@ -1071,7 +1174,6 @@
       aggiornaProiezionePunteggio();
     }
 
-    // --- MECCANICA: TENDINA RADIALE VERSO L'INTERNO DEL BERSAGLIO ---
     function apriTendinaSettore(n, index) {
       const overlay = document.getElementById('tendina-overlay');
       if (overlay.classList.contains('active')) {
@@ -1363,7 +1465,6 @@
       chiudiPopups();
       const esito = valutaTiriTurno(scores[activePlayer], turnDarts, regolaDoubleOut);
       
-      // Calcolo e registrazione statistiche del turno per il riepilogo
       let puntiFatti = esito.sballato ? 0 : (esito.vinto ? scores[activePlayer] : (scores[activePlayer] - esito.scoreFinale));
       matchDarts[activePlayer] += turnDarts.length;
       matchPointsScored[activePlayer] += puntiFatti;
@@ -1400,7 +1501,6 @@
       aggiornaProiezionePunteggio();
     }
 
-    /* GESTIONE CORIANDOLI CONTINUI SU CANVAS */
     function avviaCoriandoli() {
       const canvas = document.getElementById('victory-confetti');
       if (!canvas) return;
