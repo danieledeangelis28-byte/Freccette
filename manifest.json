@@ -1,7 +1,7 @@
 {
-  "name": "Dart_Point",
-  "short_name": "Dart_Point",
-  "description": "Tabellone segnapunti per freccette con calcolo chiusure",
+  "name": "Freccette 🎯",
+  "short_name": "Freccette",
+  "description": "Tabellone segnapunti per freccette",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
