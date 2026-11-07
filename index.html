@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Freccette 🎯</title>
+<link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#064e3b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
   
   <!-- Direttive di orientamento per browser mobili e PWA -->
@@ -1712,6 +1716,49 @@
       </svg>`;
 
       container.insertAdjacentHTML('afterbegin', svgHTML);
+    }
+  </script>
+<!-- Banner di notifica aggiornamento -->
+  <div id="update-toast" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #fbbf24; color: #451a03; padding: 10px 18px; border-radius: 50px; font-weight: 800; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 2000; align-items: center; gap: 12px; cursor: pointer;">
+    <span>Nuova versione disponibile!</span>
+    <button id="btn-update-now" type="button" style="width: auto; padding: 6px 14px; font-size: 12px; background: #451a03; color: #fbbf24; border: none; border-radius: 50px; font-weight: 900; cursor: pointer;">AGGIORNA</button>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      let nuovoWorker;
+
+      navigator.serviceWorker.register('./sw.js').then(reg => {
+        reg.addEventListener('updatefound', () => {
+          nuovoWorker = reg.installing;
+          nuovoWorker.addEventListener('statechange', () => {
+            if (nuovoWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              const banner = document.getElementById('update-toast');
+              if (banner) banner.style.display = 'flex';
+            }
+          });
+        });
+      });
+
+      let inRicaricamento = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!inRicaricamento) {
+          inRicaricamento = true;
+          window.location.reload();
+        }
+      });
+
+      document.getElementById('update-toast')?.addEventListener('click', () => {
+        if (nuovoWorker) {
+          nuovoWorker.postMessage({ type: 'SKIP_WAITING' });
+        }
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          navigator.serviceWorker.getRegistration().then(reg => reg?.update());
+        }
+      });
     }
   </script>
 </body>
