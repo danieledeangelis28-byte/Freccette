@@ -1,5 +1,5 @@
 // Incrementa questa versione a ogni rilascio (es. v2, v3, v4...)
-const CACHE_NAME = 'freccette-v1.2';
+const CACHE_NAME = 'freccette-v1.3';
 
 const RISORSE_DA_SALVARE = [
   './',
